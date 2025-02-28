@@ -9,7 +9,6 @@ namespace Test
 	{
 		public static void TestTurnEquals()
 		{
-			GD.Print("cool");
 			Move m1 = new Move(new CoordFour(0, 1, 2, 3), new CoordFour(1, 1, 2, 4));
 			Move m2 = new Move(new CoordFour(0, 1, 2, 2), new CoordFour(1, 1, 2, 1));
 			Move m3 = new Move(new CoordFour(0, 0, 0, 0), new CoordFour(0, 0, 0, 0));
@@ -32,7 +31,6 @@ namespace Test
 			Turn t1 = new Turn(moves1, in1);
 			Turn t2 = new Turn(moves2, in2);
 			Turn t3 = new Turn(moves3, in2);
-			GD.Print("cool");
 			if (!t1.Equals(t2)) 
 			{
 				throw new Exception("Assertion failed: t1 should equal t2");

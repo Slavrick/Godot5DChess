@@ -43,6 +43,8 @@ var file : int
 
 func _ready() -> void:
 	texture_normal = texture_normal.duplicate()
+	if piece_type < 0:
+		piece_type = 0
 	texture_normal.region = Rect2(piecedict[piece_type],PIECE_SIZE)
 
 

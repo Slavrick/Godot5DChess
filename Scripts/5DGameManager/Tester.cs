@@ -12,6 +12,7 @@ public partial class Tester : Node
 		FENParserTest.TestSANParser();
 		FENParserTest.TestShadParser();
 		FENParserTest.TestFENFileParser();
-		
+		FENParserTest.TestShadFEN();
+		FENParserTest.TestAmbiguityInfoParser();
 	}
 }

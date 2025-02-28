@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Engine;
 using Godot;
 
-namespace FileIO {
+namespace FileIO5D {
   public class FENParser {
 	public static readonly string STDBOARDFEN = "[r*nbqk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*NBQK*BNR*:0:1:w]";
 	public static readonly string STD_PRINCESS_BOARDFEN = "[r*nbsk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*NBSK*BNR*:0:1:w]";
 	public static readonly string STD_DEFENDEDPAWN_BOARDFEN = "[r*qbnk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*QBNK*BNR*:0:1:w]";
 
 	public static GameStateManager ShadSTDGSM(string fileLocation) {
-	using var file = FileAccess.Open("res://Resources/res/Puzzles/RookTactics4.PGN5.txt", FileAccess.ModeFlags.Read);
+	using var file = FileAccess.Open(fileLocation, FileAccess.ModeFlags.Read);
 	string content = file.GetAsText();
 	string[] linesarray = content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 	List<string> lines =  new List<string>(linesarray);
@@ -25,7 +25,6 @@ namespace FileIO {
 		if (line.Length == 0){
 			continue;
 		}
-		Console.WriteLine(line);
 		if (line[0] == '[') {
 			string line2 = line;
 			if (line.Contains("\"")) {

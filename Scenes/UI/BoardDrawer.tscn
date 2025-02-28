@@ -10,9 +10,10 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[node name="PanelContainer" type="Panel"]
+[node name="BoardDrawer" type="Panel"]
 offset_right = 100.0
 offset_bottom = 100.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ehwp4")
 script = ExtResource("1_huwgt")
-SQUARE_WIDTH = 50
+SQUARE_WIDTH = 128
+dark_color = Color(0.29219, 0.29219, 0.29219, 1)

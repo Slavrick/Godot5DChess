@@ -1,6 +1,6 @@
 using System;
 using Engine;
-using FileIO;
+using FileIO5D;
 
 namespace Test
 {
@@ -24,11 +24,8 @@ namespace Test
 		public static void TestFENFileParser()
 		{
 			Console.Write("    Testing Parsing Rookie.FEN.txt:");
-			string filePath = @"C:\Users\mavmi\Desktop\GameDev\Projects\5dChess\Resources\res\Puzzles\RookTactics4.PGN5.txt";
+			string filePath = "res://Resources/res/Puzzles/RookTactics4.PGN5.txt";
 			GameState g = FENParser.ShadSTDGSM(filePath);
-			//GameState g = FENParser.ShadSTDGSM("C:\\User\\mavmi\\Desktop\\GameDev\\Projects\\5dChess\\Resources\\res\\Puzzles\\RookTactics4.PGN5.txt");
-			
-			g.PrintMultiverse();
 			if (g == null) throw new Exception("GameState is null");
 			if (g.Color != false) throw new Exception("Color mismatch");
 			if (g.MinTL != 0) throw new Exception("MinTL mismatch");
@@ -87,9 +84,10 @@ namespace Test
 
 		public static void TestShadFEN()
 		{
-			Console.WriteLine("    Testing Whole Fen Parser.");
-			FENParser.ShadSTDGSM("res/Puzzles/Brawn Tactics 1.5DPGN.txt");
-			FENParser.ShadSTDGSM("res/testPGNs/AmbiguityCheck.txt");
+			Console.Write("    Testing Whole Fen Parser.");
+			FENParser.ShadSTDGSM("res://Resources/res/Puzzles/Brawn Tactics 1.5DPGN.txt");
+			FENParser.ShadSTDGSM("res://Resources/res/testPGNs/AmbiguityCheck.txt");
+			Console.WriteLine(" passed.");
 		}
 
 		public static void TestDefaultGame(){
@@ -98,7 +96,7 @@ namespace Test
 		
 		public static void TestAmbiguityInfoParser()
 		{
-			Console.WriteLine("    Testing Ambiguity Getter.");
+			Console.Write("    Testing Ambiguity Getter.");
 			CoordFour t1 = FENParser.GetAmbiguityInfo("Ng3");
 			CoordTester.TestCoord(t1, -1, -1, -1, -1);
 			CoordFour t2 = FENParser.GetAmbiguityInfo("Nfg3");
@@ -109,6 +107,7 @@ namespace Test
 			CoordTester.TestCoord(t4, 2, 4, -1, -1);
 			CoordFour t5 = FENParser.GetAmbiguityInfo("(0T1)N1g3");
 			CoordTester.TestCoord(t5, -1, 0, -1, -1);
+			Console.WriteLine(" passed.");
 		}
 	}
 }
