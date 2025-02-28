@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgu2tqng234b2"]
+
+[ext_resource type="Script" path="res://Scripts/UI/multi_verse_draw.gd" id="1_jqb6w"]
+
+[node name="MultiVerseDraw" type="Node2D"]
+script = ExtResource("1_jqb6w")

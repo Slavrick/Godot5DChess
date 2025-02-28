@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://dvvh4cahld0wn"]
+
+[ext_resource type="Texture2D" uid="uid://6lsp4rxrlplq" path="res://Sprites/Pieces-hirez.png" id="1_eago5"]
+
+[resource]
+atlas = ExtResource("1_eago5")
+region = Rect2(1028, 131, 136, 122)

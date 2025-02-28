@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b37646rjb18ug"]
+
+[ext_resource type="Script" path="res://Scripts/UI/MultiverseTile.gd" id="1_e7qhh"]
+[ext_resource type="Theme" uid="uid://crtb7d7dci3be" path="res://Resources/MultiverseTheme.tres" id="1_jtux4"]
+
+[node name="MultiverseTile" type="Panel"]
+offset_right = 191.0
+offset_bottom = 137.0
+theme = ExtResource("1_jtux4")
+script = ExtResource("1_e7qhh")
+
+[node name="MultiverseLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+text = "0T0L"

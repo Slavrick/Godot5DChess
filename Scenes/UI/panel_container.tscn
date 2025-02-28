@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvsag20shf3yr"]
+
+[ext_resource type="Script" path="res://Scripts/UI/Board_drawer.gd" id="1_huwgt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ehwp4"]
+bg_color = Color(0.737689, 0.571108, 0.239372, 1)
+border_color = Color(0.921569, 0.109804, 0.858824, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="PanelContainer" type="Panel"]
+offset_right = 100.0
+offset_bottom = 100.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ehwp4")
+script = ExtResource("1_huwgt")
+SQUARE_WIDTH = 50

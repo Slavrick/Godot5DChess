@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://d33rvqhsi8ycp"]
+
+[ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multi_verse_draw.tscn" id="1_fqsyd"]
+[ext_resource type="Script" path="res://Scripts/UI/Camera_controller_test.gd" id="1_ku55i"]
+[ext_resource type="Script" path="res://Scripts/UI/game.gd" id="1_wlh0e"]
+[ext_resource type="PackedScene" uid="uid://bvsag20shf3yr" path="res://Scenes/UI/panel_container.tscn" id="3_5gjml"]
+[ext_resource type="PackedScene" uid="uid://b5lchq61xdlyb" path="res://Scenes/UI/piece.tscn" id="4_ycbj2"]
+[ext_resource type="Script" path="res://Scripts/5DGameManager/Tester.cs" id="6_ivmj2"]
+
+[node name="Game" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wlh0e")
+
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("Multiverse_draw")]
+script = ExtResource("1_ku55i")
+Multiverse_draw = NodePath("../MultiVerseDraw")
+
+[node name="MultiVerseDraw" parent="." instance=ExtResource("1_fqsyd")]
+
+[node name="PanelContainer" parent="." instance=ExtResource("3_5gjml")]
+layout_mode = 0
+offset_left = 362.0
+offset_top = 126.0
+offset_right = 462.0
+offset_bottom = 226.0
+SQUARE_WIDTH = 128
+light_color = Color(0.631227, 0.933705, 0.879907, 1)
+dark_color = Color(0.0294882, 0.266672, 1, 1)
+
+[node name="Piece" parent="PanelContainer" instance=ExtResource("4_ycbj2")]
+layout_mode = 2
+piece_type = 3
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("6_ivmj2")

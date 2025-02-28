@@ -1,0 +1,17 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://crtb7d7dci3be"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nktqh"]
+bg_color = Color(0.65098, 0.478431, 0.160784, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o2ceb"]
+bg_color = Color(0.137255, 0.0901961, 0.0117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vj2u1"]
+bg_color = Color(0.219608, 0.176471, 0.0313726, 1)
+
+[resource]
+Panel/styles/panel = SubResource("StyleBoxFlat_nktqh")
+Panel/styles/panelblack = SubResource("StyleBoxFlat_nktqh")
+Panel/styles/panelwhite = SubResource("StyleBoxFlat_o2ceb")
+blacktile/base_type = &"Panel"
+blacktile/styles/panel = SubResource("StyleBoxFlat_vj2u1")
