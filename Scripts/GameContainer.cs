@@ -2,15 +2,20 @@ using Godot;
 using System;
 using Engine;
 using FileIO5D;
-
+using System.Collections.Generic;
 public partial class GameContainer : Control
 {
 	GameStateManager gsm;
+	List<CoordFour> destinations;
+	CoordFive SelectedSquare;
+	Node mvcontainer;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		//gsm = FENParser.ShadSTDGSM("res://Resources/res/testPGNs/ExampleGame.PGN5.txt");
-		gsm = FENParser.ShadSTDGSM("res://Resources/res/Puzzles/Puzzlenew.txt");
+		//gsm = FENParser.ShadSTDGSM("res://Resources/res/testPGNs/ShadTestGame2.txt");
+		gsm = FENParser.ShadSTDGSM("res://Resources/NehemiagurlVsQxyzpkS2.txt");
+		
 		GameStateToGodotNodes();
 	}
 
@@ -25,6 +30,8 @@ public partial class GameContainer : Control
 		for(int i = 0; i < gsm.Multiverse.Count; i++){
 			multiverse.AddChild(TimeLineToGodotNodes(gsm.Multiverse[i],gsm.MinTL+i));
 		}
+		multiverse.Connect("square_clicked", new Callable(this,nameof(HandleClick)));
+		mvcontainer = multiverse;
 		AddChild(multiverse);
 	}
 	
@@ -56,11 +63,47 @@ public partial class GameContainer : Control
 				arr.Add(piece);
 			}	
 		}
-		Console.WriteLine(arr);
 		scene.Set("board", arr);
 		scene.Set("multiverse_position", new Vector2(L,T));
 		scene.Set("color", color);
 		scene.Call("logicalBoardToUIBoard");
 		return scene;
+	}
+	
+	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
+		Console.WriteLine("validclick");
+		if( destinations == null ){
+			GetDestinationsFromClick(square,Temporalposition,color);
+		}
+		else if(destinations.Contains(new CoordFour((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X))){
+			Console.WriteLine("valid");
+			
+		}else{
+			GetDestinationsFromClick(square,Temporalposition,color);
+		}
+		
+	}
+	
+	public void GetDestinationsFromClick(Vector2 square, Vector2 Temporalposition, bool color){
+		//Need to pass the square. From the Square get the piece and coord.
+		CoordFive coord = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X,color);
+		SelectedSquare = coord;
+		Console.WriteLine(coord);
+		int piece = gsm.GetSquare(coord);
+		if(piece == 0){
+			return;
+		}
+		destinations = MoveGenerator.GetMoves(piece,gsm,coord);
+		Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
+		foreach( CoordFour cd in destinations ){
+			Console.WriteLine(cd);
+			DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
+		}
+		if( mvcontainer != null){
+			mvcontainer.Call("clear_highlights");
+			mvcontainer.Call("highlight_squares",DestinationsGodot,color);
+		}
+		//CoordFive coord = new CoordFive(); based on what was passed
+		//MoveGenerator.getMoves(piece,gsm,coord);
 	}
 }

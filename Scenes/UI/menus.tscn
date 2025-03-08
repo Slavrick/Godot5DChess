@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bnlsmbn1boyhm"]
+
+[node name="Menus" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.117
+offset_right = 3.0
+offset_bottom = -35.816
+
+[node name="Load Game" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Load Game"
+
+[node name="Save Game" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Save Game"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.157
+anchor_bottom = 1.0
+offset_right = 0.135986
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Present" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Return To Present"
+
+[node name="Save Game" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Submit Turn"

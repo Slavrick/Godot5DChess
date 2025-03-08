@@ -1,7 +1,7 @@
 extends TextureButton
 
 
-signal piece_clicked
+signal piece_right_clicked
 
 @export var piece_type := 0
 
@@ -54,3 +54,8 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	modulate = Color.WHITE
+
+
+func _on_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		piece_right_clicked.emit()

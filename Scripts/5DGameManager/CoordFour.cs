@@ -1,9 +1,10 @@
 using System;
 using Godot;
+using System.Collections.Generic;
 
 namespace Engine
 {
-	public class CoordFour
+	public class CoordFour : IEquatable<CoordFour>
 	{
 		/*
 		 * X represents file ie. a,b,c... files y represents rank T/L represent their
@@ -47,6 +48,15 @@ namespace Engine
 			return X == c.X && Y == c.Y && T == c.T && L == c.L;
 		}
 
+
+		public override bool Equals(object o)
+		{
+			if(o == null){
+				return false;
+			}
+			CoordFour c = o as CoordFour;
+			return X == c.X && Y == c.Y && T == c.T && L == c.L;
+		}
 		/// <summary>
 		/// A comparison function to compare this coordinate and another.
 		/// This only checks spatially.

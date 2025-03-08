@@ -493,6 +493,9 @@ namespace Engine {
 	  return GetBoard(temporalCoord, temporalCoord.Color);
 	}
 
+	public int GetSquare(CoordFive C){
+		return GetSquare(C, C.Color);
+	}
 	public int GetSquare(CoordFour c, bool color) {
 	  if (LayerExists(c.L))
 		return GetTimeline(c.L).getSquare(c, color);

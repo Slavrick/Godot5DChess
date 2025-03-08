@@ -1,0 +1,21 @@
+[Board "Standard"]
+[Mode "5D"]
+1. Nf3 / Nf6
+2. c3 / e6
+3. d4 / c6
+4. Qb3 / Qa5
+5. e3 / d5
+6. Ne5 / Qc7
+7. Na3 / Bd6
+8. Nb5 / Qe7
+9. Nxd6 / Qxd6
+10. Qd1 / Qe7
+11. Ng4 / Nxg4
+12. Qxg4 / Qf6
+13. (0T13)Qg4>>x(0T10)g7~ (>L1) / (1T10)Rf8
+14. (1T11)Qxf6 / (1T11)Qd8
+15. (1T12)Qxd8 / (1T12)Kxd8
+16. (1T13)Nxc6 / (1T13)bxc6 (0T13)Qf5
+17. (1T14)Bd2 (0T14)Bd3 / (0T14)Qf6 (1T14)Re8
+18. (0T15)f4 (1T15)Qb4 / (0T15)Qh4 (1T15)a5
+19. (0T16)g3 (1T16)Qd6 / (0T16)Qh4>>x(0T14)f2~ (>L-1)

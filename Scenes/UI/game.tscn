@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://d33rvqhsi8ycp"]
+[gd_scene load_steps=6 format=3 uid="uid://d33rvqhsi8ycp"]
 
 [ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multi_verse_draw.tscn" id="1_fqsyd"]
 [ext_resource type="Script" path="res://Scripts/GameContainer.cs" id="1_hwe3s"]
 [ext_resource type="Script" path="res://Scripts/UI/Camera_controller_test.gd" id="1_ku55i"]
-[ext_resource type="PackedScene" uid="uid://bvsag20shf3yr" path="res://Scenes/UI/BoardDrawer.tscn" id="3_5gjml"]
-[ext_resource type="PackedScene" uid="uid://b5lchq61xdlyb" path="res://Scenes/UI/piece.tscn" id="4_ycbj2"]
+[ext_resource type="PackedScene" uid="uid://bnlsmbn1boyhm" path="res://Scenes/UI/menus.tscn" id="5_bj616"]
 [ext_resource type="Script" path="res://Scripts/5DGameManager/Tester.cs" id="6_ivmj2"]
 
 [node name="Game" type="Control"]
@@ -16,26 +15,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hwe3s")
 
+[node name="SubViewport" type="CanvasLayer" parent="."]
+layer = 3
+
+[node name="Menus" parent="SubViewport" instance=ExtResource("5_bj616")]
+
 [node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("Multiverse_draw")]
 script = ExtResource("1_ku55i")
 Multiverse_draw = NodePath("../MultiVerseDraw")
 
-[node name="MultiVerseDraw" parent="." instance=ExtResource("1_fqsyd")]
-visible = false
-
-[node name="PanelContainer" parent="." instance=ExtResource("3_5gjml")]
-visible = false
-layout_mode = 0
-offset_left = 362.0
-offset_top = 126.0
-offset_right = 462.0
-offset_bottom = 226.0
-light_color = Color(0.631227, 0.933705, 0.879907, 1)
-dark_color = Color(0.0294882, 0.266672, 1, 1)
-
-[node name="Piece" parent="PanelContainer" instance=ExtResource("4_ycbj2")]
-layout_mode = 2
-piece_type = 3
+[node name="MultiVerseDraw" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("1_fqsyd")]
+camera = NodePath("../Camera2D")
+light_color = Color(0.411765, 0.572549, 0.243137, 1)
+dark_color = Color(0.305882, 0.470588, 0.215686, 1)
+SQUARE_LENGTH = 2168
 
 [node name="TestingThing" type="Node" parent="."]
 script = ExtResource("6_ivmj2")

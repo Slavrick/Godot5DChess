@@ -1,7 +1,8 @@
 extends Panel
 
+signal square_clicked( square : Vector2, time : int, color : bool)
 
-@export var SQUARE_WIDTH := 10
+@export var SQUARE_WIDTH := 128
 @export var board_height := 8
 @export var board_width := 8
 @export var light_color := Color.BEIGE
@@ -9,8 +10,11 @@ extends Panel
 @export var margin := 20
 @export var multiverse_position = Vector2.ZERO
 @export var color := false
+@export var black_style_box : StyleBoxFlat
+@export var white_style_box : StyleBoxFlat
 
 var board : Array
+var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
 
 
@@ -50,7 +54,10 @@ func _ready() -> void:
 	size = Vector2(SQUARE_WIDTH * board_width,SQUARE_WIDTH * board_height)
 	size += Vector2(margin,margin) * 2
 	load_board_array()
-
+	if color:
+		add_theme_stylebox_override("panel",white_style_box)
+	else:
+		add_theme_stylebox_override("panel",black_style_box)
 
 func place_children():
 	for child in get_children():
@@ -69,9 +76,10 @@ func load_board_array():
 		var rank = floor(i / board_width)
 		var piece = packed_piece.instantiate()
 		piece.piece_type = board[i]
-		print(board[i])
 		piece.rank = rank
 		piece.file = file
+		piece.pressed.connect(button_clicked.bind(Vector2(file,rank)))
+		piece.piece_right_clicked.connect(highlight_square.bind(Vector2(file,rank),Color.INDIAN_RED))
 		add_child(piece)
 	place_children()
 
@@ -84,6 +92,9 @@ func _draw() -> void:
 				draw_rect(rect,light_color,true)
 			else:
 				draw_rect(rect,dark_color,true)
+	for highlight in highlighted_squares:
+		var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + highlight.square.y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
+		draw_rect(rect,highlight.highlight_color,true)
 
 
 func logicalBoardToUIBoard():
@@ -99,5 +110,43 @@ func functional_height() -> float:
 	return SQUARE_WIDTH * board_height + margin * 2
 
 
-func highlight_square():
-	pass
+func highlight_square(square : Vector2, color : Color):
+	color.a = .5
+	var new_highlight = HighLightedSquare.new()
+	new_highlight.square = square
+	new_highlight.highlight_color = color
+	highlighted_squares.append(new_highlight)
+	queue_redraw()
+
+func unhighlight_square(square):
+	for i in range(highlighted_squares.size()):
+		if highlighted_squares[i].square == square:
+			highlighted_squares.remove_at(i)
+			return
+	queue_redraw()
+
+
+func clear_highlights():
+	highlighted_squares.clear()
+	queue_redraw()
+
+
+func button_clicked( pos : Vector2 ):
+	square_clicked.emit(pos,multiverse_position.y,color)
+
+
+func _on_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			var mouse_pos = get_local_mouse_position()
+			highlight_square(local_position_to_square(mouse_pos),Color.GOLD)
+			queue_redraw()
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			var mouse_pos = get_local_mouse_position()
+			button_clicked(local_position_to_square(mouse_pos))
+
+
+func local_position_to_square( local_pos ) -> Vector2:
+	var file = floor((local_pos.x - margin) / SQUARE_WIDTH)
+	var rank = floor((local_pos.y - margin) / SQUARE_WIDTH)
+	return Vector2(file,rank)

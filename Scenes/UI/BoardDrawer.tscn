@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvsag20shf3yr"]
+[gd_scene load_steps=5 format=3 uid="uid://bvsag20shf3yr"]
 
 [ext_resource type="Script" path="res://Scripts/UI/Board_drawer.gd" id="1_huwgt"]
 
@@ -10,10 +10,18 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_86p1c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8un4g"]
+bg_color = Color(0.847464, 0.50903, 0, 1)
+
 [node name="BoardDrawer" type="Panel"]
 offset_right = 100.0
 offset_bottom = 100.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ehwp4")
 script = ExtResource("1_huwgt")
-SQUARE_WIDTH = 128
 dark_color = Color(0.29219, 0.29219, 0.29219, 1)
+black_style_box = SubResource("StyleBoxFlat_86p1c")
+white_style_box = SubResource("StyleBoxFlat_8un4g")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
