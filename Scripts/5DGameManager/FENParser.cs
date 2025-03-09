@@ -10,18 +10,27 @@ namespace FileIO5D {
 	public static readonly string STD_DEFENDEDPAWN_BOARDFEN = "[r*qbnk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*QBNK*BNR*:0:1:w]";
 
 	public static GameStateManager ShadSTDGSM(string fileLocation) {
-	using var file = FileAccess.Open(fileLocation, FileAccess.ModeFlags.Read);
-	string content = file.GetAsText();
-	string[] linesarray = content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-	List<string> lines =  new List<string>(linesarray);
-	  string size = null;
-	  string variant = null;
-	  string color = null;
-	  List < string > fenBoards = new List < string > ();
-	  List < string > moves = new List < string > ();
-	  bool evenStarters = false;
-
-	  foreach(string line in lines) {
+		if (!FileAccess.FileExists(fileLocation))
+		{
+			Console.WriteLine($"File not found: {fileLocation}");
+			return null;
+		}
+		using var file = FileAccess.Open(fileLocation, FileAccess.ModeFlags.Read);
+		if (file == null)
+		{
+			Console.WriteLine("Failed to open file.");
+			return null;
+		}
+		string content = file.GetAsText();
+		string[] linesarray = content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+		List<string> lines =  new List<string>(linesarray);
+		string size = null;
+		string variant = null;
+		string color = null;
+		List < string > fenBoards = new List < string > ();
+		List < string > moves = new List < string > ();
+		bool evenStarters = false;
+		foreach(string line in lines) {
 		if (line.Length == 0){
 			continue;
 		}

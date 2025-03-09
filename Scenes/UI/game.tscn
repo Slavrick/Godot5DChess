@@ -32,3 +32,10 @@ SQUARE_LENGTH = 2168
 
 [node name="TestingThing" type="Node" parent="."]
 script = ExtResource("6_ivmj2")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+position = Vector2i(0, 36)
+size = Vector2i(500, 500)
+ok_button_text = "Open"
+file_mode = 0

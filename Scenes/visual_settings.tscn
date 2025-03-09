@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://vmb34xygywxe"]
+
+[ext_resource type="Script" path="res://Scripts/visual_settings.gd" id="1_fpv66"]
+
+[node name="VisualSettings" type="Node"]
+script = ExtResource("1_fpv66")

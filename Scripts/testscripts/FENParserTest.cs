@@ -24,7 +24,7 @@ namespace Test
 		public static void TestFENFileParser()
 		{
 			Console.Write("    Testing Parsing Rookie.FEN.txt:");
-			string filePath = "res://Resources/res/Puzzles/RookTactics4.PGN5.txt";
+			string filePath = "res://PGN/Puzzles/RookTactics4.PGN5.txt";
 			GameState g = FENParser.ShadSTDGSM(filePath);
 			if (g == null) throw new Exception("GameState is null");
 			if (g.Color != false) throw new Exception("Color mismatch");
@@ -85,8 +85,8 @@ namespace Test
 		public static void TestShadFEN()
 		{
 			Console.Write("    Testing Whole Fen Parser.");
-			FENParser.ShadSTDGSM("res://Resources/res/Puzzles/Brawn Tactics 1.5DPGN.txt");
-			FENParser.ShadSTDGSM("res://Resources/res/testPGNs/AmbiguityCheck.txt");
+			FENParser.ShadSTDGSM("res://PGN/Puzzles/Brawn Tactics 1.5DPGN.txt");
+			FENParser.ShadSTDGSM("res://PGN/testPGNs/AmbiguityCheck.txt");
 			Console.WriteLine(" passed.");
 		}
 

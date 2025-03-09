@@ -2,27 +2,39 @@ extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
 
-enum Perspective {
+enum PERSPECTIVE {
 	BLACK,
 	WHITE
 }
 
+enum TYPE {
+	PRESENT,
+	HISTORY,
+	GHOST,
+	INACTIVE,
+}
+
+@export_group("dimensions")
 @export var SQUARE_WIDTH := 128
 @export var board_height := 8
 @export var board_width := 8
+@export var margin := 20
+@export_group("colors")
 @export var light_color := Color.BEIGE
 @export var dark_color := Color.BLACK
-@export var margin := 20
-@export var multiverse_position = Vector2.ZERO
-@export var color := false
 @export var black_style_box : StyleBoxFlat
 @export var white_style_box : StyleBoxFlat
-@export var board_perspective := Perspective.WHITE
+@export_group("visual_settings")
+@export var board_perspective := PERSPECTIVE.WHITE
+@export var board_type := TYPE.PRESENT
+
 var board : Array
+@export var multiverse_position = Vector2.ZERO
+@export var color := false
 var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
 
-
+#Translates from what the array uses in my game manager to the positions of this.
 const translation_dict = {
 	0:0,
 	1:1,
@@ -66,7 +78,7 @@ func _ready() -> void:
 
 func place_children():
 	for child in get_children():
-		if(board_perspective == Perspective.WHITE):
+		if(board_perspective == PERSPECTIVE.WHITE):
 			child.position = piece_local_position_white(child.rank,child.file)
 		else:
 			child.position = piece_local_position_black(child.rank,child.file)
@@ -106,7 +118,7 @@ func _draw() -> void:
 			else:
 				draw_rect(rect,dark_color,true)
 	for highlight in highlighted_squares:
-		if(board_perspective == Perspective.WHITE):
+		if(board_perspective == PERSPECTIVE.WHITE):
 			var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + (board_height - highlight.square.y - 1) * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
 			draw_rect(rect,highlight.highlight_color,true)
 		else:
@@ -166,7 +178,7 @@ func _on_gui_input(event: InputEvent) -> void:
 func local_position_to_square( local_pos ) -> Vector2:
 	var file
 	var rank
-	if board_perspective == Perspective.WHITE:
+	if board_perspective == PERSPECTIVE.WHITE:
 		file = floor((local_pos.x - margin) / SQUARE_WIDTH)
 		rank = board_height - floor((local_pos.y - margin) / SQUARE_WIDTH) - 1
 	else:

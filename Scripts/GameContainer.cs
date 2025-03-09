@@ -15,19 +15,14 @@ public partial class GameContainer : Control
 	{
 		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
 		GetNode("SubViewport/Menus").Connect("undo_turn", new Callable(this,nameof(UndoTurn)));
-		
-		//gsm = FENParser.ShadSTDGSM("res://Resources/res/Puzzles/RookTactics4.PGN5.txt");
-		gsm = FENParser.ShadSTDGSM("res://Resources/res/Variations/Standard-T0.PGN5.txt");
-		//gsm = FENParser.ShadSTDGSM("res://Resources/res/testPGNs/ExampleGame.PGN5.txt");
-		//gsm = FENParser.ShadSTDGSM("res://Resources/res/testPGNs/ShadTestGame2.txt");
-		//gsm = FENParser.ShadSTDGSM("res://Resources/NehemiagurlVsQxyzpkS2.txt");
-		
-		GameStateToGodotNodes();
+		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
+		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		
 	}
 	
 	public void GameStateToGodotNodes()
@@ -122,6 +117,7 @@ public partial class GameContainer : Control
 	
 	public void SubmitTurn(){
 		gsm.SubmitMoves();
+		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);
 	}
 	
 	public void UndoTurn(){
@@ -130,9 +126,25 @@ public partial class GameContainer : Control
 	}
 	
 	public void UpdateRender(){
-		mvcontainer.Call("queue_free");
-		GameStateToGodotNodes();
+		if(mvcontainer != null){
+			mvcontainer.Call("queue_free");
+		}if(gsm != null){
+			GameStateToGodotNodes();
+			GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);
+		}
 	}
+	
+	
+	public void LoadGame(String filepath){
+		gsm = FENParser.ShadSTDGSM(filepath);
+		UpdateRender();
+	}
+	
+	
+	public void OpenFileDialog(){
+		GetNode("FileDialog").Call("show");
+	}
+	
 	
 	public override void _Input(InputEvent @event)
 	{

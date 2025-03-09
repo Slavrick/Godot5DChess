@@ -6,6 +6,10 @@ public partial class Tester : Node
 {
 	public override void _Ready()
 	{
+		//if (Engine.IsDebugBuild())
+		//{ TODO ADD THIS not sure the rigth way to implement.
+			//QueueFree();
+		//}
 		TurnTester.TestTurnEquals();
 		CoordTester.TestAllCoordFourFuncs();
 		FENParserTest.TestMoveParser();
