@@ -3,6 +3,8 @@ extends Control
 signal square_clicked(square : Vector2, temporal_position : Vector2, color : bool)
 
 var highlighted_squares = []
+var chessboard_dimensions : Vector2
+
 
 func _ready() -> void:
 	place_timelines()

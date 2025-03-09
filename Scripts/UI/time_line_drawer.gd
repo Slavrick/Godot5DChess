@@ -11,6 +11,8 @@ enum DRAWMODE {
 @export var layer := 0
 @export var board_margin := 20
 @export var draw_mode := DRAWMODE.FULL
+var chessboard_dimensions : Vector2
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	place_children()

@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://bnlsmbn1boyhm"]
+[gd_scene load_steps=2 format=3 uid="uid://bnlsmbn1boyhm"]
+
+[ext_resource type="Script" path="res://Scripts/UI/menus.gd" id="1_ici0s"]
 
 [node name="Menus" type="Control"]
 layout_mode = 3
@@ -8,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("1_ici0s")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -47,6 +50,10 @@ grow_vertical = 0
 layout_mode = 2
 text = "Return To Present"
 
-[node name="Save Game" type="Button" parent="HBoxContainer2"]
+[node name="Submit" type="Button" parent="HBoxContainer2"]
 layout_mode = 2
 text = "Submit Turn"
+
+[node name="Undo" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Undo Moves"

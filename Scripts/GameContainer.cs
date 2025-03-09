@@ -3,6 +3,7 @@ using System;
 using Engine;
 using FileIO5D;
 using System.Collections.Generic;
+
 public partial class GameContainer : Control
 {
 	GameStateManager gsm;
@@ -12,9 +13,14 @@ public partial class GameContainer : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
+		GetNode("SubViewport/Menus").Connect("undo_turn", new Callable(this,nameof(UndoTurn)));
+		
+		//gsm = FENParser.ShadSTDGSM("res://Resources/res/Puzzles/RookTactics4.PGN5.txt");
+		gsm = FENParser.ShadSTDGSM("res://Resources/res/Variations/Standard-T0.PGN5.txt");
 		//gsm = FENParser.ShadSTDGSM("res://Resources/res/testPGNs/ExampleGame.PGN5.txt");
 		//gsm = FENParser.ShadSTDGSM("res://Resources/res/testPGNs/ShadTestGame2.txt");
-		gsm = FENParser.ShadSTDGSM("res://Resources/NehemiagurlVsQxyzpkS2.txt");
+		//gsm = FENParser.ShadSTDGSM("res://Resources/NehemiagurlVsQxyzpkS2.txt");
 		
 		GameStateToGodotNodes();
 	}
@@ -27,6 +33,7 @@ public partial class GameContainer : Control
 	public void GameStateToGodotNodes()
 	{
 		var multiverse = ResourceLoader.Load<PackedScene>("res://Scenes/UI/multiverse_Container.tscn").Instantiate();
+		multiverse.Set("chessboard_dimensions",new Vector2(gsm.Width,gsm.Height));
 		for(int i = 0; i < gsm.Multiverse.Count; i++){
 			multiverse.AddChild(TimeLineToGodotNodes(gsm.Multiverse[i],gsm.MinTL+i));
 		}
@@ -63,6 +70,8 @@ public partial class GameContainer : Control
 				arr.Add(piece);
 			}	
 		}
+		scene.Set("board_width",gsm.Width);
+		scene.Set("board_height",gsm.Height);
 		scene.Set("board", arr);
 		scene.Set("multiverse_position", new Vector2(L,T));
 		scene.Set("color", color);
@@ -72,11 +81,18 @@ public partial class GameContainer : Control
 	
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
 		Console.WriteLine("validclick");
+		CoordFour clicked = new CoordFour((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X);
 		if( destinations == null ){
 			GetDestinationsFromClick(square,Temporalposition,color);
 		}
-		else if(destinations.Contains(new CoordFour((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X))){
+		else if(destinations.Contains(clicked)){
 			Console.WriteLine("valid");
+			if(gsm.CoordIsPlayable(SelectedSquare)){
+				Move SelectedMove = new Move(SelectedSquare,clicked);
+				gsm.MakeMove(SelectedMove);
+				//need to add cleanup
+				UpdateRender();
+			}
 			
 		}else{
 			GetDestinationsFromClick(square,Temporalposition,color);
@@ -105,5 +121,31 @@ public partial class GameContainer : Control
 		}
 		//CoordFive coord = new CoordFive(); based on what was passed
 		//MoveGenerator.getMoves(piece,gsm,coord);
+	}
+	
+	public void SubmitTurn(){
+		gsm.SubmitMoves();
+	}
+	
+	public void UndoTurn(){
+		gsm.undoTempMoves();
+		UpdateRender();
+	}
+	
+	public void UpdateRender(){
+		mvcontainer.Call("queue_free");
+		GameStateToGodotNodes();
+	}
+	
+	public override void _Input(InputEvent @event)
+	{
+		if (@event.IsActionPressed("SubmitTurn"))
+		{
+			SubmitTurn();
+		}
+		if (@event.IsActionPressed("UndoTurn"))
+		{
+			UndoTurn();
+		}
 	}
 }
