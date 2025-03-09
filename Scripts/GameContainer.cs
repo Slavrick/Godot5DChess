@@ -80,13 +80,11 @@ public partial class GameContainer : Control
 	}
 	
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
-		Console.WriteLine("validclick");
 		CoordFour clicked = new CoordFour((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X);
 		if( destinations == null ){
 			GetDestinationsFromClick(square,Temporalposition,color);
 		}
 		else if(destinations.Contains(clicked)){
-			Console.WriteLine("valid");
 			if(gsm.CoordIsPlayable(SelectedSquare)){
 				Move SelectedMove = new Move(SelectedSquare,clicked);
 				gsm.MakeMove(SelectedMove);
@@ -112,7 +110,6 @@ public partial class GameContainer : Control
 		destinations = MoveGenerator.GetMoves(piece,gsm,coord);
 		Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
 		foreach( CoordFour cd in destinations ){
-			Console.WriteLine(cd);
 			DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
 		}
 		if( mvcontainer != null){

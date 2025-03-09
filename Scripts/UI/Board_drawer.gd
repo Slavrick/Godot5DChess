@@ -2,6 +2,11 @@ extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
 
+enum Perspective {
+	BLACK,
+	WHITE
+}
+
 @export var SQUARE_WIDTH := 128
 @export var board_height := 8
 @export var board_width := 8
@@ -12,7 +17,7 @@ signal square_clicked( square : Vector2, time : int, color : bool)
 @export var color := false
 @export var black_style_box : StyleBoxFlat
 @export var white_style_box : StyleBoxFlat
-
+@export var board_perspective := Perspective.WHITE
 var board : Array
 var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
@@ -61,12 +66,20 @@ func _ready() -> void:
 
 func place_children():
 	for child in get_children():
-		child.position = piece_local_position(child.rank,child.file)
-
+		if(board_perspective == Perspective.WHITE):
+			child.position = piece_local_position_white(child.rank,child.file)
+		else:
+			child.position = piece_local_position_black(child.rank,child.file)
 
 func piece_local_position(rank, file):
 	return Vector2(margin + SQUARE_WIDTH * file, margin + SQUARE_WIDTH * rank)
 
+
+func piece_local_position_white(rank, file):
+	return Vector2(margin + SQUARE_WIDTH * file, margin + SQUARE_WIDTH * (board_height - rank - 1))
+
+func piece_local_position_black(rank, file):
+	return Vector2(margin + SQUARE_WIDTH * (board_width - file - 1), margin + SQUARE_WIDTH * rank)
 
 func load_board_array():
 	for i in range(board.size()):
@@ -93,8 +106,12 @@ func _draw() -> void:
 			else:
 				draw_rect(rect,dark_color,true)
 	for highlight in highlighted_squares:
-		var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + highlight.square.y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
-		draw_rect(rect,highlight.highlight_color,true)
+		if(board_perspective == Perspective.WHITE):
+			var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + (board_height - highlight.square.y - 1) * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
+			draw_rect(rect,highlight.highlight_color,true)
+		else:
+			var rect = Rect2(margin + (board_width - highlight.square.x - 1) * SQUARE_WIDTH, margin + highlight.square.y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
+			draw_rect(rect,highlight.highlight_color,true)
 
 
 func logicalBoardToUIBoard():
@@ -147,6 +164,12 @@ func _on_gui_input(event: InputEvent) -> void:
 
 
 func local_position_to_square( local_pos ) -> Vector2:
-	var file = floor((local_pos.x - margin) / SQUARE_WIDTH)
-	var rank = floor((local_pos.y - margin) / SQUARE_WIDTH)
+	var file
+	var rank
+	if board_perspective == Perspective.WHITE:
+		file = floor((local_pos.x - margin) / SQUARE_WIDTH)
+		rank = board_height - floor((local_pos.y - margin) / SQUARE_WIDTH) - 1
+	else:
+		file = board_width - floor((local_pos.x - margin) / SQUARE_WIDTH)  - 1
+		rank = floor((local_pos.y - margin) / SQUARE_WIDTH)
 	return Vector2(file,rank)
