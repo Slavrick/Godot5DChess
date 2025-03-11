@@ -9,6 +9,8 @@ signal undo_turn
 func _ready() -> void:
 	$HBoxContainer2/Submit.pressed.connect(submit_pressed)
 	$HBoxContainer2/Undo.pressed.connect(undo_turn_pressed)
+	$HBoxContainer2/Present.pressed.connect(gotopresent_pressed)
+	
 	$"HBoxContainer/Load Game".pressed.connect(load_game_pressed)
 
 
@@ -22,6 +24,10 @@ func undo_turn_pressed():
 
 func load_game_pressed():
 	load_game.emit()
+
+
+func gotopresent_pressed():
+	goto_present.emit()
 
 
 func set_turn_label(color : bool, present : int):

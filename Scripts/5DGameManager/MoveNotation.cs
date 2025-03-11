@@ -14,12 +14,12 @@ namespace Engine
 		public bool Rider { get; set; }
 		public int[] MovNote { get; set; }
 
-		public static readonly int[] ROOK = { 1 };
-		public static readonly int[] BISHOP = { 2 };
+/* 		public static readonly int[] ROOK = { 1 }; DELETE this is slated for deletion. Originally I wanted to notetate based on the movement potentials
+		public static readonly int[] BISHOP = { 2 }; Since each would have to generate the below movesets anyway, just hvaing them there is a little more clearn imo
 		public static readonly int[] UNICORN = { 3 };
 		public static readonly int[] DRAGON = { 4 };
 		public static readonly int[] KING = { 1, 2, 3, 4 };
-		public static readonly int[] QUEEN = { 1, 2, 3, 4 };
+		public static readonly int[] QUEEN = { 1, 2, 3, 4 }; */
 
 		public static readonly CoordFour[] NULLMOVESET = { };
 
@@ -466,7 +466,6 @@ namespace Engine
 		}
 	}
 	
-	//returns whether piece is a leaper or no
 	public static bool pieceIsRider(int piece) {
 		piece = piece < 0 ? piece * -1 : piece;
 		switch(piece) {

@@ -49,6 +49,8 @@ public partial class GameContainer : Control
 			timeline.AddChild(BoardToGodotNodes(tl.BBoards[i],i + tl.BlackStart, timelineLayer, false));
 		}
 		timeline.Set("layer",timelineLayer);
+		timeline.Set("TStart",tl.TStart);
+		timeline.Set("chessboard_dimensions",new Vector2(gsm.Width,gsm.Height));
 		return timeline;
 	}
 	
@@ -137,6 +139,8 @@ public partial class GameContainer : Control
 	
 	public void LoadGame(String filepath){
 		gsm = FENParser.ShadSTDGSM(filepath);
+		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
+		GetNode("/root/VisualSettings").EmitSignal("game_changed");
 		UpdateRender();
 	}
 	

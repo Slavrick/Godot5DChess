@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqq7umfxlncdj"]
+
+[ext_resource type="Script" path="res://Scripts/application_controller.gd" id="1_54hpp"]
+[ext_resource type="PackedScene" uid="uid://bqco6q4bwai4m" path="res://Scenes/UI/main_menu.tscn" id="1_rhmts"]
+
+[node name="ApplicationController" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_54hpp")
+
+[node name="MainMenu" parent="." instance=ExtResource("1_rhmts")]
+layout_mode = 1
+offset_left = 79.0
+offset_top = 32.0
+offset_right = -1073.0
+offset_bottom = -616.0

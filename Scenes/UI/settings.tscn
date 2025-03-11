@@ -1,0 +1,153 @@
+[gd_scene load_steps=7 format=3 uid="uid://dg5b24p4ma8jb"]
+
+[ext_resource type="Script" path="res://Scripts/UI/ExampleSquare.gd" id="1_h3oha"]
+[ext_resource type="Script" path="res://Scripts/settings.gd" id="1_y2bqf"]
+[ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multi_verse_draw.tscn" id="3_ja077"]
+
+[sub_resource type="Theme" id="Theme_b1vdr"]
+RichTextLabel/colors/default_color = Color(1, 1, 1, 1)
+RichTextLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+RichTextLabel/constants/outline_size = 10
+RichTextLabel/constants/shadow_outline_size = 7
+
+[sub_resource type="Gradient" id="Gradient_utle8"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.197452, 0.458599, 0.726115)
+colors = PackedColorArray(0, 0, 0, 1, 0.363057, 0.363057, 0.363057, 1, 0.364706, 0.364706, 0.870588, 1, 0.145098, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_aovgw"]
+gradient = SubResource("Gradient_utle8")
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_b1vdr")
+script = ExtResource("1_y2bqf")
+
+[node name="MultiVerseDraw" parent="." instance=ExtResource("3_ja077")]
+position = Vector2(494, 229)
+SQUARE_LENGTH = 250
+SQUARE_HEIGHT = 250
+coord_font_size = 0
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(506, 51)
+script = ExtResource("1_h3oha")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 418.0
+offset_bottom = 250.0
+
+[node name="whitesquare" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/whitesquare"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "White Square Color"
+fit_content = true
+scroll_active = false
+
+[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer/whitesquare"]
+custom_minimum_size = Vector2(50, 20)
+layout_mode = 2
+
+[node name="blacksquare" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/blacksquare"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Black Square Color"
+fit_content = true
+scroll_active = false
+
+[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer/blacksquare"]
+custom_minimum_size = Vector2(50, 20)
+layout_mode = 2
+
+[node name="whitemultiversesquare" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/whitemultiversesquare"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "White Multiverse Square Color"
+fit_content = true
+scroll_active = false
+
+[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer/whitemultiversesquare"]
+custom_minimum_size = Vector2(50, 20)
+layout_mode = 2
+
+[node name="blackmultiversesquare" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/blackmultiversesquare"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Black Multiverse Square Color"
+fit_content = true
+scroll_active = false
+
+[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer/blackmultiversesquare"]
+custom_minimum_size = Vector2(50, 20)
+layout_mode = 2
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer6"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Black Multiverse Square Color"
+fit_content = true
+scroll_active = false
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/HBoxContainer6"]
+custom_minimum_size = Vector2(50, 20)
+layout_mode = 2
+min_value = 10.0
+value = 10.0
+
+[node name="PalletsLabel" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]Pallets[/center]"
+fit_content = true
+
+[node name="Pallets" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/Pallets"]
+layout_mode = 2
+texture_normal = SubResource("GradientTexture2D_aovgw")
+
+[node name="TextureButton2" type="TextureButton" parent="VBoxContainer/Pallets"]
+layout_mode = 2
+texture_normal = SubResource("GradientTexture2D_aovgw")
+
+[node name="TextureButton3" type="TextureButton" parent="VBoxContainer/Pallets"]
+layout_mode = 2
+texture_normal = SubResource("GradientTexture2D_aovgw")
+
+[node name="TextureButton4" type="TextureButton" parent="VBoxContainer/Pallets"]
+layout_mode = 2
+texture_normal = SubResource("GradientTexture2D_aovgw")
+
+[node name="TextureButton5" type="TextureButton" parent="VBoxContainer/Pallets"]
+layout_mode = 2
+texture_normal = SubResource("GradientTexture2D_aovgw")
+
+[node name="TextureButton6" type="TextureButton" parent="VBoxContainer/Pallets"]
+layout_mode = 2
+texture_normal = SubResource("GradientTexture2D_aovgw")
+
+[node name="TextureButton7" type="TextureButton" parent="VBoxContainer/Pallets"]
+layout_mode = 2
+texture_normal = SubResource("GradientTexture2D_aovgw")

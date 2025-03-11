@@ -6,7 +6,7 @@ namespace Engine
 	public class Board
 	{
 		// TODO possibly make this hold the position of pieces.
-		
+		// TODO Make this board a 1d array and index that way, in order to have all the board contiguous and possibly faster
 		// Make this board private, so incorrect indexing doesn't happen
 		public int[][] Brd { get; set; }
 		public int Height { get; set; }
