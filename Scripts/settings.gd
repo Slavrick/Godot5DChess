@@ -1,5 +1,7 @@
 extends Control
 
+signal close
+
 
 func _ready() -> void:
 	$VBoxContainer/whitesquare/ColorPicker.color_changed.connect(change_light_color)
@@ -12,6 +14,8 @@ func _ready() -> void:
 	$VBoxContainer/blacksquare/ColorPicker.color = VisualSettings.dark_square_color
 	$VBoxContainer/whitemultiversesquare/ColorPicker.color = VisualSettings.white_multiverse_color
 	$VBoxContainer/blackmultiversesquare/ColorPicker.color = VisualSettings.black_multiverse_color
+	
+	$VBoxContainer/return.pressed.connect(returntomain)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -30,3 +34,7 @@ func white_multiverse_color_change( color : Color ):
 
 func black_multiverse_color_change( color : Color ):
 	VisualSettings.black_multiverse_color = color
+
+
+func returntomain():
+	close.emit()

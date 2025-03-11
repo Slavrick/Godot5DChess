@@ -14,7 +14,3 @@ script = ExtResource("1_54hpp")
 
 [node name="MainMenu" parent="." instance=ExtResource("1_rhmts")]
 layout_mode = 1
-offset_left = 79.0
-offset_top = 32.0
-offset_right = -1073.0
-offset_bottom = -616.0

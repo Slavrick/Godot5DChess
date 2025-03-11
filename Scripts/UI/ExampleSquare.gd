@@ -1,11 +1,11 @@
 extends Node2D
 
-@export_group("dimensions")
+@export_group("Dimensions")
 @export var SQUARE_WIDTH := 20
 @export var board_height := 8
 @export var board_width := 8
 @export var margin := 20
-@export_group("colors")
+@export_group("Colors")
 @export var light_color := Color.BEIGE
 @export var dark_color := Color.BLACK
 @export var black_style_box : StyleBoxFlat

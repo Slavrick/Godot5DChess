@@ -2,7 +2,7 @@ extends Node2D
 
 
 @export var camera : Node2D
-@export var camera_position := Vector2.ZERO
+@export var camera_position := Vector2(10,10)
 @export var light_color := Color(0.412, 0.573, 0.243)
 @export var dark_color := Color(0.306, 0.471, 0.216)
 @export var SQUARE_LENGTH := 2304

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqco6q4bwai4m"]
+[gd_scene load_steps=4 format=3 uid="uid://bqco6q4bwai4m"]
 
 [ext_resource type="PackedScene" uid="uid://dg5b24p4ma8jb" path="res://Scenes/UI/settings.tscn" id="1_7blw5"]
 [ext_resource type="Script" path="res://Scripts/UI/main_menu.gd" id="1_656jk"]
+[ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multi_verse_draw.tscn" id="2_yxuhw"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -12,15 +13,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_656jk")
 
+[node name="MultiVerseDraw" parent="." instance=ExtResource("2_yxuhw")]
+position = Vector2(416, 499)
+SQUARE_LENGTH = 100
+SQUARE_HEIGHT = 100
+coord_font_size = 0
+
 [node name="Settings" parent="." instance=ExtResource("1_7blw5")]
 visible = false
 layout_mode = 1
-offset_left = 510.0
-offset_top = 140.0
-offset_right = 510.0
-offset_bottom = 140.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MenuVbox" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.098
@@ -33,24 +36,43 @@ offset_right = 48.104
 offset_bottom = 49.136
 theme_override_constants/separation = 50
 
-[node name="Play Game" type="Button" parent="VBoxContainer"]
+[node name="Play Game" type="Button" parent="MenuVbox"]
 layout_mode = 2
 text = "Play"
 
-[node name="Puzzles" type="Button" parent="VBoxContainer"]
+[node name="Puzzles" type="Button" parent="MenuVbox"]
 layout_mode = 2
 disabled = true
 text = "Puzzles"
 
-[node name="Analysis" type="Button" parent="VBoxContainer"]
+[node name="Analysis" type="Button" parent="MenuVbox"]
 layout_mode = 2
 disabled = true
 text = "Analysis"
 
-[node name="Settings" type="Button" parent="VBoxContainer"]
+[node name="Settings" type="Button" parent="MenuVbox"]
 layout_mode = 2
 text = "Settings"
 
-[node name="Exit" type="Button" parent="VBoxContainer"]
+[node name="Exit" type="Button" parent="MenuVbox"]
 layout_mode = 2
 text = "Exit Game"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.21
+anchor_right = 1.0
+anchor_bottom = 0.21
+offset_left = 412.0
+offset_top = -55.08
+offset_right = -25.0
+offset_bottom = 311.92
+theme_override_constants/outline_size = 20
+theme_override_constants/shadow_offset_y = 70
+theme_override_constants/shadow_offset_x = 120
+theme_override_constants/shadow_outline_size = 60
+theme_override_font_sizes/normal_font_size = 100
+text = "5D Chess In Godot"
+fit_content = true

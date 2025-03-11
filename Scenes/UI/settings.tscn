@@ -18,8 +18,7 @@ colors = PackedColorArray(0, 0, 0, 1, 0.363057, 0.363057, 0.363057, 1, 0.364706,
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_aovgw"]
 gradient = SubResource("Gradient_utle8")
 
-[node name="Settings" type="Control"]
-layout_mode = 3
+[node name="Settings" type="CenterContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -39,9 +38,7 @@ position = Vector2(506, 51)
 script = ExtResource("1_h3oha")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 418.0
-offset_bottom = 250.0
+layout_mode = 2
 
 [node name="whitesquare" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -151,3 +148,8 @@ texture_normal = SubResource("GradientTexture2D_aovgw")
 [node name="TextureButton7" type="TextureButton" parent="VBoxContainer/Pallets"]
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_aovgw")
+
+[node name="return" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back To Main Menu"

@@ -10,7 +10,7 @@ func _ready() -> void:
 	$HBoxContainer2/Submit.pressed.connect(submit_pressed)
 	$HBoxContainer2/Undo.pressed.connect(undo_turn_pressed)
 	$HBoxContainer2/Present.pressed.connect(gotopresent_pressed)
-	
+
 	$"HBoxContainer/Load Game".pressed.connect(load_game_pressed)
 
 
