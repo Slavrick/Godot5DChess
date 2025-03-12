@@ -14,11 +14,11 @@ I used GitHub Copilot to initially port the code over, Im a little nervous about
 
 
 
-https://imgur.com/wwCJFo9
+![Main Menu](https://imgur.com/wwCJFo9)
 
 
 
-https://imgur.com/IgEKOwV
+![T0](https://imgur.com/IgEKOwV)
 
 
 
