@@ -26,3 +26,8 @@ var game_board_dimensions := Vector2(8,8)
 var board_padding := 20
 var board_horizontal_margin := 20
 var timeline_vertical_margin := 700
+
+var board_width
+var board_height
+var multiverse_tile_width
+var multiverse_tile_height

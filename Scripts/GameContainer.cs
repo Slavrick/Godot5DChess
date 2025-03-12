@@ -6,9 +6,13 @@ using System.Collections.Generic;
 
 public partial class GameContainer : Control
 {
+	[Signal]
+	public delegate void ExitGameEventHandler();
+	
 	GameStateManager gsm;
 	List<CoordFour> destinations;
 	CoordFive SelectedSquare;
+	
 	Node mvcontainer;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -17,6 +21,7 @@ public partial class GameContainer : Control
 		GetNode("SubViewport/Menus").Connect("undo_turn", new Callable(this,nameof(UndoTurn)));
 		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
 		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
+		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -150,6 +155,11 @@ public partial class GameContainer : Control
 	}
 	
 	
+	public void ExitGamePressed(){
+		EmitSignal(SignalName.ExitGame);
+	}
+	
+	
 	public override void _Input(InputEvent @event)
 	{
 		if (@event.IsActionPressed("SubmitTurn"))
@@ -159,6 +169,18 @@ public partial class GameContainer : Control
 		if (@event.IsActionPressed("UndoTurn"))
 		{
 			UndoTurn();
+		}
+		if(@event.IsActionPressed("escMenu"))
+		{
+			Control escMenu = GetNode("SubViewport/GameEscapeMenu") as Control;
+			
+			if(escMenu.Visible){
+				escMenu.Call("hide");
+			}
+			else
+			{
+				escMenu.Call("show");
+			}
 		}
 	}
 }

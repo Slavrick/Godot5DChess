@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multi_verse_draw.tscn" id="1_fqsyd"]
 [ext_resource type="Script" path="res://Scripts/GameContainer.cs" id="1_hwe3s"]
 [ext_resource type="Script" path="res://Scripts/UI/Camera_controller_test.gd" id="1_ku55i"]
-[ext_resource type="PackedScene" uid="uid://bnlsmbn1boyhm" path="res://Scenes/UI/menus.tscn" id="5_bj616"]
+[ext_resource type="PackedScene" uid="uid://bnlsmbn1boyhm" path="res://Scenes/UI/5DGameUI.tscn" id="5_bj616"]
 [ext_resource type="Script" path="res://Scripts/5DGameManager/Tester.cs" id="6_ivmj2"]
 
 [node name="Game" type="Control"]
@@ -18,10 +18,31 @@ script = ExtResource("1_hwe3s")
 [node name="SubViewport" type="CanvasLayer" parent="."]
 layer = 3
 
+[node name="GameEscapeMenu" type="MarginContainer" parent="SubViewport"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="SubViewport/GameEscapeMenu"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="SubViewport/GameEscapeMenu"]
+layout_mode = 2
+text = "Exit to main Menu"
+
 [node name="Menus" parent="SubViewport" instance=ExtResource("5_bj616")]
 
 [node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("Multiverse_draw")]
-offset = Vector2(10, 10)
+position = Vector2(106, 130)
 script = ExtResource("1_ku55i")
 Multiverse_draw = NodePath("../MultiVerseDraw")
 

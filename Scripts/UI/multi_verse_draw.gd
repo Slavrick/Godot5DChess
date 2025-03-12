@@ -17,6 +17,11 @@ func _ready():
 	VisualSettings.visual_theme_changed.connect(update_theme)
 	update_theme("null")
 	VisualSettings.game_changed.connect(update_dimensions)
+	if camera != null:
+		if camera.global_position != camera_position:
+			camera_position = camera.global_position
+			queue_redraw()
+
 
 func _process( delta :float ) -> void:
 	if camera != null:

@@ -17,9 +17,6 @@ func _ready() -> void:
 	
 	$VBoxContainer/return.pressed.connect(returntomain)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 
 func change_light_color( color : Color):

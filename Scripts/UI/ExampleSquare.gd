@@ -18,10 +18,6 @@ func _ready() -> void:
 	VisualSettings.visual_theme_changed.connect(color_changed)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 func color_changed( _change : String):
 	light_color = VisualSettings.light_square_color
 	dark_color = VisualSettings.dark_square_color
