@@ -34,6 +34,8 @@ var board : Array
 var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
 
+@onready var pawntres = load("res://Resources/Pieces/Pawn.tres")
+@onready var piecestext = load("res://Resources/res/Pieces-hirez.png")
 #Translates from what the array uses in my game manager to the positions of this.
 const translation_dict = {
 	0:0,
@@ -66,19 +68,52 @@ const translation_dict = {
 	27:27
 }
 
+
+const piecedict = {
+	0: Vector2(0,0), # Empty
+	1: Vector2(128,0), #WPawn
+	2: Vector2(256,0), #WKnight
+	3: Vector2(384,0), 
+	4: Vector2(512,0),
+	5: Vector2(640,0),
+	6: Vector2(768,0),
+	7: Vector2(896,0),
+	8: Vector2(1024,0),
+	9: Vector2(1152,0),
+	10: Vector2(1280,0),
+	11: Vector2(0,128), #WBrawn
+	12: Vector2(128,128),
+	13: Vector2(256,128),
+	14: Vector2(384,128),
+	15: Vector2(512,128),
+	16: Vector2(640,128),
+	17: Vector2(768,128),
+	18: Vector2(896,128),
+	19: Vector2(1024,128),
+	20: Vector2(1152,128),
+	21: Vector2(1280,128),
+	22: Vector2(0,256), #BUnicorn
+	23: Vector2(128,256),
+	24: Vector2(256,256),
+	25: Vector2(384,256),
+	26: Vector2(512,256),
+}
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	light_color = VisualSettings.light_square_color
 	dark_color = VisualSettings.dark_square_color
 	size = Vector2(SQUARE_WIDTH * board_width,SQUARE_WIDTH * board_height)
 	size += Vector2(margin,margin) * 2
-	load_board_array()
+	#load_board_array() Slated for removal need to re_add highlighting when mousing over.
 	if color:
 		add_theme_stylebox_override("panel",white_style_box)
 	else:
 		add_theme_stylebox_override("panel",black_style_box)
 
 func place_children():
+	return
 	for child in get_children():
 		if(board_perspective == PERSPECTIVE.WHITE):
 			child.position = piece_local_position_white(child.rank,child.file)
@@ -112,6 +147,7 @@ func load_board_array():
 
 
 func _draw() -> void:
+	#TODO can potentially just draw a big initial square and fill in the dark spots to optimize.
 	for y in range(board_height):
 		for x in range(board_width):
 			var rect = Rect2(margin + x * SQUARE_WIDTH, margin + y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
@@ -119,6 +155,16 @@ func _draw() -> void:
 				draw_rect(rect,light_color,true)
 			else:
 				draw_rect(rect,dark_color,true)
+	if board_perspective == PERSPECTIVE.WHITE:
+		for i in range(board.size()):
+			var file = i % board_width
+			var rank = floor(i / board_width)
+			draw_texture_rect_region(piecestext,Rect2(piece_local_position_white(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(128,128)))
+	else:
+		for i in range(board.size()):
+			var file = i % board_width
+			var rank = floor(i / board_width)
+			draw_texture_rect_region(piecestext,Rect2(piece_local_position_black(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(128,128)))
 	for highlight in highlighted_squares:
 		if(board_perspective == PERSPECTIVE.WHITE):
 			var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + (board_height - highlight.square.y - 1) * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
