@@ -1,9 +1,111 @@
-# GODOT 5D CHESS Project
+# Godot 5D Chess Project
+
+This project is a port of my original Java UI From 2021 which you can find here: <https://github.com/Slavrick/5dChessGUI>
+
+The point of this project was just for fun, not sure how far I will take the project. The main motivation behind this project was that I had a semi decent and working implementation of 5D Chess in CSharp, but it was behind a janky java UI :( 
+
+I plan to expand on the previous project by making it more portable, so more people can use the GUI, to make the experiance less clunky and more smooth/better feeling. I also wish to add a study feature.
 
 
-
-This is a fun little project for me, my only goal is to make a cool little analysis tool for 5D chess in godot. Godot should allow my previous project to bit a bit less clunky and more portable.
 
 
 
 I used GitHub Copilot to initially port the code over, Im a little nervous about bugs and performance but CSharp and Java should be similar enough that hopefully there is no issues.
+
+
+
+https://imgur.com/wwCJFo9
+
+
+
+https://imgur.com/IgEKOwV
+
+
+
+## Features
+
+* GUI For 5d Chess
+* All Rules and pieces of the base game implemented
+* Ability to load games through PGN/FEN files
+
+## Proposed Features
+
+* Ability to save games to a PGN/FEN fil
+* Analysis tools such as sidelines, rewinding and jumping to positions(this is present in other implementations such as chessin5d but not in the base game)
+* White/Black only views
+* Study System(Loading, creating saving)
+* Ability to interface with 5d Engines in a UCI like protocol
+* Human V. Bot and Bot V. Bot Matches.
+* Variant Creator menu
+  
+  
+
+## Notation
+
+This main notation that this project uses is Shad Amethyst's notation, which is the unofficial standard notation for 5d Chess. Using this Notation, games can be loaded and will be exportable in this notation in the near future. You can read more about this notation here: <https://github.com/adri326/5dchess-notation/blob/master/README.md>
+
+## Other Notations
+
+### PGN5 Notation
+
+Some print statements use the notation that looks like:
+
+> [w.3T0L.a1]
+
+This is similar to my old notation, and is only for debugging purposes, as I have no way to parse this kind of notation at the moment.
+
+### Coordinate Notation
+
+This GUI also can parse a custom raw notation, dissimilar to other notations developed by other 5dChess community members. This notation is not meant to be human readable, but rather meant for an engine. I have dubbed this notation __**Coordinate Notation**__.
+
+In a 2d chess engine, you may notice that moves are denoted in long algebraic notation _ie_.
+
+> e2e4
+
+In this gui, notation for a move will look like
+
+> (x<sub>origin</sub>,y<sub>origin</sub>,T<sub>origin</sub>,L<sub>origin</sub>)(x<sub>dest</sub>,y<sub>dest</sub>,T<sub>dest</sub>,L<sub>dest</sub>)
+
+With x being the file, y being rank, T being time, and L being Layer/Timeline.A whole Turn will look like
+
+> (x<sub>M1o</sub>,y<sub>M1o</sub>,T<sub>M1o</sub>,L<sub>M1o</sub>)(x<sub>M1d</sub>,y<sub>M1d</sub>,T<sub>M1d</sub>,L<sub>M1d</sub>);(x<sub>M2o</sub>,y<sub>M2o</sub>,T<sub>M2o</sub>,L<sub>M2o</sub>)(x<sub>M2d</sub>,y<sub>M2d</sub>,T<sub>M2d</sub>,L<sub>M2d</sub>)…
+
+With moves separated by semicolons. A promotion would look like
+
+> (x<sub>origin</sub>,y<sub>origin</sub>,T<sub>origin</sub>,L<sub>origin</sub>)(x<sub>dest</sub>,y<sub>dest</sub>,T<sub>dest</sub>,L<sub>dest</sub>)=Q
+
+and castling is denoted normally, with layer added
+
+> &lt;MOVE&gt;;O-O,L;&lt;MOVE&gt;
+
+Lastly, there may be the need to show a null move, which is denoted as:
+
+> 0000
+
+Formally, the moves should follow an order where destination layer is from top to bottom however this is not enforced by the engine. Branching moves must always be ordered how they occur however.
+
+## Other Projects and resources
+
+**The Best Resource for 5d Chess Programming is AlexBay's Discord Channel: <https://discord.gg/KP5vApW>**
+
+Original 5d Implementation on steam: <https://5dchesswithmultiversetimetravel.com/>
+
+There are several other open source projects that are also being worked on:
+
+Alexbay's GitLab:<https://gitlab.com/alexbay218/5d-chess-js>
+
+Alexbay's 5dChess:<https://chessin5d.net/#/>
+
+Shad's Engine:<https://github.com/adri326/5dchess-tools/> 
+
+L0laapk3 5dChess website: <https://multiversechess.com/> (Not Open Source, Very hard to find a game)
+
+
+
+## Copyright
+
+This engine was made without reference to source or decompiled code from the software "5d Chess With Multiverse Time Travel" developed by LLC. Thunkspace. All code, assets, libraries and other files in this project were either made by me, or are open source.
+
+The project itself is open source.
+
+

@@ -10,13 +10,13 @@ RichTextLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 RichTextLabel/constants/outline_size = 10
 RichTextLabel/constants/shadow_outline_size = 7
 
-[sub_resource type="Gradient" id="Gradient_utle8"]
+[sub_resource type="Gradient" id="Gradient_ignbm"]
 interpolation_mode = 1
 offsets = PackedFloat32Array(0, 0.182222, 0.435556, 0.72)
 colors = PackedColorArray(0.960784, 0.960784, 0.862745, 1, 0, 0, 0, 1, 0.411765, 0.572549, 0.243137, 1, 0.305882, 0.470588, 0.215686, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_aovgw"]
-gradient = SubResource("Gradient_utle8")
+gradient = SubResource("Gradient_ignbm")
 
 [sub_resource type="Gradient" id="Gradient_j0gt5"]
 interpolation_mode = 1
