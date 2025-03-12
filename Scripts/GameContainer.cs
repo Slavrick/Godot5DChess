@@ -27,7 +27,7 @@ public partial class GameContainer : Control
 	
 	public void GameStateToGodotNodes()
 	{
-		var multiverse = ResourceLoader.Load<PackedScene>("res://Scenes/UI/multiverse_Container.tscn").Instantiate();
+		var multiverse = ResourceLoader.Load<PackedScene>("res://Scenes/UI/multiverse_container.tscn").Instantiate();
 		multiverse.Set("chessboard_dimensions",new Vector2(gsm.Width,gsm.Height));
 		for(int i = 0; i < gsm.Multiverse.Count; i++){
 			multiverse.AddChild(TimeLineToGodotNodes(gsm.Multiverse[i],gsm.MinTL+i));

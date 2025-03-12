@@ -61,6 +61,7 @@ func _draw():
 	for child in get_children():
 		width += child.functional_width()
 	size.x = width
+	size.y = get_child(0).functional_height()
 	draw_rect(Rect2(0,VisualSettings.game_board_dimensions.y * 128 / 2,width,timeline_arrow_thickness),Color.PURPLE,true)
 
 

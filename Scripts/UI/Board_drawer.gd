@@ -14,17 +14,17 @@ enum TYPE {
 	INACTIVE,
 }
 
-@export_group("dimensions")
+@export_group("Dimensions")
 @export var SQUARE_WIDTH := 128
 @export var board_height := 8
 @export var board_width := 8
 @export var margin := 20
-@export_group("colors")
+@export_group("Colors")
 @export var light_color := Color.BEIGE
 @export var dark_color := Color.BLACK
 @export var black_style_box : StyleBoxFlat
 @export var white_style_box : StyleBoxFlat
-@export_group("visual_settings")
+@export_group("Visual Settings")
 @export var board_perspective := PERSPECTIVE.WHITE
 @export var board_type := TYPE.PRESENT
 
