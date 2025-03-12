@@ -56,8 +56,10 @@ SQUARE_LENGTH = 2168
 script = ExtResource("6_ivmj2")
 
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Open a File"
-position = Vector2i(0, 36)
+title = "Open a 5D PGN for Review"
+initial_position = 1
 size = Vector2i(500, 500)
-ok_button_text = "Open"
+ok_button_text = "Open File"
 file_mode = 0
+filters = PackedStringArray("*.txt", "*.PGN", "*.PGN5", "*.PGN5.txt")
+show_hidden_files = true

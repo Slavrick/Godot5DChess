@@ -9,10 +9,6 @@ func _ready() -> void:
 	$Settings.close.connect(close_settings)
 	$MenuVbox/Exit.pressed.connect(exit_program)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 
 func play_game():
 	load_game.emit(" ")
@@ -33,4 +29,3 @@ func close_settings():
 func exit_program():
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
-	pass

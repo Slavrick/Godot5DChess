@@ -22,6 +22,7 @@ public partial class GameContainer : Control
 		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
 		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
+		Console.WriteLine("Connected without Error");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -143,6 +144,7 @@ public partial class GameContainer : Control
 	
 	
 	public void LoadGame(String filepath){
+		Console.WriteLine("chose Path: " + filepath);
 		gsm = FENParser.ShadSTDGSM(filepath);
 		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
 		GetNode("/root/VisualSettings").EmitSignal("game_changed");

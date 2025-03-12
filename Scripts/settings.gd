@@ -16,7 +16,9 @@ func _ready() -> void:
 	$VBoxContainer/blackmultiversesquare/ColorPicker.color = VisualSettings.black_multiverse_color
 	
 	$VBoxContainer/return.pressed.connect(returntomain)
-
+	
+	$VBoxContainer/Pallets/DefaultPallet.pressed.connect(set_pallet.bind(VisualSettings.default_pallet))
+	$VBoxContainer/Pallets/GrayScalePallet.pressed.connect(set_pallet.bind(VisualSettings.grayscale_pallet))
 
 
 func change_light_color( color : Color):
@@ -35,3 +37,7 @@ func black_multiverse_color_change( color : Color ):
 
 func returntomain():
 	close.emit()
+
+
+func set_pallet(pallet_dicitionary : Dictionary):
+	VisualSettings.load_dictionary(pallet_dicitionary)
