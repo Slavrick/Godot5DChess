@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using Test;
+using FileIO5D;
+using Engine;
 
 public partial class Tester : Node
 {
@@ -18,5 +20,10 @@ public partial class Tester : Node
 		FENParserTest.TestFENFileParser();
 		FENParserTest.TestShadFEN();
 		FENParserTest.TestAmbiguityInfoParser();
+		GameStateManager gsm = FENParser.ShadSTDGSM("res://PGN/Variations/Standard-T0.PGN5.txt");
+		long time1 = Benchmarker.Measure(gsm, x => x.isMated());
+		long time2 = Benchmarker.MeasureAverage(gsm, x => x.isMated(),10);
+		Console.WriteLine(time1);
+		Console.WriteLine(time2);
 	}
 }

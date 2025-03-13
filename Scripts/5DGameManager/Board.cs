@@ -12,6 +12,7 @@ namespace Engine
 		public int Height { get; set; }
 		public int Width { get; set; }
 		// The board has no need for its location within the multiverse
+		//TODO possibly make this a 2d coordinate instead.
 		public CoordFour EnPassentSquare { get; set; }
 
 		public static readonly int numTypes = 12;

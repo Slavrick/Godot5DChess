@@ -9,20 +9,21 @@ func _ready() -> void:
 	$VBoxContainer/whitemultiversesquare/ColorPicker.color_changed.connect(white_multiverse_color_change)
 	$VBoxContainer/blackmultiversesquare/ColorPicker.color_changed.connect(black_multiverse_color_change)
 	
-	
-	$VBoxContainer/whitesquare/ColorPicker.color = VisualSettings.light_square_color
-	$VBoxContainer/blacksquare/ColorPicker.color = VisualSettings.dark_square_color
-	$VBoxContainer/whitemultiversesquare/ColorPicker.color = VisualSettings.white_multiverse_color
-	$VBoxContainer/blackmultiversesquare/ColorPicker.color = VisualSettings.black_multiverse_color
+	VisualSettings.load_user_settings()
+	set_colorpickers()
 	
 	$VBoxContainer/return.pressed.connect(returntomain)
-	
-	$VBoxContainer/Pallets/DefaultPallet.pressed.connect(set_pallet.bind(VisualSettings.default_pallet))
-	$VBoxContainer/Pallets/GrayScalePallet.pressed.connect(set_pallet.bind(VisualSettings.grayscale_pallet))
+	$VBoxContainer/Pallets/DefaultPalette.pressed.connect(set_pallet.bind(VisualSettings.default_palette))
+	$VBoxContainer/Pallets/GrayScalePalette.pressed.connect(set_pallet.bind(VisualSettings.grayscale_palette))
+	$VBoxContainer/Pallets/GlassPalette.pressed.connect(set_pallet.bind(VisualSettings.glass_palette))
+	$VBoxContainer/Pallets/WoodPalette.pressed.connect(set_pallet.bind(VisualSettings.wood_palette))
+	$VBoxContainer/Pallets/CheckersPalette.pressed.connect(set_pallet.bind(VisualSettings.checkers_palette))
+
 
 
 func change_light_color( color : Color):
 	VisualSettings.light_square_color = color
+
 
 func change_dark_color( color : Color ):
 	VisualSettings.dark_square_color = color
@@ -31,13 +32,24 @@ func change_dark_color( color : Color ):
 func white_multiverse_color_change( color : Color ):
 	VisualSettings.white_multiverse_color = color
 
+
 func black_multiverse_color_change( color : Color ):
 	VisualSettings.black_multiverse_color = color
 
 
+func set_colorpickers():
+	$VBoxContainer/whitesquare/ColorPicker.color = VisualSettings.light_square_color
+	$VBoxContainer/blacksquare/ColorPicker.color = VisualSettings.dark_square_color
+	$VBoxContainer/whitemultiversesquare/ColorPicker.color = VisualSettings.white_multiverse_color
+	$VBoxContainer/blackmultiversesquare/ColorPicker.color = VisualSettings.black_multiverse_color
+
+
+
 func returntomain():
 	close.emit()
+	VisualSettings.save_user_settings()
 
 
 func set_pallet(pallet_dicitionary : Dictionary):
 	VisualSettings.load_dictionary(pallet_dicitionary)
+	set_colorpickers()

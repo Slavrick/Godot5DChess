@@ -1,0 +1,3 @@
+[board "custom"]
+[size "5x5"]
+[1u1uk/5/5/5/KU1U1:0:1:w]
