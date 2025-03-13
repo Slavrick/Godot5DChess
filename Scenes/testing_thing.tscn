@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://85gi5dekhei7"]
+
+[ext_resource type="Script" path="res://Scripts/5DGameManager/Tester.cs" id="1_nnowk"]
+
+[node name="TestingThing" type="Node"]
+script = ExtResource("1_nnowk")

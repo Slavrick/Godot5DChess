@@ -8,10 +8,6 @@ public partial class Tester : Node
 {
 	public override void _Ready()
 	{
-		//if (Engine.IsDebugBuild())
-		//{ TODO ADD THIS not sure the rigth way to implement.
-			//QueueFree();
-		//}
 		TurnTester.TestTurnEquals();
 		CoordTester.TestAllCoordFourFuncs();
 		FENParserTest.TestMoveParser();
@@ -20,10 +16,13 @@ public partial class Tester : Node
 		FENParserTest.TestFENFileParser();
 		FENParserTest.TestShadFEN();
 		FENParserTest.TestAmbiguityInfoParser();
-		GameStateManager gsm = FENParser.ShadSTDGSM("res://PGN/Variations/Standard-T0.PGN5.txt");
-		long time1 = Benchmarker.Measure(gsm, x => x.isMated());
+		GameStateManager gsm = FENParser.ShadSTDGSM("res://PGN/testPGNs/ShadTestGame2.txt");
 		long time2 = Benchmarker.MeasureAverage(gsm, x => x.isMated(),10);
-		Console.WriteLine(time1);
-		Console.WriteLine(time2);
+		Console.Write(time2);
+		Console.WriteLine("ns ShadTestGame2.txt");
+		GameStateManager gsm2 = FENParser.ShadSTDGSM("res://PGN/NehemiagurlVsQxyzpkS2.txt");
+		long time3 = Benchmarker.MeasureAverage(gsm, x => x.isMated(),10);
+		Console.Write(time3);
+		Console.WriteLine("ns NehemiavsQxyzpkS2");
 	}
 }

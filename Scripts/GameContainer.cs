@@ -9,6 +9,12 @@ public partial class GameContainer : Control
 	[Signal]
 	public delegate void ExitGameEventHandler();
 	
+	[Signal]
+	public delegate void IsMatedEventHandler(bool player_mated);
+	
+	[Signal]
+	public delegate void TurnChangedEventHandler(bool player, int present);
+	
 	GameStateManager gsm;
 	List<CoordFour> destinations;
 	CoordFive SelectedSquare;
@@ -22,7 +28,6 @@ public partial class GameContainer : Control
 		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
 		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
-		Console.WriteLine("Connected without Error");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -124,7 +129,13 @@ public partial class GameContainer : Control
 	}
 	
 	public void SubmitTurn(){
-		gsm.SubmitMoves();
+		bool SubmitSuccessful = gsm.SubmitMoves();
+		if( SubmitSuccessful ){
+			EmitSignal(SignalName.TurnChanged, gsm.Color, gsm.Present);
+		}
+		if( SubmitSuccessful && gsm.isMated()) {;
+			EmitSignal(SignalName.IsMated, gsm.Color);
+		}
 		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);
 	}
 	
@@ -167,6 +178,7 @@ public partial class GameContainer : Control
 		if (@event.IsActionPressed("SubmitTurn"))
 		{
 			SubmitTurn();
+			
 		}
 		if (@event.IsActionPressed("UndoTurn"))
 		{
