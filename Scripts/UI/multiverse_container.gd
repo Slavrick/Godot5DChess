@@ -7,6 +7,7 @@ var chessboard_dimensions : Vector2
 var perspective = true
 
 func _ready() -> void:
+	VisualSettings.view_changed.connect(on_view_changed)
 	perspective = VisualSettings.perspective
 	connect_signals()
 	place_timelines()
@@ -65,3 +66,7 @@ func set_perspective( new_perspective ):
 func flip_perspective():
 	VisualSettings.perspective = !VisualSettings.perspective
 	set_perspective(VisualSettings.perspective)
+
+
+func on_view_changed( perspective : bool , view ):
+	place_timelines()

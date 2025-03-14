@@ -20,6 +20,7 @@ var chessboard_dimensions : Vector2
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	place_children()
+	VisualSettings.view_changed.connect(on_view_changed)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,25 +29,30 @@ func _process(delta: float) -> void:
 
 
 func place_children():
-	match draw_mode:
-		DRAWMODE.WHITE:
+	match VisualSettings.multiverse_view:
+		VisualSettings.WHITE_VIEW:
 			for child in get_children():
-				if child.color == false:
+				if !child.color:
 					child.hide()
 					continue
-				var ply = child.multiverse_position.y - 1
+				else:
+					child.show()
+				var ply = child.multiverse_position.y - TStart + 1
 				child.square_clicked.connect(board_square_clicked)
 				child.position = Vector2(ply,0) * Vector2(child.functional_width() + board_margin,child.functional_height() + board_margin)
-		DRAWMODE.BLACK:
+		VisualSettings.BLACK_VIEW:
 			for child in get_children():
 				if child.color == true:
 					child.hide()
 					continue
-				var ply = child.multiverse_position.y - 1
+				else:
+					child.show()
+				var ply = child.multiverse_position.y - TStart + 1
 				child.square_clicked.connect(board_square_clicked)
 				child.position = Vector2(ply,0) * Vector2(child.functional_width() + board_margin,child.functional_height() + board_margin)
 		_:
 			for child in get_children():
+				child.show()
 				var ply = child.multiverse_position.y - TStart + 1
 				if child.color:
 					ply *= 2
@@ -61,27 +67,71 @@ func place_children():
 func _draw():
 	var horizontal_stickout = 100 #TODO define this in visualSettings.
 	draw_rect(Rect2(-30,-30,60,60),Color.MAGENTA)
-	var width = 200
-	for child in get_children():
-		width += VisualSettings.multiverse_tile_width / 2
-	size.x = width + VisualSettings.multiverse_tile_width * 3 # all this does is make sure the tl stays on screen and draws even when on the edges.
-	size.y = get_child(0).functional_height()
-	
-	var tl_draw_position
-	if color_start:
-		tl_draw_position = Vector2(VisualSettings.multiverse_tile_width - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
-	else:
-		tl_draw_position = Vector2(VisualSettings.multiverse_tile_width * 1.5 - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
-	var tl_arrow_dimension = Vector2(width,timeline_arrow_thickness)
-	draw_rect(Rect2(tl_draw_position,tl_arrow_dimension),VisualSettings.timeline_color,true)
-	
-	draw_circle(tl_draw_position + Vector2(0,timeline_arrow_thickness/2),timeline_arrow_thickness/2,VisualSettings.timeline_color)
-	
-	var points = PackedVector2Array()
-	points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, -horizontal_stickout))
-	points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, 2 * horizontal_stickout))
-	points.append(tl_draw_position + Vector2(tl_arrow_dimension.x + horizontal_stickout * 1.5, timeline_arrow_thickness/2))
-	draw_colored_polygon(points,VisualSettings.timeline_color)
+	match VisualSettings.multiverse_view:
+		VisualSettings.FULL_VIEW:
+			var width = horizontal_stickout * 2
+			for child in get_children():
+						width += VisualSettings.multiverse_tile_width / 2
+			size.x = width + VisualSettings.multiverse_tile_width * 3 # all this does is make sure the tl stays on screen and draws even when on the edges.
+			size.y = get_child(0).functional_height() #TODO REPLACE with visualsettings.
+			
+			var tl_draw_position
+			if color_start:
+				tl_draw_position = Vector2(VisualSettings.multiverse_tile_width - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
+			else:
+				tl_draw_position = Vector2(VisualSettings.multiverse_tile_width * 1.5 - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
+			var tl_arrow_dimension = Vector2(width,timeline_arrow_thickness)
+			draw_rect(Rect2(tl_draw_position,tl_arrow_dimension),VisualSettings.timeline_color,true)
+			
+			draw_circle(tl_draw_position + Vector2(0,timeline_arrow_thickness/2),timeline_arrow_thickness/2,VisualSettings.timeline_color)
+			
+			var points = PackedVector2Array()
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, -horizontal_stickout))
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, 2 * horizontal_stickout))
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x + horizontal_stickout * 1.5, timeline_arrow_thickness/2))
+			draw_colored_polygon(points,VisualSettings.timeline_color)
+		VisualSettings.BLACK_VIEW:
+			var width = horizontal_stickout * 2
+			for child in get_children():
+				if !child.color:
+					width += VisualSettings.multiverse_tile_width 
+			size.x = width + VisualSettings.multiverse_tile_width * 3 # all this does is make sure the tl stays on screen and draws even when on the edges.
+			size.y = get_child(0).functional_height() #TODO REPLACE with visualsettings.
+			
+			var tl_draw_position
+			tl_draw_position = Vector2(VisualSettings.multiverse_tile_width - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
+			var tl_arrow_dimension = Vector2(width,timeline_arrow_thickness)
+			draw_rect(Rect2(tl_draw_position,tl_arrow_dimension),VisualSettings.timeline_color,true)
+			
+			draw_circle(tl_draw_position + Vector2(0,timeline_arrow_thickness/2),timeline_arrow_thickness/2,VisualSettings.timeline_color)
+			
+			var points = PackedVector2Array()
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, -horizontal_stickout))
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, 2 * horizontal_stickout))
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x + horizontal_stickout * 1.5, timeline_arrow_thickness/2))
+			draw_colored_polygon(points,VisualSettings.timeline_color)
+		VisualSettings.WHITE_VIEW:
+			var width = horizontal_stickout * 2
+			for child in get_children():
+				if child.color:
+					width += VisualSettings.multiverse_tile_width 
+			size.x = width + VisualSettings.multiverse_tile_width * 3 # all this does is make sure the tl stays on screen and draws even when on the edges.
+			size.y = get_child(0).functional_height() #TODO REPLACE with visualsettings.
+			
+			var tl_draw_position
+			tl_draw_position = Vector2(VisualSettings.multiverse_tile_width - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
+			if !color_start:
+				tl_draw_position.x += VisualSettings.multiverse_tile_width
+			var tl_arrow_dimension = Vector2(width,timeline_arrow_thickness)
+			draw_rect(Rect2(tl_draw_position,tl_arrow_dimension),VisualSettings.timeline_color,true)
+			
+			draw_circle(tl_draw_position + Vector2(0,timeline_arrow_thickness/2),timeline_arrow_thickness/2,VisualSettings.timeline_color)
+			
+			var points = PackedVector2Array()
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, -horizontal_stickout))
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, 2 * horizontal_stickout))
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x + horizontal_stickout * 1.5, timeline_arrow_thickness/2))
+			draw_colored_polygon(points,VisualSettings.timeline_color)
 #TODO need to recalc the center y of tile.
 
 
@@ -109,3 +159,9 @@ func set_perspective( perspective ):
 	for child in get_children():
 		child.board_perspective = perspective
 		child.queue_redraw()
+
+
+
+func on_view_changed( perspective : bool , view ):
+	place_children()
+	queue_redraw()

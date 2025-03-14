@@ -61,9 +61,21 @@ text = "Submit Turn"
 layout_mode = 2
 text = "Undo Moves"
 
-[node name="Perspective" type="Button" parent="HBoxContainer2"]
+[node name="Perspective" type="CheckButton" parent="HBoxContainer2"]
 layout_mode = 2
-text = "Flip Perspective"
+button_pressed = true
+text = "Perspective"
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer2"]
+layout_mode = 2
+alignment = 1
+selected = 0
+item_count = 3
+popup/item_0/text = "Full View"
+popup/item_1/text = "Black Boards"
+popup/item_1/id = 1
+popup/item_2/text = "White Boards"
+popup/item_2/id = 2
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1

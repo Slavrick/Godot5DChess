@@ -15,6 +15,7 @@ extends Node2D
 
 func _ready():
 	VisualSettings.visual_theme_changed.connect(update_theme)
+	VisualSettings.view_changed.connect(on_view_changed)
 	update_theme("null")
 	VisualSettings.game_changed.connect(update_dimensions)
 	if camera != null:
@@ -74,3 +75,7 @@ func _draw() -> void:
 					draw_rect(rect,light_color,true)
 			if coord_font_size > 0:
 				draw_string(coord_font, Vector2(x * SQUARE_LENGTH + x_offset, y * SQUARE_HEIGHT + y_offset), str(starting_layer + y) + "L" + str(starting_time + x) + "T",HORIZONTAL_ALIGNMENT_LEFT,-1,coord_font_size)
+
+
+func on_view_changed( perspective : bool , view ):
+	update_dimensions()

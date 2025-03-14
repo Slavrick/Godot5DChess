@@ -35,7 +35,11 @@ var square_width := 128
 var board_padding := 20 #Distance between squares and edge of board.
 var board_horizontal_margin := 20  #Distance between boards.
 var timeline_vertical_margin := 700 #Distance between timelines
-var multiverse_view := FULL_VIEW
+var multiverse_view := FULL_VIEW :
+	set(value):
+		multiverse_view = value
+		calculate_dimensions()
+		view_changed.emit(perspective, multiverse_view)
 #True for white, false for black
 var perspective := true
 
