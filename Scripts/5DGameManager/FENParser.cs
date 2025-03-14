@@ -132,7 +132,7 @@ namespace FileIO5D {
 			  col++;
 			} else if (c <= '9' && c >= '1') {
 			  for (int i = 0; i < c - '0'; i++) {
-				b.Brd[height - row - 1][ col] = Array.IndexOf(Board.PieceChars, '_');
+				b.setSquare(col,height - row - 1, Board.EMPTYSQUARE);
 				col++;
 			  }
 			} else {
@@ -152,7 +152,7 @@ namespace FileIO5D {
 	  Timeline t = new Timeline(b, fields[3][0] == 'w', int.Parse(fields[2]), ParseLayer(fields[1], evenStarters));
 	  return t;
 	}
-
+/* XXX Slated for Removal. This is not used ever since eventimelines were implemented.
 	public static Timeline GetTimelineFromString(string timelinestr, int layer, int width, int height) {
 	  string[] fields = timelinestr.Split(';');
 	  string[] rows = fields[0].Split('/');
@@ -170,11 +170,11 @@ namespace FileIO5D {
 				piece *= -1;
 				charat++;
 			  }
-			  b.Brd[height - row - 1][col] = piece;
+			  b.setSquare(height - row - 1,col, piece);
 			  col++;
 			} else if (c <= '9' && c >= '1') {
 			  for (int i = 0; i < c - '0'; i++) {
-				b.Brd[height - row - 1][col] = Array.IndexOf(Board.PieceChars, '_');
+				b.setSquare(col,height - row - 1, Board.EMPTYSQUARE);
 				col++;
 			  }
 			} else {
@@ -204,7 +204,7 @@ namespace FileIO5D {
 	  Timeline t = new Timeline(b, color, timeStart, layer);
 	  return t;
 	}
-
+ */
 	public static Turn StringToTurn(GameState g, string turnstr, bool evenStarters) {
 	  if (turnstr.Contains(".")) {
 		turnstr = turnstr.Substring(turnstr.IndexOf('.') + 1);
@@ -410,7 +410,7 @@ namespace FileIO5D {
 	  return new CoordFour(file - 'a', int.Parse(rank) - 1, 0, 0);
 	}
 
-	public static int IndexOfElement(int[] arr, int target) {
+/* 	public static int IndexOfElement(int[] arr, int target) { XXX Slated for removal. This is not required---CSharp Has inbuilt functions.
 	  for (int i = 0; i < arr.Length; i++) {
 		if (arr[i] == target) {
 		  return i;
@@ -426,7 +426,7 @@ namespace FileIO5D {
 		}
 	  }
 	  return 0;
-	}
+	} */
 
 	public static int ParseLayer(string layer, bool evenStarters) {
 	  if (!evenStarters) {

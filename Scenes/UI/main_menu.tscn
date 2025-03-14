@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dg5b24p4ma8jb" path="res://Scenes/UI/settings.tscn" id="1_7blw5"]
 [ext_resource type="Script" path="res://Scripts/UI/main_menu.gd" id="1_656jk"]
-[ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multi_verse_draw.tscn" id="2_yxuhw"]
+[ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multiverse_draw.tscn" id="2_yxuhw"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -43,12 +43,14 @@ text = "Play"
 [node name="Puzzles" type="Button" parent="MenuVbox"]
 layout_mode = 2
 disabled = true
-text = "Puzzles"
+text = "Puzzles 
+(coming in future Update)"
 
 [node name="Analysis" type="Button" parent="MenuVbox"]
 layout_mode = 2
 disabled = true
-text = "Analysis"
+text = "Analysis
+(coming in future Update)"
 
 [node name="Settings" type="Button" parent="MenuVbox"]
 layout_mode = 2

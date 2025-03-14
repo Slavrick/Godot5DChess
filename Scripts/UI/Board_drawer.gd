@@ -2,11 +2,6 @@ extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
 
-enum PERSPECTIVE {
-	BLACK,
-	WHITE
-}
-
 enum TYPE {
 	PRESENT,
 	HISTORY,
@@ -25,7 +20,7 @@ enum TYPE {
 @export var black_style_box : StyleBoxFlat
 @export var white_style_box : StyleBoxFlat
 @export_group("Visual Settings")
-@export var board_perspective := PERSPECTIVE.WHITE
+@export var board_perspective := true
 @export var board_type := TYPE.PRESENT
 
 var board : Array
@@ -102,6 +97,7 @@ const piecedict = {
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	board_perspective = VisualSettings.perspective
 	light_color = VisualSettings.light_square_color
 	dark_color = VisualSettings.dark_square_color
 	size = Vector2(SQUARE_WIDTH * board_width,SQUARE_WIDTH * board_height)
@@ -115,7 +111,7 @@ func _ready() -> void:
 func place_children():
 	return
 	for child in get_children():
-		if(board_perspective == PERSPECTIVE.WHITE):
+		if board_perspective :
 			child.position = piece_local_position_white(child.rank,child.file)
 		else:
 			child.position = piece_local_position_black(child.rank,child.file)
@@ -155,7 +151,7 @@ func _draw() -> void:
 				draw_rect(rect,light_color,true)
 			else:
 				draw_rect(rect,dark_color,true)
-	if board_perspective == PERSPECTIVE.WHITE:
+	if board_perspective:
 		for i in range(board.size()):
 			var file = i % board_width
 			var rank = floor(i / board_width)
@@ -166,7 +162,7 @@ func _draw() -> void:
 			var rank = floor(i / board_width)
 			draw_texture_rect_region(piecestext,Rect2(piece_local_position_black(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(128,128)))
 	for highlight in highlighted_squares:
-		if(board_perspective == PERSPECTIVE.WHITE):
+		if board_perspective:
 			var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + (board_height - highlight.square.y - 1) * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
 			draw_rect(rect,highlight.highlight_color,true)
 		else:
@@ -226,7 +222,7 @@ func _on_gui_input(event: InputEvent) -> void:
 func local_position_to_square( local_pos ) -> Vector2:
 	var file
 	var rank
-	if board_perspective == PERSPECTIVE.WHITE:
+	if board_perspective:
 		file = floor((local_pos.x - margin) / SQUARE_WIDTH)
 		rank = board_height - floor((local_pos.y - margin) / SQUARE_WIDTH) - 1
 	else:

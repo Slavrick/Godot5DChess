@@ -26,6 +26,7 @@ public partial class GameContainer : Control
 		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
 		GetNode("SubViewport/Menus").Connect("undo_turn", new Callable(this,nameof(UndoTurn)));
 		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
+		GetNode("SubViewport/Menus").Connect("flip_perspective", new Callable(this,nameof(flip_pespective)));
 		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
 	}
@@ -50,7 +51,7 @@ public partial class GameContainer : Control
 	
 	public Node TimeLineToGodotNodes(Timeline tl, int timelineLayer )
 	{
-		var timeline = ResourceLoader.Load<PackedScene>("res://Scenes/UI/time_line_drawer.tscn").Instantiate();
+		var timeline = ResourceLoader.Load<PackedScene>("res://Scenes/UI/timeline_drawer.tscn").Instantiate();
 		//Get all the boards and add them to the array
 		for( int i = 0; i < tl.WBoards.Count; i++){
 			timeline.AddChild(BoardToGodotNodes(tl.WBoards[i],i + tl.WhiteStart, timelineLayer, true));
@@ -61,6 +62,7 @@ public partial class GameContainer : Control
 		}
 		timeline.Set("layer",timelineLayer);
 		timeline.Set("TStart",tl.TStart);
+		timeline.Set("color_start",tl.ColorStart);
 		timeline.Set("chessboard_dimensions",new Vector2(gsm.Width,gsm.Height));
 		return timeline;
 	}
@@ -71,7 +73,7 @@ public partial class GameContainer : Control
 		var arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.Brd[x][y];
+				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}
@@ -158,7 +160,7 @@ public partial class GameContainer : Control
 		Console.WriteLine("chose Path: " + filepath);
 		gsm = FENParser.ShadSTDGSM(filepath);
 		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
-		GetNode("/root/VisualSettings").EmitSignal("game_changed");
+		GetNode("/root/VisualSettings").Call("change_game");
 		UpdateRender();
 	}
 	
@@ -196,5 +198,9 @@ public partial class GameContainer : Control
 				escMenu.Call("show");
 			}
 		}
+	}
+	
+	public void flip_pespective(){
+		mvcontainer.Call("flip_perspective");
 	}
 }

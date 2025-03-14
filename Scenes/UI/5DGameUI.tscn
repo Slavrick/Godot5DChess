@@ -26,7 +26,10 @@ text = "Load Game"
 
 [node name="Save Game" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-text = "Save Game"
+disabled = true
+text = "Save Game
+(coming in future Update)
+"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -57,6 +60,10 @@ text = "Submit Turn"
 [node name="Undo" type="Button" parent="HBoxContainer2"]
 layout_mode = 2
 text = "Undo Moves"
+
+[node name="Perspective" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+text = "Flip Perspective"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1

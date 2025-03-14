@@ -18,15 +18,15 @@ func _ready():
 	update_theme("null")
 	VisualSettings.game_changed.connect(update_dimensions)
 	if camera != null:
-		if camera.global_position != camera_position:
-			camera_position = camera.global_position
+		if camera.position != camera_position:
+			camera_position = camera.position
 			queue_redraw()
 
 
 func _process( delta :float ) -> void:
 	if camera != null:
-		if camera.global_position != camera_position:
-			camera_position = camera.global_position
+		if camera.position != camera_position:
+			camera_position = camera.position
 			queue_redraw()
 
 
@@ -37,22 +37,28 @@ func update_theme(visual_changed : String):
 
 
 func update_dimensions():
-	SQUARE_LENGTH = (128 * VisualSettings.game_board_dimensions.x * 2
-		+ VisualSettings.board_padding * 4 
-		+ VisualSettings.board_horizontal_margin * 2)
-	SQUARE_HEIGHT = (128 * VisualSettings.game_board_dimensions.y
-		+ VisualSettings.timeline_vertical_margin)
+	SQUARE_LENGTH = VisualSettings.multiverse_tile_width
+	SQUARE_HEIGHT = VisualSettings.multiverse_tile_height
+	queue_redraw()
 
 
 func _draw() -> void:
-	
 	var x_offset = camera_position.x - (10 * SQUARE_LENGTH) - (int(floor(camera_position.x)) % SQUARE_LENGTH)
 	var y_offset = camera_position.y - (10 * SQUARE_HEIGHT) - (int(floor(camera_position.y)) % SQUARE_HEIGHT)
 	
 	var odd_start =  ( abs(int( floor(x_offset/SQUARE_LENGTH))) + abs(int( floor(y_offset/SQUARE_HEIGHT))) ) % 2 == 1
 	
-	var starting_layer = (int(y_offset) / SQUARE_HEIGHT) - 2
-	var starting_time = int(x_offset) / SQUARE_LENGTH
+	var starting_time
+	var starting_layer
+	if y_offset < 0:
+		starting_layer = (int(y_offset) / SQUARE_HEIGHT) - 2
+	else:
+		starting_layer = (int(y_offset) / SQUARE_HEIGHT) - 1
+	if x_offset < 0:
+		starting_time = int(x_offset) / SQUARE_LENGTH
+	else:
+		starting_time = (int(x_offset) / SQUARE_LENGTH) + 1
+		
 	for x in range(grid_width):
 		for y in range(grid_height):
 			var rect = Rect2(x * SQUARE_LENGTH + x_offset, y * SQUARE_HEIGHT + y_offset,SQUARE_LENGTH, SQUARE_HEIGHT)	

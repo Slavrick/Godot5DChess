@@ -4,13 +4,13 @@ signal submit_turn
 signal load_game
 signal goto_present
 signal undo_turn
-
+signal flip_perspective
 
 func _ready() -> void:
 	$HBoxContainer2/Submit.pressed.connect(submit_pressed)
 	$HBoxContainer2/Undo.pressed.connect(undo_turn_pressed)
 	$HBoxContainer2/Present.pressed.connect(gotopresent_pressed)
-	
+	$HBoxContainer2/Perspective.pressed.connect(flip_perspective_pressed)
 	$"HBoxContainer/Load Game".pressed.connect(load_game_pressed)
 
 
@@ -28,6 +28,10 @@ func load_game_pressed():
 
 func gotopresent_pressed():
 	goto_present.emit()
+
+
+func flip_perspective_pressed():
+	flip_perspective.emit()
 
 
 func set_turn_label(color : bool, present : int):

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dgu2tqng234b2"]
 
-[ext_resource type="Script" path="res://Scripts/UI/multi_verse_draw.gd" id="1_jqb6w"]
+[ext_resource type="Script" path="res://Scripts/UI/multiverse_draw.gd" id="1_jqb6w"]
 
 [sub_resource type="SystemFont" id="SystemFont_hx4s2"]
 font_names = PackedStringArray("Times New Roman")

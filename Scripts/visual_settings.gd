@@ -2,7 +2,15 @@ extends Node
 
 signal game_changed
 signal visual_theme_changed(type : String)
+signal view_changed( perspective : bool, multiverse_view )
 
+enum {
+	WHITE_VIEW,
+	BLACK_VIEW,
+	FULL_VIEW,
+}
+
+#Colors
 var light_square_color : Color = Color(0.961, 0.961, 0.863):
 	set(value):
 		light_square_color = value
@@ -19,20 +27,47 @@ var black_multiverse_color : Color = Color(0.306, 0.471, 0.216):
 	set(value):
 		black_multiverse_color = value
 		visual_theme_changed.emit("black_multiverse_color")
+var timeline_color : Color = Color.PURPLE
+var font_color : Color = Color.BLACK
+
+#Spacing
+var square_width := 128
+var board_padding := 20 #Distance between squares and edge of board.
+var board_horizontal_margin := 20  #Distance between boards.
+var timeline_vertical_margin := 700 #Distance between timelines
+var multiverse_view := FULL_VIEW
+#True for white, false for black
+var perspective := true
 
 var pieces_file := "res://Resources/res/Pieces-hirez.png"
 var visual_settings_path := "user://5dvisuals.json"
 
 var game_board_dimensions := Vector2(8,8)
-var board_padding := 20
-var board_horizontal_margin := 20
-var timeline_vertical_margin := 700
 
-var board_width
-var board_height
-var multiverse_tile_width
-var multiverse_tile_height
+var board_width : float
+var board_height : float
+var multiverse_tile_width : float
+var multiverse_tile_height : float
 
+
+func change_game():
+	calculate_dimensions()
+	game_changed.emit()
+
+
+func calculate_dimensions():
+	board_width = square_width * game_board_dimensions.x
+	board_height = square_width * game_board_dimensions.y
+	multiverse_tile_height = (square_width * game_board_dimensions.y
+		+ timeline_vertical_margin)
+	if multiverse_view == FULL_VIEW:
+		multiverse_tile_width = (square_width * game_board_dimensions.x * 2
+			+ board_padding * 4 
+			+ board_horizontal_margin * 2)
+	else:
+		multiverse_tile_width = (square_width * game_board_dimensions.x
+			+ board_padding * 2 
+			+ board_horizontal_margin)
 
 func load_user_settings():
 	if not FileAccess.file_exists(visual_settings_path):

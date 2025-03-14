@@ -1,8 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://cybrgwaw4fuu"]
 
-[ext_resource type="Script" path="res://Scripts/UI/time_line_drawer.gd" id="1_soc3d"]
+[ext_resource type="Script" path="res://Scripts/UI/timeline_drawer.gd" id="1_kfodc"]
 
 [node name="TimeLineDrawer" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_soc3d")
+mouse_filter = 2
+script = ExtResource("1_kfodc")

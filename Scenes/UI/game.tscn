@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://d33rvqhsi8ycp"]
 
-[ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multi_verse_draw.tscn" id="1_fqsyd"]
+[ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multiverse_draw.tscn" id="1_fqsyd"]
 [ext_resource type="Script" path="res://Scripts/GameContainer.cs" id="1_hwe3s"]
 [ext_resource type="Script" path="res://Scripts/UI/Camera_controller_test.gd" id="1_ku55i"]
 [ext_resource type="Script" path="res://Scenes/UI/TurnIndicator.gd" id="2_d187i"]

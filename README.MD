@@ -25,24 +25,32 @@ I used GitHub Copilot to initially port the code over, Im a little nervous about
 ## Features
 
 * GUI For 5d Chess
-* All Rules and pieces of the base game implemented
+* All Rules and pieces of the base game implemented (Promotion, en passent need to be reimplemented)
 * Ability to load games through PGN/FEN files
 
 ## Proposed Features
 
-* Ability to save games to a PGN/FEN fil
+* Ability to save games to a PGN/FEN files
 * Analysis tools such as sidelines, rewinding and jumping to positions(this is present in other implementations such as chessin5d but not in the base game)
 * White/Black only views
-* Study System(Loading, creating saving)
+* Study System (Loading, creating, saving)
 * Ability to interface with 5d Engines in a UCI like protocol
 * Human V. Bot and Bot V. Bot Matches.
 * Variant Creator menu
   
   
 
+## Limitations
+
+Godot has several issues with FileIO. First the Filedialog node is bugged so you cannot load anything outside of the base res:// Directory. additonally the Godot FileIO is sandboxed to only open files within the res:// directory. In the future this project will port to use CSharp File IO. If you would like to load your own games into the GUI, please clone the repository and add the game locally in your file system under the project files.
+
 ## Notation
 
 This main notation that this project uses is Shad Amethyst's notation, which is the unofficial standard notation for 5d Chess. Using this Notation, games can be loaded and will be exportable in this notation in the near future. You can read more about this notation here: <https://github.com/adri326/5dchess-notation/blob/master/README.md>
+
+
+
+This project may not be able to load games which have multiple different boards per timeline at the start.
 
 ## Other Notations
 
@@ -53,6 +61,16 @@ Some print statements use the notation that looks like:
 > [w.3T0L.a1]
 
 This is similar to my old notation, and is only for debugging purposes, as I have no way to parse this kind of notation at the moment.
+
+## Raw Notation
+
+I am proposing that any chess engines use raw notation, however i do not know if there are any other engines. Raw notation would look like this:
+
+(l<sub>Layer</sub>Tt<sub>Time</sub>)
+
+> (l<sub>Origin</sub>Tt<sub>Origin</sub>)SAN(l<sub>dest</sub>Tt<sub>dest</sub>)SAN
+
+For example the first move of a game would look like: (0T1)e2(0T1)e4. Moves are ordered exactly like Shads notation, with spatial moves coming first ordered by Timeline lowest to highest, then any jumping moves ordered by origin timeline lowest to highest. Finally the exact order that the branching moves were played in.
 
 ### Coordinate Notation
 
@@ -65,6 +83,8 @@ In a 2d chess engine, you may notice that moves are denoted in long algebraic no
 In this gui, notation for a move will look like
 
 > (x<sub>origin</sub>,y<sub>origin</sub>,T<sub>origin</sub>,L<sub>origin</sub>)(x<sub>dest</sub>,y<sub>dest</sub>,T<sub>dest</sub>,L<sub>dest</sub>)
+> 
+> ex: (3,1,1,0)(3,3,1,0) for 1.e4
 
 With x being the file, y being rank, T being time, and L being Layer/Timeline.A whole Turn will look like
 
@@ -74,13 +94,17 @@ With moves separated by semicolons. A promotion would look like
 
 > (x<sub>origin</sub>,y<sub>origin</sub>,T<sub>origin</sub>,L<sub>origin</sub>)(x<sub>dest</sub>,y<sub>dest</sub>,T<sub>dest</sub>,L<sub>dest</sub>)=Q
 
-and castling is denoted normally, with layer added
+and castling is denoted normally, with layer added 
 
 > &lt;MOVE&gt;;O-O,L;&lt;MOVE&gt;
+
+The castling assumes there is only 1 unmoved king on the given board. this may need to be changed since this may not be true. However 1 unmoved king per board is standard in most if not all variants.
 
 Lastly, there may be the need to show a null move, which is denoted as:
 
 > 0000
+
+Null moves are used in this project as a way for a player to pass (for example T0)
 
 Formally, the moves should follow an order where destination layer is from top to bottom however this is not enforced by the engine. Branching moves must always be ordered how they occur however.
 
@@ -107,5 +131,3 @@ L0laapk3 5dChess website: <https://multiversechess.com/> (Not Open Source, Very 
 This engine was made without reference to source or decompiled code from the software "5d Chess With Multiverse Time Travel" developed by LLC. Thunkspace. All code, assets, libraries and other files in this project were either made by me, or are open source.
 
 The project itself is open source.
-
-
