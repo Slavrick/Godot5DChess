@@ -132,10 +132,10 @@ This engine was made without reference to source or decompiled code from the sof
 
 The project itself is open source.
 
-For the chess pieces, I am using are open source, TBD i cannot find them, its been 4 years since i first found the source.
-
-In the future, I am planning on adding UI sounds for better game feel, most likely something by Kenny see: <https://kenney.nl/assets/category:Audio?sort=update>
+For the chess pieces currently i am using the chess font "Chess Adventurer" on the website: <https://www.enpassant.dk/chess/fonteng.htm> . I am going to change this in the future as it is unclear the licensing behind these pieces, althuogh the website does state "freeware" its possible i am breaking some copyright by redistributing.
 
 I might also use CrazyPenguin's open source chess pieces that other 5D Projects use:  <https://gitlab.com/adri326/the-amazing-5d-chess-piece-set>
 
 I also plan to implement other methods of modification of the looks, currently you can only really do a palette swap but in the future I plan to implement fully customizable pieces, chess boards, etc.
+
+In the future, I am planning on adding UI sounds for better game feel, most likely something by Kenny see: <https://kenney.nl/assets/category:Audio?sort=update>
