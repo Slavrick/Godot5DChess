@@ -2,15 +2,15 @@
 
 This project is a port of my original Java UI From 2021 which you can find here: <https://github.com/Slavrick/5dChessGUI>
 
-The point of this project was just for fun, not sure how far I will take the project. The main motivation behind this project was that I had a semi decent and working implementation of 5D Chess in CSharp, but it was behind a janky java UI :( 
+The point of this project was just for fun, not sure how far I will take the project. The main motivation behind this project was that I had a semi decent and working implementation of 5D Chess in Java, but it was behind a janky JavaFX UI :( 
 
-I plan to expand on the previous project by making it more portable, so more people can use the GUI, to make the experiance less clunky and more smooth/better feeling. I also wish to add a study feature.
-
-
+I plan to expand on my previous 5D project by making it more portable, so more people can use the GUI (Im not even sure anyone else ever used the old GUI based on what I heard and how clunky it was to get to work), to make the experiance less clunky and more smooth/better feeling. I also wish to add a study/analysis feature.
 
 
 
-I used GitHub Copilot to initially port the code over, Im a little nervous about bugs and performance but CSharp and Java should be similar enough that hopefully there is no issues.
+
+
+I used GitHub Copilot to initially port the code over, Im a little nervous about bugs and performance but CSharp and Java should be similar enough that hopefully there is no issues. So far the project has not had any bugs from the porting itself as far as i can tell. I plan to do a partial rewrite to consolidate some of the code, improve checkmate detection, and the data structures i was using.
 
 
 
@@ -131,3 +131,11 @@ L0laapk3 5dChess website: <https://multiversechess.com/> (Not Open Source, Very 
 This engine was made without reference to source or decompiled code from the software "5d Chess With Multiverse Time Travel" developed by LLC. Thunkspace. All code, assets, libraries and other files in this project were either made by me, or are open source.
 
 The project itself is open source.
+
+For the chess pieces, I am using are open source, TBD i cannot find them, its been 4 years since i first found the source.
+
+In the future, I am planning on adding UI sounds for better game feel, most likely something by Kenny see: <https://kenney.nl/assets/category:Audio?sort=update>
+
+I might also use CrazyPenguin's open source chess pieces that other 5D Projects use:  <https://gitlab.com/adri326/the-amazing-5d-chess-piece-set>
+
+I also plan to implement other methods of modification of the looks, currently you can only really do a palette swap but in the future I plan to implement fully customizable pieces, chess boards, etc.
