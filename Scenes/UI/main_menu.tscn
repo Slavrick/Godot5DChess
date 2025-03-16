@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqco6q4bwai4m"]
+[gd_scene load_steps=5 format=3 uid="uid://bqco6q4bwai4m"]
 
 [ext_resource type="PackedScene" uid="uid://dg5b24p4ma8jb" path="res://Scenes/UI/settings.tscn" id="1_7blw5"]
 [ext_resource type="Script" path="res://Scripts/UI/main_menu.gd" id="1_656jk"]
 [ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multiverse_draw.tscn" id="2_yxuhw"]
+[ext_resource type="PackedScene" uid="uid://c8wa801n3kele" path="res://Scenes/UI/variant_selection_menu.tscn" id="4_lcxmb"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -23,54 +24,28 @@ coord_font_size = 0
 visible = false
 layout_mode = 1
 
-[node name="MenuVbox" type="VBoxContainer" parent="."]
+[node name="Main" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.098
-anchor_top = 0.168
-anchor_right = 0.098
-anchor_bottom = 0.168
-offset_left = 8.104
-offset_top = 9.13599
-offset_right = 48.104
-offset_bottom = 49.136
-theme_override_constants/separation = 50
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1152.0
+offset_bottom = -648.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Play Game" type="Button" parent="MenuVbox"]
-layout_mode = 2
-text = "Play"
-
-[node name="Puzzles" type="Button" parent="MenuVbox"]
-layout_mode = 2
-disabled = true
-text = "Puzzles 
-(coming in future Update)"
-
-[node name="Analysis" type="Button" parent="MenuVbox"]
-layout_mode = 2
-disabled = true
-text = "Analysis
-(coming in future Update)"
-
-[node name="Settings" type="Button" parent="MenuVbox"]
-layout_mode = 2
-text = "Settings"
-
-[node name="Exit" type="Button" parent="MenuVbox"]
-layout_mode = 2
-text = "Exit Game"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="RichTextLabel" type="RichTextLabel" parent="Main"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 1
 anchors_preset = -1
+anchor_left = 0.358
 anchor_top = 0.21
-anchor_right = 1.0
+anchor_right = 0.358
 anchor_bottom = 0.21
 offset_left = 412.0
-offset_top = -55.08
-offset_right = -25.0
-offset_bottom = 311.92
+offset_top = 81.0
+offset_right = 1127.0
+offset_bottom = 581.0
 theme_override_constants/outline_size = 20
 theme_override_constants/shadow_offset_y = 70
 theme_override_constants/shadow_offset_x = 120
@@ -78,3 +53,51 @@ theme_override_constants/shadow_outline_size = 60
 theme_override_font_sizes/normal_font_size = 100
 text = "5D Chess In Godot"
 fit_content = true
+
+[node name="MenuVbox" type="VBoxContainer" parent="Main"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 125.0
+offset_top = 113.0
+offset_right = 332.0
+offset_bottom = 514.0
+theme_override_constants/separation = 50
+
+[node name="Play Game" type="Button" parent="Main/MenuVbox"]
+layout_mode = 2
+text = "Play"
+
+[node name="Puzzles" type="Button" parent="Main/MenuVbox"]
+layout_mode = 2
+disabled = true
+text = "Puzzles 
+(coming in future Update)"
+
+[node name="Analysis" type="Button" parent="Main/MenuVbox"]
+layout_mode = 2
+disabled = true
+text = "Analysis
+(coming in future Update)"
+
+[node name="Settings" type="Button" parent="Main/MenuVbox"]
+layout_mode = 2
+text = "Settings"
+
+[node name="Exit" type="Button" parent="Main/MenuVbox"]
+layout_mode = 2
+text = "Exit Game"
+
+[node name="VariantSelectionMenu" parent="." instance=ExtResource("4_lcxmb")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 79.0
+offset_top = 70.0
+offset_right = -116.0
+offset_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -1,0 +1,175 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8wa801n3kele"]
+
+[ext_resource type="Script" path="res://Scripts/UI/variant_selection_menu.gd" id="1_becik"]
+
+[node name="VariantSelectionMenu" type="MarginContainer"]
+anchors_preset = -1
+anchor_left = 0.095
+anchor_top = 0.095
+anchor_right = 0.921
+anchor_bottom = 0.902
+offset_left = -6.44001
+offset_top = -4.56001
+offset_right = 3.00793
+offset_bottom = 5.50397
+script = ExtResource("1_becik")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 2
+current_tab = 2
+
+[node name="Standard" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Standard"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Standard" type="HBoxContainer" parent="TabContainer/Standard/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Standard/VBoxContainer/Standard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+text = "Standard"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Standard/VBoxContainer/Standard"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "The Standard Chess Position"
+fit_content = true
+
+[node name="StandardT0" type="HBoxContainer" parent="TabContainer/Standard/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Standard/VBoxContainer/StandardT0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+text = "Standard T0"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Standard/VBoxContainer/StandardT0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "The Standard Chess Position, which grants black an extra board on T0 before whites first move. This gives black counterplay in f7 sac cases."
+fit_content = true
+
+[node name="Defended Pawn" type="HBoxContainer" parent="TabContainer/Standard/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Standard/VBoxContainer/Defended Pawn"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+text = "Defended Pawn"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Standard/VBoxContainer/Defended Pawn"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "The Standard Chess Position, However The queen and b1 knight are swapped, which defends f7 on turn one."
+fit_content = true
+
+[node name="Princess" type="HBoxContainer" parent="TabContainer/Standard/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Standard/VBoxContainer/Princess"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+text = "Princess"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Standard/VBoxContainer/Princess"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "The Standard Chess Position, However The queenis replaced with the weaker princess, which has less time travel powers."
+fit_content = true
+
+[node name="Checkmate Practice" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Checkmate Practice"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Knight" type="HBoxContainer" parent="TabContainer/Checkmate Practice/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Checkmate Practice/VBoxContainer/Knight"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+disabled = true
+text = "Knight"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Checkmate Practice/VBoxContainer/Knight"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Checkmate practice for knight users (TBD)"
+fit_content = true
+
+[node name="Focused-Single Piece" type="ScrollContainer" parent="TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Focused-Single Piece"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Only Brawns" type="HBoxContainer" parent="TabContainer/Focused-Single Piece/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Focused-Single Piece/VBoxContainer/Only Brawns"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+text = "Only Brawns"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Focused-Single Piece/VBoxContainer/Only Brawns"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Only Brawns in this one"
+fit_content = true
+
+[node name="Only Unicorns" type="HBoxContainer" parent="TabContainer/Focused-Single Piece/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Focused-Single Piece/VBoxContainer/Only Unicorns"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+text = "Only Unicorns"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Focused-Single Piece/VBoxContainer/Only Unicorns"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "The Standard Chess Position, which grants black an extra board on T0 before whites first move. This gives black counterplay in f7 sac cases."
+fit_content = true
+
+[node name="Misc Variants" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Misc Variants"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimelineStrategos" type="HBoxContainer" parent="TabContainer/Misc Variants/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TabContainer/Misc Variants/VBoxContainer/TimelineStrategos"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+text = "Timeline Strategos"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Misc Variants/VBoxContainer/TimelineStrategos"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Small Variant (this is pretty much solved for white)"
+fit_content = true

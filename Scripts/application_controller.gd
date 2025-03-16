@@ -13,8 +13,6 @@ func _ready() -> void:
 
 
 func load_game(file_path : String):
-	#TODO make this work better. use string provided. loading screen.
-	file_path = "res://PGN/Variations/Standard-T0.PGN5.txt"
 	var game_node = load(game_path).instantiate()
 	add_child(game_node)
 	game_node.call("LoadGame", file_path)

@@ -93,5 +93,14 @@ file_mode = 0
 filters = PackedStringArray("*.txt", "*.PGN", "*.PGN5", "*.PGN5.txt")
 show_hidden_files = true
 
+[node name="SaveDialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
+initial_position = 1
+size = Vector2i(500, 500)
+ok_button_text = "Save"
+access = 2
+filters = PackedStringArray("*.txt", "*.PGN", "*.PGN5", "*.PGN5.txt")
+show_hidden_files = true
+
 [connection signal="IsMated" from="." to="SubViewport/Mated" method="_on_game_is_mated"]
 [connection signal="TurnChanged" from="." to="SubViewport/Panel" method="_on_game_turn_changed"]

@@ -1,0 +1,3 @@
+[board "custom"]
+[size "8x8"]
+[r*qbnk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*QBNK*BNR*:0:1:w]

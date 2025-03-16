@@ -2,6 +2,7 @@ extends Control
 
 signal submit_turn
 signal load_game
+signal save_game
 signal goto_present
 signal undo_turn
 signal flip_perspective
@@ -14,6 +15,8 @@ func _ready() -> void:
 	$HBoxContainer2/Perspective.pressed.connect(flip_perspective_pressed)
 	$"HBoxContainer/Load Game".pressed.connect(load_game_pressed)
 	$HBoxContainer2/OptionButton.item_selected.connect(view_changed)
+	$"HBoxContainer/Save Game".pressed.connect(save_game_pressed)
+
 
 func submit_pressed():
 	submit_turn.emit()
@@ -26,6 +29,8 @@ func undo_turn_pressed():
 func load_game_pressed():
 	load_game.emit()
 
+func save_game_pressed():
+	save_game.emit()
 
 func gotopresent_pressed():
 	goto_present.emit()

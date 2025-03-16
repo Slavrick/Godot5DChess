@@ -161,7 +161,6 @@ func set_perspective( perspective ):
 		child.queue_redraw()
 
 
-
 func on_view_changed( perspective : bool , view ):
 	place_children()
 	queue_redraw()

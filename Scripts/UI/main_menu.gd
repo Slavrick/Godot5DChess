@@ -4,28 +4,31 @@ signal load_game()
 
 
 func _ready() -> void:
-	$"MenuVbox/Play Game".pressed.connect(play_game)
-	$MenuVbox/Settings.pressed.connect(show_settings)
+	$"Main/MenuVbox/Play Game".pressed.connect(play_game)
+	$Main/MenuVbox/Settings.pressed.connect(show_settings)
+	$Main/MenuVbox/Exit.pressed.connect(exit_program)
 	$Settings.close.connect(close_settings)
-	$MenuVbox/Exit.pressed.connect(exit_program)
-
+	$VariantSelectionMenu.variant_selected.connect(on_variant_selected)
 
 func play_game():
-	load_game.emit(" ")
+	$Main.hide()
+	$VariantSelectionMenu.show()
 
 
 func show_settings():
-	$MenuVbox.hide()
-	$RichTextLabel.hide()
+	$Main.hide()
 	$Settings.show()
 
 
 func close_settings():
 	$Settings.hide()
-	$MenuVbox.show()
-	$RichTextLabel.show()
+	$Main.show()
 
 
 func exit_program():
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
+
+
+func on_variant_selected(variantfilepath : String):
+	load_game.emit(variantfilepath)
