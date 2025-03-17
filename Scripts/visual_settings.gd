@@ -33,7 +33,7 @@ var font_color : Color = Color.BLACK
 #Spacing
 var square_width := 128
 var board_padding := 20 #Distance between squares and edge of board.
-var board_horizontal_margin := 20  #Distance between boards.
+var board_horizontal_margin := 100  #Distance between boards.
 var timeline_vertical_margin := 700 #Distance between timelines
 var multiverse_view := FULL_VIEW :
 	set(value):
@@ -67,7 +67,7 @@ func calculate_dimensions():
 	if multiverse_view == FULL_VIEW:
 		multiverse_tile_width = (square_width * game_board_dimensions.x * 2
 			+ board_padding * 4 
-			+ board_horizontal_margin * 2)
+			+ board_horizontal_margin * 3)
 	else:
 		multiverse_tile_width = (square_width * game_board_dimensions.x
 			+ board_padding * 2 
@@ -112,8 +112,16 @@ func parsable_json_to_dict(json : String) -> Dictionary:
 	new_dict["black_multiverse_color"] = Color(json_dict["black_multiverse_color"])
 	return new_dict
 
+
 func import_user_settings(filepath:String):
-	pass
+	if not FileAccess.file_exists(filepath):
+		print_debug("Settings dont exist")
+		return false
+	var file := FileAccess.open(visual_settings_path, FileAccess.READ)
+	var json_settings := file.get_line()
+	var visuals_dictionary = parsable_json_to_dict(json_settings)
+	load_dictionary(visuals_dictionary)
+	return true
 
 
 func load_dictionary(settings_dictionary : Dictionary):

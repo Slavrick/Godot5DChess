@@ -42,7 +42,7 @@ func update_dimensions():
 	SQUARE_HEIGHT = VisualSettings.multiverse_tile_height
 	queue_redraw()
 
-
+#TODO This doesn't display the right label in the case of a flipped perspective. ( in other words -1L needs to be 1L)
 func _draw() -> void:
 	var x_offset = camera_position.x - (10 * SQUARE_LENGTH) - (int(floor(camera_position.x)) % SQUARE_LENGTH)
 	var y_offset = camera_position.y - (10 * SQUARE_HEIGHT) - (int(floor(camera_position.y)) % SQUARE_HEIGHT)

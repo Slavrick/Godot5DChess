@@ -128,21 +128,54 @@ scroll_active = false
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer"]
+[node name="BoardMargin" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer6"]
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/BoardMargin"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-text = "Black Multiverse Square Color"
+text = "Board margin"
 fit_content = true
 scroll_active = false
 
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/HBoxContainer6"]
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/BoardMargin"]
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 min_value = 10.0
 value = 10.0
+
+[node name="BoardPadding" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/BoardPadding"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Board Padding"
+fit_content = true
+scroll_active = false
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/BoardPadding"]
+custom_minimum_size = Vector2(50, 20)
+layout_mode = 2
+min_value = 10.0
+value = 10.0
+
+[node name="TLVertMargin" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/TLVertMargin"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Timeline Vertical Margin"
+fit_content = true
+scroll_active = false
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/TLVertMargin"]
+custom_minimum_size = Vector2(50, 20)
+layout_mode = 2
+min_value = 300.0
+max_value = 1000.0
+value = 700.0
 
 [node name="PalletsLabel" type="RichTextLabel" parent="VBoxContainer"]
 layout_mode = 2

@@ -18,7 +18,11 @@ func _ready() -> void:
 	$VBoxContainer/Pallets/GlassPalette.pressed.connect(set_pallet.bind(VisualSettings.glass_palette))
 	$VBoxContainer/Pallets/WoodPalette.pressed.connect(set_pallet.bind(VisualSettings.wood_palette))
 	$VBoxContainer/Pallets/CheckersPalette.pressed.connect(set_pallet.bind(VisualSettings.checkers_palette))
-
+	
+	
+	$VBoxContainer/TLVertMargin/SpinBox.value_changed.connect(TLMarginChanged)
+	$VBoxContainer/BoardPadding/SpinBox.value_changed.connect(board_padding_changed)
+	$VBoxContainer/BoardMargin/SpinBox.value_changed.connect(board_margin_changed)
 
 
 func change_light_color( color : Color):
@@ -53,3 +57,15 @@ func returntomain():
 func set_pallet(pallet_dicitionary : Dictionary):
 	VisualSettings.load_dictionary(pallet_dicitionary)
 	set_colorpickers()
+
+
+func TLMarginChanged(value : float):
+	VisualSettings.timeline_vertical_margin = value
+
+
+func board_margin_changed(value: float):
+	VisualSettings.board_horizontal_margin = value
+
+
+func board_padding_changed(value:float):
+	VisualSettings.board_padding = value

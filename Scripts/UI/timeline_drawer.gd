@@ -13,7 +13,7 @@ enum DRAWMODE {
 var TStart := 0
 var color_start := true
 var layer := 0
-var board_margin := 20
+#var board_margin := 20
 var timeline_arrow_thickness := 80
 var chessboard_dimensions : Vector2
 
@@ -39,7 +39,7 @@ func place_children():
 					child.show()
 				var ply = child.multiverse_position.y - TStart + 1
 				child.square_clicked.connect(board_square_clicked)
-				child.position = Vector2(ply,0) * Vector2(child.functional_width() + board_margin,child.functional_height() + board_margin)
+				child.position = Vector2(ply,0) * Vector2(child.functional_width() + VisualSettings.board_horizontal_margin,child.functional_height() + VisualSettings.board_horizontal_margin)
 		VisualSettings.BLACK_VIEW:
 			for child in get_children():
 				if child.color == true:
@@ -49,7 +49,7 @@ func place_children():
 					child.show()
 				var ply = child.multiverse_position.y - TStart + 1
 				child.square_clicked.connect(board_square_clicked)
-				child.position = Vector2(ply,0) * Vector2(child.functional_width() + board_margin,child.functional_height() + board_margin)
+				child.position.x = ply * (child.functional_width() + VisualSettings.board_horizontal_margin) + VisualSettings.board_horizontal_margin/2
 		_:
 			for child in get_children():
 				child.show()
@@ -60,13 +60,15 @@ func place_children():
 					ply *= 2
 					ply += 1
 				child.square_clicked.connect(board_square_clicked)
-				child.position = Vector2(ply,0) * Vector2(child.functional_width() + board_margin,child.functional_height() + board_margin)
+				child.position.x = ply * (VisualSettings.multiverse_tile_width / 2)
+				print_debug(child.position)
+				child.position.x += VisualSettings.board_horizontal_margin
 #TODO change all child.functional_width and height
 
 
 func _draw():
 	var horizontal_stickout = 100 #TODO define this in visualSettings.
-	draw_rect(Rect2(-30,-30,60,60),Color.MAGENTA)
+	#draw_rect(Rect2(-30,-30,60,60),Color.MAGENTA) For testing purposes.
 	match VisualSettings.multiverse_view:
 		VisualSettings.FULL_VIEW:
 			var width = horizontal_stickout * 2
