@@ -212,6 +212,15 @@ namespace Engine {
 	  return true;
 	}
 
+	/**
+	 * make a move without submitting turn, or effecting the temp move data
+	 * structures. (In other words, it becomes up to the caller to handle undo's and
+	 * other features. This will do no validation as it should only be called for
+	 * setting up positions.
+	 * 
+	 * @param m move to submit
+	 * @return boolean whether the move was made or not
+	 */
 	protected bool MakeSilentMove(Move m) {
 	  if (m.Type == Move.SPATIALMOVE) {
 		int pieceMoved = this.GetSquare(m.Origin, this.Color);
@@ -328,6 +337,17 @@ namespace Engine {
 	  return false;
 	}
 
+	/**
+	 * add a timeline to the multiverse. This assumes that the branch is the color
+	 * of the current players turn
+	 * 
+	 * @param b
+	 * @param timeStart the time of the destination of the branch. ie if you jump to
+	 *                  time 1 as black, you would input 1 not 2 (2 is the first
+	 *                  playable board for white and when the timeline actually
+	 *                  starts)
+	 * @return integer of the timeline created.
+	 */
 	private int AddTimeline(Board b, int timeStart) {
 	  if (Color) {
 		MaxTL++;
@@ -926,6 +946,5 @@ namespace Engine {
 	public static int getTLIndex(int layer, int MinTL) {
 	  return layer + (-1 * MinTL);
 	}
-
   }
 }

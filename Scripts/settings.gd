@@ -4,25 +4,25 @@ signal close
 
 
 func _ready() -> void:
-	$VBoxContainer/whitesquare/ColorPicker.color_changed.connect(change_light_color)
-	$VBoxContainer/blacksquare/ColorPicker.color_changed.connect(change_dark_color)
-	$VBoxContainer/whitemultiversesquare/ColorPicker.color_changed.connect(white_multiverse_color_change)
-	$VBoxContainer/blackmultiversesquare/ColorPicker.color_changed.connect(black_multiverse_color_change)
+	$TabContainer/Colors/whitesquare/ColorPicker.color_changed.connect(change_light_color)
+	$TabContainer/Colors/blacksquare/ColorPicker.color_changed.connect(change_dark_color)
+	$TabContainer/Colors/whitemultiversesquare/ColorPicker.color_changed.connect(white_multiverse_color_change)
+	$TabContainer/Colors/blackmultiversesquare/ColorPicker.color_changed.connect(black_multiverse_color_change)
 	
 	VisualSettings.load_user_settings()
 	set_colorpickers()
 	
-	$VBoxContainer/return.pressed.connect(returntomain)
-	$VBoxContainer/Pallets/DefaultPalette.pressed.connect(set_pallet.bind(VisualSettings.default_palette))
-	$VBoxContainer/Pallets/GrayScalePalette.pressed.connect(set_pallet.bind(VisualSettings.grayscale_palette))
-	$VBoxContainer/Pallets/GlassPalette.pressed.connect(set_pallet.bind(VisualSettings.glass_palette))
-	$VBoxContainer/Pallets/WoodPalette.pressed.connect(set_pallet.bind(VisualSettings.wood_palette))
-	$VBoxContainer/Pallets/CheckersPalette.pressed.connect(set_pallet.bind(VisualSettings.checkers_palette))
+	$TabContainer/Colors/return.pressed.connect(returntomain)
+	$TabContainer/Colors/Pallets/DefaultPalette.pressed.connect(set_pallet.bind(VisualSettings.default_palette))
+	$TabContainer/Colors/Pallets/GrayScalePalette.pressed.connect(set_pallet.bind(VisualSettings.grayscale_palette))
+	$TabContainer/Colors/Pallets/GlassPalette.pressed.connect(set_pallet.bind(VisualSettings.glass_palette))
+	$TabContainer/Colors/Pallets/WoodPalette.pressed.connect(set_pallet.bind(VisualSettings.wood_palette))
+	$TabContainer/Colors/Pallets/CheckersPalette.pressed.connect(set_pallet.bind(VisualSettings.checkers_palette))
 	
 	
-	$VBoxContainer/TLVertMargin/SpinBox.value_changed.connect(TLMarginChanged)
-	$VBoxContainer/BoardPadding/SpinBox.value_changed.connect(board_padding_changed)
-	$VBoxContainer/BoardMargin/SpinBox.value_changed.connect(board_margin_changed)
+	$TabContainer/Colors/TLVertMargin/SpinBox.value_changed.connect(TLMarginChanged)
+	$TabContainer/Colors/BoardPadding/SpinBox.value_changed.connect(board_padding_changed)
+	$TabContainer/Colors/BoardMargin/SpinBox.value_changed.connect(board_margin_changed)
 
 
 func change_light_color( color : Color):
@@ -42,10 +42,10 @@ func black_multiverse_color_change( color : Color ):
 
 
 func set_colorpickers():
-	$VBoxContainer/whitesquare/ColorPicker.color = VisualSettings.light_square_color
-	$VBoxContainer/blacksquare/ColorPicker.color = VisualSettings.dark_square_color
-	$VBoxContainer/whitemultiversesquare/ColorPicker.color = VisualSettings.white_multiverse_color
-	$VBoxContainer/blackmultiversesquare/ColorPicker.color = VisualSettings.black_multiverse_color
+	$TabContainer/Colors/whitesquare/ColorPicker.color = VisualSettings.light_square_color
+	$TabContainer/Colors/blacksquare/ColorPicker.color = VisualSettings.dark_square_color
+	$TabContainer/Colors/whitemultiversesquare/ColorPicker.color = VisualSettings.white_multiverse_color
+	$TabContainer/Colors/blackmultiversesquare/ColorPicker.color = VisualSettings.black_multiverse_color
 
 
 

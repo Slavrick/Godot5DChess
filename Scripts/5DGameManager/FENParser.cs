@@ -410,24 +410,6 @@ namespace FileIO5D {
 	  return new CoordFour(file - 'a', int.Parse(rank) - 1, 0, 0);
 	}
 
-/* 	public static int IndexOfElement(int[] arr, int target) { XXX Slated for removal. This is not required---CSharp Has inbuilt functions.
-	  for (int i = 0; i < arr.Length; i++) {
-		if (arr[i] == target) {
-		  return i;
-		}
-	  }
-	  return 0;
-	}
-
-	public static int IndexOfElement(char[] arr, char target) {
-	  for (int i = 0; i < arr.Length; i++) {
-		if (arr[i] == target) {
-		  return i;
-		}
-	  }
-	  return 0;
-	} */
-
 	public static int ParseLayer(string layer, bool evenStarters) {
 	  if (!evenStarters) {
 		return int.Parse(layer);

@@ -10,11 +10,11 @@ namespace Engine
 		// a leaper is a piece who "Leaps" a specific length and stays there.
 		// rooks, bishops, queens, unicorns, dragons, are all riders
 		// Kings, Rooks, and pawns are leapers. however Pawn 2 move on 2nd/7th rank is not a leap, but pseudo leap/ride.
+/* 
+		public bool Rider { get; set; } XXX Delete this is Slated for deletion. Originally I had intended to have a rider be determined by something like this. However, i decided to use the below arrays
+		public int[] MovNote { get; set; } */ 
 
-		public bool Rider { get; set; }
-		public int[] MovNote { get; set; }
-
-/* 		public static readonly int[] ROOK = { 1 }; DELETE this is slated for deletion. Originally I wanted to notetate based on the movement potentials
+/* 		public static readonly int[] ROOK = { 1 }; XXX this is slated for deletion. Originally I wanted to notetate based on the movement potentials
 		public static readonly int[] BISHOP = { 2 }; Since each would have to generate the below movesets anyway, just hvaing them there is a little more clearn imo
 		public static readonly int[] UNICORN = { 3 };
 		public static readonly int[] DRAGON = { 4 };
@@ -412,7 +412,7 @@ namespace Engine
 	//java complains its no constant :(
 	//Perhaps changing this to an if else is something I want to do
 	//However, as long as I strictly add new pieces in a predictable pattern, this is fine
-	
+	//TODO re add the numpieces. (although i dont imagine ever needing to add in more fairy pieces.)
 	/**
 	 * Take a piece and turns it into an array of movement vectors,
 	 * 
@@ -440,7 +440,7 @@ namespace Engine
 			return PRINCESSMOVESET;
 		case 6:
 		case 18:
-			//this case is the queen, but it has the same movement vectors as a king, but is a rider instead. making the queen a "king rider" (that sounds dirty)
+			//this case is the queen, but it has the same movement vectors as a king.
 			return KINGMOVESET;
 		case 7:
 		case 19:
@@ -485,6 +485,7 @@ namespace Engine
 		}
 	}
 	
+	//Determines who or what piece counts toward checkmate. currently only the king and royal queen but flexable if you want to add more royal pieces.
 	public static bool pieceIsRoyal(int piece) {
 		piece = piece < 0 ? piece * -1 : piece;
 		switch(piece) {

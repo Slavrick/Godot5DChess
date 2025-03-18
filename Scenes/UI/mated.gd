@@ -5,6 +5,6 @@ extends RichTextLabel
 func _on_game_is_mated(player_mated: bool) -> void:
 	show()
 	if player_mated:
-		text = "Black Wins!"
+		text = "[center]Black Wins![/center]"
 	else:
-		text = "White Wins!"
+		text = "[center]White Wins![/center]"

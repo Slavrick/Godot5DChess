@@ -69,144 +69,157 @@ coord_font_size = 0
 position = Vector2(107, 100)
 script = ExtResource("1_h3oha")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="."]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+current_tab = 0
+
+[node name="Colors" type="VBoxContainer" parent="TabContainer"]
+custom_minimum_size = Vector2(500, 400)
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="whitesquare" type="HBoxContainer" parent="TabContainer/Colors"]
 layout_mode = 2
 
-[node name="whitesquare" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/whitesquare"]
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Colors/whitesquare"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "White Square Color"
 fit_content = true
 scroll_active = false
 
-[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer/whitesquare"]
+[node name="ColorPicker" type="ColorPickerButton" parent="TabContainer/Colors/whitesquare"]
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 
-[node name="blacksquare" type="HBoxContainer" parent="VBoxContainer"]
+[node name="blacksquare" type="HBoxContainer" parent="TabContainer/Colors"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/blacksquare"]
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Colors/blacksquare"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Black Square Color"
 fit_content = true
 scroll_active = false
 
-[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer/blacksquare"]
+[node name="ColorPicker" type="ColorPickerButton" parent="TabContainer/Colors/blacksquare"]
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 
-[node name="whitemultiversesquare" type="HBoxContainer" parent="VBoxContainer"]
+[node name="whitemultiversesquare" type="HBoxContainer" parent="TabContainer/Colors"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/whitemultiversesquare"]
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Colors/whitemultiversesquare"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "White Multiverse Square Color"
 fit_content = true
 scroll_active = false
 
-[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer/whitemultiversesquare"]
+[node name="ColorPicker" type="ColorPickerButton" parent="TabContainer/Colors/whitemultiversesquare"]
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 
-[node name="blackmultiversesquare" type="HBoxContainer" parent="VBoxContainer"]
+[node name="blackmultiversesquare" type="HBoxContainer" parent="TabContainer/Colors"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/blackmultiversesquare"]
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Colors/blackmultiversesquare"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Black Multiverse Square Color"
 fit_content = true
 scroll_active = false
 
-[node name="ColorPicker" type="ColorPickerButton" parent="VBoxContainer/blackmultiversesquare"]
+[node name="ColorPicker" type="ColorPickerButton" parent="TabContainer/Colors/blackmultiversesquare"]
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 
-[node name="BoardMargin" type="HBoxContainer" parent="VBoxContainer"]
+[node name="BoardMargin" type="HBoxContainer" parent="TabContainer/Colors"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/BoardMargin"]
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Colors/BoardMargin"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Board margin"
 fit_content = true
 scroll_active = false
 
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/BoardMargin"]
+[node name="SpinBox" type="SpinBox" parent="TabContainer/Colors/BoardMargin"]
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 min_value = 10.0
 value = 10.0
 
-[node name="BoardPadding" type="HBoxContainer" parent="VBoxContainer"]
+[node name="BoardPadding" type="HBoxContainer" parent="TabContainer/Colors"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/BoardPadding"]
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Colors/BoardPadding"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Board Padding"
 fit_content = true
 scroll_active = false
 
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/BoardPadding"]
+[node name="SpinBox" type="SpinBox" parent="TabContainer/Colors/BoardPadding"]
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 min_value = 10.0
 value = 10.0
 
-[node name="TLVertMargin" type="HBoxContainer" parent="VBoxContainer"]
+[node name="TLVertMargin" type="HBoxContainer" parent="TabContainer/Colors"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/TLVertMargin"]
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Colors/TLVertMargin"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Timeline Vertical Margin"
 fit_content = true
 scroll_active = false
 
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/TLVertMargin"]
+[node name="SpinBox" type="SpinBox" parent="TabContainer/Colors/TLVertMargin"]
 custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 min_value = 300.0
 max_value = 1000.0
 value = 700.0
 
-[node name="PalletsLabel" type="RichTextLabel" parent="VBoxContainer"]
+[node name="PalletsLabel" type="RichTextLabel" parent="TabContainer/Colors"]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]Pallets[/center]"
 fit_content = true
 
-[node name="Pallets" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Pallets" type="HBoxContainer" parent="TabContainer/Colors"]
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="DefaultPalette" type="TextureButton" parent="VBoxContainer/Pallets"]
+[node name="DefaultPalette" type="TextureButton" parent="TabContainer/Colors/Pallets"]
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_aovgw")
 
-[node name="GrayScalePalette" type="TextureButton" parent="VBoxContainer/Pallets"]
+[node name="GrayScalePalette" type="TextureButton" parent="TabContainer/Colors/Pallets"]
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_oq17k")
 
-[node name="GlassPalette" type="TextureButton" parent="VBoxContainer/Pallets"]
+[node name="GlassPalette" type="TextureButton" parent="TabContainer/Colors/Pallets"]
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_vue1v")
 
-[node name="WoodPalette" type="TextureButton" parent="VBoxContainer/Pallets"]
+[node name="WoodPalette" type="TextureButton" parent="TabContainer/Colors/Pallets"]
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_eyshr")
 
-[node name="CheckersPalette" type="TextureButton" parent="VBoxContainer/Pallets"]
+[node name="CheckersPalette" type="TextureButton" parent="TabContainer/Colors/Pallets"]
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_7liwe")
 
-[node name="return" type="Button" parent="VBoxContainer"]
+[node name="return" type="Button" parent="TabContainer/Colors"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Back To Main Menu"
+
+[node name="Controls" type="VBoxContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1

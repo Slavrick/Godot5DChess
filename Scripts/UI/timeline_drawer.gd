@@ -17,13 +17,12 @@ var layer := 0
 var timeline_arrow_thickness := 80
 var chessboard_dimensions : Vector2
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	place_children()
 	VisualSettings.view_changed.connect(on_view_changed)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
 
@@ -61,7 +60,6 @@ func place_children():
 					ply += 1
 				child.square_clicked.connect(board_square_clicked)
 				child.position.x = ply * (VisualSettings.multiverse_tile_width / 2)
-				print_debug(child.position)
 				child.position.x += VisualSettings.board_horizontal_margin
 #TODO change all child.functional_width and height
 

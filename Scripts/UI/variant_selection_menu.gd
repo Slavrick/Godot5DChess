@@ -3,7 +3,7 @@ extends MarginContainer
 
 signal variant_selected(variant_filepath : String)
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	$TabContainer/Standard/VBoxContainer/Standard/Button.pressed.connect(on_variant_selected.bind("Standard"))
 	$TabContainer/Standard/VBoxContainer/StandardT0/Button.pressed.connect(on_variant_selected.bind("StandardT0"))

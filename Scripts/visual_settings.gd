@@ -144,8 +144,12 @@ func load_dictionary(settings_dictionary : Dictionary):
 
 
 func position_of_multiverse_tile(tile : Vector2) -> Vector2:
-	return tile * Vector2(multiverse_tile_width,multiverse_tile_height)
-
+	tile = Vector2(tile.y-1,tile.x)
+	if(perspective):
+		return tile * Vector2(multiverse_tile_width,multiverse_tile_height)
+	else:
+		tile.y -= 1
+		return tile * Vector2(multiverse_tile_width,-multiverse_tile_height)
 
 
 

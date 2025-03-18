@@ -195,6 +195,22 @@ namespace Engine
 			}
 		}
 
+		//this is for the game UI, no functional attributes to this function. this is used to pan the board.
+		public CoordFour GetPresentCoordinate(int skip){
+			for(int i = MinActiveTL ; i <= MaxActiveTL; i++){
+				Timeline t = GetTimeline(getTLIndex(i,MinTL)); 
+				if(t.ColorPlayable == this.Color && t.TEnd <= Present){
+					return new CoordFour(0,0,i,t.TEnd);
+				}
+			}
+			//fallback
+			for(int i = MinActiveTL ; i <= MinActiveTL; i++){
+				Timeline t = GetTimeline(getTLIndex(i,MinTL));
+				return new CoordFour(0,0,i,t.TEnd);
+			}
+			return null;
+		}
+		
 		public static void PrintTree(TurnTree t)
 		{
 			List<TurnTree.Node> nodes = t.GetNodesLinear();

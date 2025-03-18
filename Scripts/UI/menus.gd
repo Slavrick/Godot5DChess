@@ -16,6 +16,8 @@ func _ready() -> void:
 	$"HBoxContainer/Load Game".pressed.connect(load_game_pressed)
 	$HBoxContainer2/OptionButton.item_selected.connect(view_changed)
 	$"HBoxContainer/Save Game".pressed.connect(save_game_pressed)
+	
+	$HBoxContainer2/Perspective.button_pressed = VisualSettings.perspective
 
 
 func submit_pressed():

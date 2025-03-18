@@ -13,6 +13,9 @@ public partial class GameContainer : Control
 	public delegate void IsMatedEventHandler(bool player_mated);
 	
 	[Signal]
+	public delegate void MoveMadeEventHandler(Vector2 tile_destination, bool destination_color);
+	
+	[Signal]
 	public delegate void TurnChangedEventHandler(bool player, int present);
 	
 	GameStateManager gsm;
@@ -98,9 +101,32 @@ public partial class GameContainer : Control
 		else if(destinations.Contains(clicked)){
 			if(gsm.CoordIsPlayable(SelectedSquare)){
 				Move SelectedMove = new Move(SelectedSquare,clicked);
-				gsm.MakeMove(SelectedMove);
-				//need to add cleanup
-				UpdateRender();
+				bool MoveStatus = gsm.MakeMove(SelectedMove);
+				if(MoveStatus){
+					if(SelectedMove.Type == 3 ){
+						Console.WriteLine("branching move detected");
+						int Layer;
+						if(color){
+							Layer = gsm.MaxTL;
+						}else{
+							Layer = gsm.MinTL;
+						}
+						Vector2 tile = new Vector2(Layer,clicked.T);
+						if(!color){
+							tile.Y += 1;
+						}
+						EmitSignal(SignalName.MoveMade, tile,!color);
+					}
+					else{
+						Vector2 tile = new Vector2(clicked.L,clicked.T);
+						if(!color){
+							tile.Y += 1;
+						}
+						EmitSignal(SignalName.MoveMade, tile, !color);
+					}
+					UpdateRender();
+					//need to add cleanup
+				}
 			}
 			
 		}else{
@@ -127,6 +153,7 @@ public partial class GameContainer : Control
 			mvcontainer.Call("clear_highlights");
 			mvcontainer.Call("highlight_squares",DestinationsGodot,color);
 		}
+		
 		//CoordFive coord = new CoordFive(); based on what was passed
 		//MoveGenerator.getMoves(piece,gsm,coord);
 	}
@@ -139,7 +166,7 @@ public partial class GameContainer : Control
 		if( SubmitSuccessful && gsm.isMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
-		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);
+		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
 	}
 	
 	public void UndoTurn(){
@@ -175,6 +202,11 @@ public partial class GameContainer : Control
 		EmitSignal(SignalName.ExitGame);
 	}
 	
+	
+	public Vector2 GetPresentTile(){
+		CoordFour cf = gsm.GetPresentCoordinate(0);
+		return new Vector2(cf.L,cf.T);
+	}
 	
 	public override void _Input(InputEvent @event)
 	{

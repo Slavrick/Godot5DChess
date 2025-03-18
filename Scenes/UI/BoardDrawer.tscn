@@ -1,17 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvsag20shf3yr"]
+[gd_scene load_steps=7 format=3 uid="uid://bvsag20shf3yr"]
 
 [ext_resource type="Script" path="res://Scripts/UI/Board_drawer.gd" id="1_huwgt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ehwp4"]
 bg_color = Color(0.737689, 0.571108, 0.239372, 1)
 border_color = Color(0.921569, 0.109804, 0.858824, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_86p1c"]
-bg_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -24,13 +17,44 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_86p1c"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqylc"]
+bg_color = Color(0.847464, 0.50903, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vcol"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
 [node name="BoardDrawer" type="Panel"]
 offset_right = 100.0
 offset_bottom = 100.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ehwp4")
 script = ExtResource("1_huwgt")
 dark_color = Color(0.29219, 0.29219, 0.29219, 1)
-black_style_box = SubResource("StyleBoxFlat_86p1c")
 white_style_box = SubResource("StyleBoxFlat_8un4g")
+black_style_box = SubResource("StyleBoxFlat_86p1c")
+white_present_style_box = SubResource("StyleBoxFlat_eqylc")
+black_present_style_box = SubResource("StyleBoxFlat_8vcol")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]

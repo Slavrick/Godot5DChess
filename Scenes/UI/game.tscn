@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multiverse_draw.tscn" id="1_fqsyd"]
 [ext_resource type="Script" path="res://Scripts/GameContainer.cs" id="1_hwe3s"]
-[ext_resource type="Script" path="res://Scripts/UI/Camera_controller_test.gd" id="1_ku55i"]
+[ext_resource type="Script" path="res://Scripts/UI/Camera_controller.gd" id="1_ku55i"]
 [ext_resource type="Script" path="res://Scenes/UI/TurnIndicator.gd" id="2_d187i"]
 [ext_resource type="StyleBox" uid="uid://byvx0063hyiek" path="res://Resources/black_indicator.tres" id="2_foilj"]
 [ext_resource type="Script" path="res://Scenes/UI/mated.gd" id="2_hvs6b"]
@@ -21,22 +21,22 @@ script = ExtResource("1_hwe3s")
 layer = 3
 
 [node name="Mated" type="RichTextLabel" parent="SubViewport"]
-visible = false
 custom_minimum_size = Vector2(500, 500)
 anchors_preset = -1
 anchor_top = 0.21
 anchor_right = 1.0
 anchor_bottom = 0.21
-offset_left = 412.0
+offset_left = 32.0
 offset_top = -55.08
 offset_right = -25.0
 offset_bottom = 444.92
+mouse_filter = 2
 theme_override_constants/outline_size = 20
 theme_override_constants/shadow_offset_y = 70
 theme_override_constants/shadow_offset_x = 120
 theme_override_constants/shadow_outline_size = 60
 theme_override_font_sizes/normal_font_size = 100
-text = "5D Chess In Godot"
+bbcode_enabled = true
 fit_content = true
 script = ExtResource("2_hvs6b")
 
@@ -73,10 +73,10 @@ text = "Exit to main Menu"
 
 [node name="Menus" parent="SubViewport" instance=ExtResource("5_bj616")]
 
-[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("Multiverse_draw")]
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("game")]
 position = Vector2(106, 130)
 script = ExtResource("1_ku55i")
-Multiverse_draw = NodePath("../MultiVerseDraw")
+game = NodePath("..")
 
 [node name="MultiVerseDraw" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("1_fqsyd")]
 camera = NodePath("../Camera2D")
@@ -104,3 +104,4 @@ show_hidden_files = true
 
 [connection signal="IsMated" from="." to="SubViewport/Mated" method="_on_game_is_mated"]
 [connection signal="TurnChanged" from="." to="SubViewport/Panel" method="_on_game_turn_changed"]
+[connection signal="goto_present" from="SubViewport/Menus" to="Camera2D" method="_on_menus_goto_present"]

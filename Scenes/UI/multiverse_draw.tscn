@@ -1,11 +1,8 @@
 [gd_scene load_steps=3 format=3 uid="uid://dgu2tqng234b2"]
 
 [ext_resource type="Script" path="res://Scripts/UI/multiverse_draw.gd" id="1_jqb6w"]
-
-[sub_resource type="SystemFont" id="SystemFont_hx4s2"]
-font_names = PackedStringArray("Times New Roman")
-subpixel_positioning = 0
+[ext_resource type="FontFile" uid="uid://ipxen8jbc6hy" path="res://Resources/Font/Teko/Teko-VariableFont_wght.ttf" id="2_6h14j"]
 
 [node name="MultiVerseDraw" type="Node2D"]
 script = ExtResource("1_jqb6w")
-coord_font = SubResource("SystemFont_hx4s2")
+coord_font = ExtResource("2_6h14j")

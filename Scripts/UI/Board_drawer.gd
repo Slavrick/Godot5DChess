@@ -17,8 +17,10 @@ enum TYPE {
 @export_group("Colors")
 @export var light_color := Color.BEIGE
 @export var dark_color := Color.BLACK
-@export var black_style_box : StyleBoxFlat
 @export var white_style_box : StyleBoxFlat
+@export var black_style_box : StyleBoxFlat
+@export var white_present_style_box : StyleBoxFlat
+@export var black_present_style_box : StyleBoxFlat
 @export_group("Visual Settings")
 @export var board_perspective := true
 @export var board_type := TYPE.PRESENT
@@ -103,10 +105,16 @@ func _ready() -> void:
 	size = Vector2(SQUARE_WIDTH * board_width,SQUARE_WIDTH * board_height)
 	size += Vector2(margin,margin) * 2
 	#load_board_array() Slated for removal need to re_add highlighting when mousing over.
-	if color:
-		add_theme_stylebox_override("panel",white_style_box)
+	if board_type == TYPE.PRESENT:
+		if color:
+			add_theme_stylebox_override("panel",white_present_style_box)
+		else:
+			add_theme_stylebox_override("panel",black_present_style_box)
 	else:
-		add_theme_stylebox_override("panel",black_style_box)
+		if color:
+			add_theme_stylebox_override("panel",white_style_box)
+		else:
+			add_theme_stylebox_override("panel",black_style_box)
 
 func place_children():
 	return
@@ -126,20 +134,20 @@ func piece_local_position_white(rank, file):
 func piece_local_position_black(rank, file):
 	return Vector2(margin + SQUARE_WIDTH * (board_width - file - 1), margin + SQUARE_WIDTH * rank)
 
-func load_board_array():
-	for i in range(board.size()):
-		if board[i] == 0:
-			continue
-		var file = i % board_width
-		var rank = floor(i / board_width)
-		var piece = packed_piece.instantiate()
-		piece.piece_type = board[i]
-		piece.rank = rank
-		piece.file = file
-		piece.pressed.connect(button_clicked.bind(Vector2(file,rank)))
-		piece.piece_right_clicked.connect(highlight_square.bind(Vector2(file,rank),Color.INDIAN_RED))
-		add_child(piece)
-	place_children()
+#func load_board_array(): XXX slated for removal, 
+	#for i in range(board.size()):
+		#if board[i] == 0:
+			#continue
+		#var file = i % board_width
+		#var rank = floor(i / board_width)
+		#var piece = packed_piece.instantiate()
+		#piece.piece_type = board[i]
+		#piece.rank = rank
+		#piece.file = file
+		#piece.pressed.connect(button_clicked.bind(Vector2(file,rank)))
+		#piece.piece_right_clicked.connect(highlight_square.bind(Vector2(file,rank),Color.INDIAN_RED))
+		#add_child(piece)
+	#place_children()
 
 
 func _draw() -> void:
@@ -168,6 +176,10 @@ func _draw() -> void:
 		else:
 			var rect = Rect2(margin + (board_width - highlight.square.x - 1) * SQUARE_WIDTH, margin + highlight.square.y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
 			draw_rect(rect,highlight.highlight_color,true)
+	if board_type == TYPE.GHOST:
+		self_modulate = Color(1,1,1,.75)
+	if board_type == TYPE.INACTIVE:
+		self_modulate = Color(.67,.67,.67,1)
 
 
 func logicalBoardToUIBoard():

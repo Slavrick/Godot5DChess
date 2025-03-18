@@ -16,10 +16,9 @@ script = ExtResource("1_becik")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 2
-current_tab = 2
+current_tab = 0
 
 [node name="Standard" type="ScrollContainer" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -113,6 +112,7 @@ text = "Checkmate practice for knight users (TBD)"
 fit_content = true
 
 [node name="Focused-Single Piece" type="ScrollContainer" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
