@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://dg5b24p4ma8jb"]
+[gd_scene load_steps=16 format=3 uid="uid://dg5b24p4ma8jb"]
 
 [ext_resource type="Script" path="res://Scripts/UI/ExampleSquare.gd" id="1_h3oha"]
 [ext_resource type="Script" path="res://Scripts/settings.gd" id="1_y2bqf"]
 [ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multiverse_draw.tscn" id="3_ja077"]
+[ext_resource type="Script" path="res://Scripts/UI/control_selector.gd" id="4_xl6a7"]
 
 [sub_resource type="Theme" id="Theme_b1vdr"]
 RichTextLabel/colors/default_color = Color(1, 1, 1, 1)
@@ -72,9 +73,10 @@ script = ExtResource("1_h3oha")
 [node name="TabContainer" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Colors" type="VBoxContainer" parent="TabContainer"]
+visible = false
 custom_minimum_size = Vector2(500, 400)
 layout_mode = 2
 metadata/_tab_index = 0
@@ -220,6 +222,37 @@ size_flags_horizontal = 4
 text = "Back To Main Menu"
 
 [node name="Controls" type="VBoxContainer" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
+
+[node name="SubmitTurn" type="HBoxContainer" parent="TabContainer/Controls"]
+layout_mode = 2
+script = ExtResource("4_xl6a7")
+input_name = "SubmitTurn"
+input_description = "Turn Submit"
+
+[node name="Label" type="Label" parent="TabContainer/Controls/SubmitTurn"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Submit Turn"
+
+[node name="Button" type="Button" parent="TabContainer/Controls/SubmitTurn"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="UndoTurn" type="HBoxContainer" parent="TabContainer/Controls"]
+layout_mode = 2
+script = ExtResource("4_xl6a7")
+input_name = "UndoTurn"
+input_description = "Undo Button"
+
+[node name="Label" type="Label" parent="TabContainer/Controls/UndoTurn"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Undo Turn"
+
+[node name="Button" type="Button" parent="TabContainer/Controls/UndoTurn"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 6

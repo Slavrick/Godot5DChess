@@ -142,7 +142,6 @@ func load_dictionary(settings_dictionary : Dictionary):
 	else:
 		black_multiverse_color = Color(0.306, 0.471, 0.216)
 
-
 func position_of_multiverse_tile(tile : Vector2) -> Vector2:
 	tile = Vector2(tile.y-1,tile.x)
 	if(perspective):
@@ -152,7 +151,8 @@ func position_of_multiverse_tile(tile : Vector2) -> Vector2:
 		return tile * Vector2(multiverse_tile_width,-multiverse_tile_height)
 
 
-
+func position_of_coordfive(tile : Vector2, square : Vector2, color : bool):
+	pass
 
 
 

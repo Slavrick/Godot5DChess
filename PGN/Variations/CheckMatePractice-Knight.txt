@@ -1,0 +1,3 @@
+[board "custom"]
+[size "6x6"]
+[n5/6/6/6/6/5K:0:1:w]

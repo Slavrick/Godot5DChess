@@ -534,7 +534,7 @@ namespace Engine
 			return destCoords;
 		}
 
-//START OF JAVA CODE
+//START OF JAVA CODE This stuff was not ported by copilot
 
 	   public static CoordFour kingCanCastle(Board b, CoordFive kingSquare, bool kside) {
 		int unmvdRk = UNMOVEDROOK;

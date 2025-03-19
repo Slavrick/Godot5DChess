@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://d33rvqhsi8ycp"]
+[gd_scene load_steps=9 format=3 uid="uid://d33rvqhsi8ycp"]
 
 [ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multiverse_draw.tscn" id="1_fqsyd"]
 [ext_resource type="Script" path="res://Scripts/GameContainer.cs" id="1_hwe3s"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scenes/UI/TurnIndicator.gd" id="2_d187i"]
 [ext_resource type="StyleBox" uid="uid://byvx0063hyiek" path="res://Resources/black_indicator.tres" id="2_foilj"]
 [ext_resource type="Script" path="res://Scenes/UI/mated.gd" id="2_hvs6b"]
+[ext_resource type="Theme" uid="uid://cbyooiahpjpb2" path="res://Resources/Main_Theme.tres" id="5_48eck"]
 [ext_resource type="PackedScene" uid="uid://bnlsmbn1boyhm" path="res://Scenes/UI/5DGameUI.tscn" id="5_bj616"]
 
 [node name="Game" type="Control"]
@@ -63,6 +64,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("5_48eck")
 
 [node name="Panel" type="Panel" parent="SubViewport/GameEscapeMenu"]
 layout_mode = 2

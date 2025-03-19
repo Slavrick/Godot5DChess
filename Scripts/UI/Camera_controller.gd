@@ -20,11 +20,12 @@ var _moveCamera: bool = false
 
 func _ready() -> void:
 	zoom = Vector2(.01,.01)
-	desired_zoom = Vector2(.5,.5)
+	desired_zoom = Vector2(.3,.3)
 	zoomtweener = create_tween().set_ease(Tween.EASE_OUT)
 	zoomtweener.tween_property(self,"zoom",desired_zoom,1).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	if(game != null):
 		game.MoveMade.connect(on_move_made)
+		game.GameLoaded.connect(_on_menus_goto_present)
 
 
 func _process(delta: float) -> void:
@@ -99,8 +100,8 @@ func get_multiverse_position():
 	print_debug(vec)
 
 
+#TODO doesn't work as well for black only or white only view
 func on_move_made(tile : Vector2, color : bool):
-	print_debug(tile,color)
 	tile.x += .5
 	if color:
 		tile.y += .25
@@ -116,6 +117,4 @@ func _on_menus_goto_present() -> void:
 			return
 		present = Vector2(present.y,present.x) #translate from L,T to game coords
 		present += Vector2(.5,.5)
-		
-		print_debug(present);
 		force_pan_to_tile(present,true,.5)

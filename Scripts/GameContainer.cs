@@ -18,6 +18,9 @@ public partial class GameContainer : Control
 	[Signal]
 	public delegate void TurnChangedEventHandler(bool player, int present);
 	
+	[Signal]
+	public delegate void GameLoadedEventHandler();
+	
 	GameStateManager gsm;
 	List<CoordFour> destinations;
 	CoordFive SelectedSquare;
@@ -190,6 +193,7 @@ public partial class GameContainer : Control
 		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
 		GetNode("/root/VisualSettings").Call("change_game");
 		UpdateRender();
+		EmitSignal(SignalName.GameLoaded);
 	}
 	
 	

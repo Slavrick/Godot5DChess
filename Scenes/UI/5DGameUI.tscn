@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bnlsmbn1boyhm"]
+[gd_scene load_steps=3 format=3 uid="uid://bnlsmbn1boyhm"]
 
 [ext_resource type="Script" path="res://Scripts/UI/menus.gd" id="1_ici0s"]
+[ext_resource type="Theme" uid="uid://cbyooiahpjpb2" path="res://Resources/Main_Theme.tres" id="1_iw4iw"]
 
 [node name="Menus" type="Control"]
 layout_mode = 3
@@ -10,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("1_iw4iw")
 script = ExtResource("1_ici0s")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -17,15 +19,19 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.117
-offset_right = 3.0
-offset_bottom = -35.816
+offset_left = 58.0
+offset_top = 30.0
+offset_right = -43.0
+offset_bottom = 10.184
 
 [node name="Load Game" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Load Game"
 
 [node name="Save Game" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 disabled = true
 text = "Save Game
 (coming in future Update)
@@ -42,11 +48,13 @@ offset_right = 0.135986
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.86
+anchor_top = 0.908
 anchor_right = 1.0
-anchor_bottom = 0.86
-offset_top = -29.28
-offset_bottom = 1.71997
+anchor_bottom = 0.908
+offset_left = 121.0
+offset_top = -15.384
+offset_right = -54.0
+offset_bottom = 15.616
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -63,9 +71,11 @@ layout_mode = 2
 text = "Undo Moves"
 
 [node name="Perspective" type="CheckButton" parent="HBoxContainer2"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 button_pressed = true
 text = "Perspective"
+alignment = 1
 
 [node name="OptionButton" type="OptionButton" parent="HBoxContainer2"]
 layout_mode = 2

@@ -102,8 +102,7 @@ func _ready() -> void:
 	board_perspective = VisualSettings.perspective
 	light_color = VisualSettings.light_square_color
 	dark_color = VisualSettings.dark_square_color
-	size = Vector2(SQUARE_WIDTH * board_width,SQUARE_WIDTH * board_height)
-	size += Vector2(margin,margin) * 2
+	size = Vector2(SQUARE_WIDTH * board_width,SQUARE_WIDTH * board_height) + Vector2(margin,margin) * 2
 	#load_board_array() Slated for removal need to re_add highlighting when mousing over.
 	if board_type == TYPE.PRESENT:
 		if color:
