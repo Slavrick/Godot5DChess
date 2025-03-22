@@ -131,6 +131,9 @@ public partial class GameContainer : Control
 						if(!color){
 							tile.Y += 1;
 						}
+						Node a = CreateArrow(SelectedMove,color);
+						TempArrows.Add(a);
+						AddChild(a);
 						EmitSignal(SignalName.MoveMade, tile,!color);
 					}
 					else{
@@ -223,6 +226,13 @@ public partial class GameContainer : Control
 		return arrow;
 	}
 	
+	public void ClearTurnArrows(){
+		foreach(Node child in Arrows){
+			child.Call("queue_free");
+		}
+		Arrows.Clear();
+	}
+	
 	public void SubmitTurn(){
 		bool SubmitSuccessful = gsm.SubmitMoves();
 		if( SubmitSuccessful ){
@@ -250,6 +260,7 @@ public partial class GameContainer : Control
 		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
 		GetNode("/root/VisualSettings").Call("change_game");
 		UpdateRender();
+		ClearTurnArrows();
 		EmitSignal(SignalName.GameLoaded);
 	}
 	
