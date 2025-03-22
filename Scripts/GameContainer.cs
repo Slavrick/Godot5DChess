@@ -111,8 +111,11 @@ public partial class GameContainer : Control
 	
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
 		CoordFour clicked = new CoordFour((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X);
+		int piece = gsm.GetSquare(clicked,color);
 		if( destinations == null ){
-			GetDestinationsFromClick(square,Temporalposition,color);
+			if(ValidateClickSquare(new CoordFive(clicked,color))){
+				GetDestinationsFromClick(square,Temporalposition,color);
+			}
 		}
 		else if(destinations.Contains(clicked)){
 			if(gsm.CoordIsPlayable(SelectedSquare)){
@@ -153,7 +156,9 @@ public partial class GameContainer : Control
 			}
 			
 		}else{
-			GetDestinationsFromClick(square,Temporalposition,color);
+			if(ValidateClickSquare(new CoordFive(clicked,color))){
+				GetDestinationsFromClick(square,Temporalposition,color);
+			}
 		}
 		
 	}
@@ -179,6 +184,20 @@ public partial class GameContainer : Control
 		
 		//CoordFive coord = new CoordFive(); based on what was passed
 		//MoveGenerator.getMoves(piece,gsm,coord);
+	}
+	
+	public bool ValidateClickSquare(CoordFive cf){
+		if(cf.Color != gsm.Color){
+			return false;
+		}
+		if(!gsm.CoordIsPlayable(cf)){
+			return false;
+		}
+		int piece = gsm.GetSquare(cf);
+		if(Board.GetColorBool(piece) != gsm.Color){
+			return false;
+		}
+		return true;
 	}
 	
 	public void UpdateRender(){
@@ -243,6 +262,7 @@ public partial class GameContainer : Control
 		if( SubmitSuccessful && gsm.isMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
+		destinations = null;
 		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
 	}
 	
