@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://7rjl1oreg7t2"]
+
+[ext_resource type="Script" path="res://Scripts/UI/arrow_draw.gd" id="1_etorc"]
+
+[node name="ArrowDraw" type="Path2D"]
+z_index = 2
+script = ExtResource("1_etorc")

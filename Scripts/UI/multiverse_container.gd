@@ -70,3 +70,4 @@ func flip_perspective():
 
 func on_view_changed( perspective : bool , view ):
 	place_timelines()
+	set_perspective(VisualSettings.perspective)

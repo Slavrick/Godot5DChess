@@ -41,7 +41,10 @@ var multiverse_view := FULL_VIEW :
 		calculate_dimensions()
 		view_changed.emit(perspective, multiverse_view)
 #True for white, false for black
-var perspective := true
+var perspective := true:
+	set(value):
+		perspective = value
+		view_changed.emit(perspective, multiverse_view)
 
 var pieces_file := "res://Resources/res/Pieces-hirez.png"
 var visual_settings_path := "user://5dvisuals.json"
@@ -144,15 +147,27 @@ func load_dictionary(settings_dictionary : Dictionary):
 
 func position_of_multiverse_tile(tile : Vector2) -> Vector2:
 	tile = Vector2(tile.y-1,tile.x)
-	if(perspective):
+	if(perspective or tile.y==0):
 		return tile * Vector2(multiverse_tile_width,multiverse_tile_height)
 	else:
-		tile.y -= 1
 		return tile * Vector2(multiverse_tile_width,-multiverse_tile_height)
 
 
-func position_of_coordfive(tile : Vector2, square : Vector2, color : bool):
-	pass
+func position_of_coordinate(coord : Coord5):
+	var position_ = position_of_multiverse_tile(Vector2(coord.v.z,coord.v.w))
+	if perspective:
+		position_ += Vector2(coord.v.x,game_board_dimensions.y - coord.v.y) * square_width
+		position_ += Vector2(square_width/2,-square_width/2)
+		position_ += Vector2(board_padding+board_horizontal_margin,board_padding + (VisualSettings.multiverse_tile_height / 2.0) - ((game_board_dimensions.y * 128) / 2.0))
+	else:
+		position_ += Vector2(game_board_dimensions.x - coord.v.x, coord.v.y) * square_width
+		position_ += Vector2(square_width/2,square_width/2)
+		position_.y += board_padding + (VisualSettings.multiverse_tile_height / 2.0) - ((game_board_dimensions.y * 128) / 2.0)
+	if !coord.color:
+		position_.x += multiverse_tile_width/2
+		pass
+	print_debug(position_)
+	return position_
 
 
 

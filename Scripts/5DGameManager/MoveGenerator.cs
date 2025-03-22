@@ -69,6 +69,62 @@ namespace Engine
 			return attackingPieces;
 		}
 
+		//for all the check indicator.
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="g">gamestate to check</param>
+		/// <param name="color">color to check. For example if true(white) you are checking who is checking white</param>
+		/// <returns></returns>
+		public static List<Move> GetCurrentThreats(GameState g, bool defender){
+			List<Move> moves = new List<Move>();
+			for(int i = g.MinTL; i <= g.MaxTL; i++){
+				Timeline t = g.GetTimeline(i);
+				bool NullAdded = false;
+				if(t.ColorPlayable == defender){
+					//if its the defenders turn check if they need to move.
+					if(i < g.MinActiveTL || i > g.MaxActiveTL || t.TEnd > g.Present){
+						continue;
+					}
+					//The defender has to move, so add a 'ghost' board
+					t.AddNullMove();
+					NullAdded = true;
+				}
+				Console.WriteLine("Checking: " + i.ToString() + "L");
+				Board b = t.GetPlayableBoard();
+				for (int x = 0; x < g.Width; x++)
+				{
+					for (int y = 0; y < g.Height; y++)
+					{
+						int piece = b.getSquare(x, y);
+						if (Board.GetColorBool(piece) != defender)
+						{
+							CoordFour srcLocation = new CoordFour(x, y, t.TEnd, i);
+							List<CoordFour> captures = GetCaptures(piece, g, new CoordFive(srcLocation, !defender));
+							if (captures == null)
+							{
+								continue;
+							}
+							foreach (CoordFour dest in captures)
+							{
+								if(MoveNotation.pieceIsRoyal(g.GetSquare(dest,!defender))){
+									moves.Add(new Move(srcLocation, dest));
+								}
+							}
+						}
+					}
+				}
+				if (NullAdded){
+					t.UndoMove();
+				}
+			}
+			Console.WriteLine("done");
+			foreach( Move m in moves){
+				Console.WriteLine(m);
+			}
+			return moves;
+		}
+
 		public static List<Move> GetAllMoves(GameState g, bool color, int T, int L)
 		{
 			List<Move> moves = new List<Move>();
@@ -638,6 +694,7 @@ namespace Engine
 		return true;
 	}
 
+	//Slated for removal. this is probalby a c# function
 	public static bool arrContains(CoordFour[] array, CoordFour target) {
 		foreach (CoordFour element in array) {
 			if (element.Equals(target)) {

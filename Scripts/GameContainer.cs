@@ -21,24 +21,29 @@ public partial class GameContainer : Control
 	[Signal]
 	public delegate void GameLoadedEventHandler();
 	
-	GameStateManager gsm;
-	List<CoordFour> destinations;
-	CoordFive SelectedSquare;
+	public GameStateManager gsm;
+	public List<CoordFour> destinations;
+	public CoordFive SelectedSquare;
+	public List<Node> Arrows;
+	public List<Node> TempArrows;
+	public List<Node> CheckArrows;
 	
 	Node mvcontainer;
 	
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		CheckArrows = new List<Node>();
+		Arrows = new List<Node>();
+		TempArrows = new List<Node>();
 		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
 		GetNode("SubViewport/Menus").Connect("undo_turn", new Callable(this,nameof(UndoTurn)));
+		//GetNode("SubViewport/Menus").Connect("checkforchecks", new Callable(this,nameof(CheckForChecks)));
 		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
-		GetNode("SubViewport/Menus").Connect("flip_perspective", new Callable(this,nameof(flip_pespective)));
 		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
+		GetNode("/root/VisualSettings").Connect("view_changed", new Callable(this, nameof(OnViewChanged)));
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		
@@ -71,12 +76,13 @@ public partial class GameContainer : Control
 		timeline.Set("TStart",tl.TStart);
 		timeline.Set("color_start",tl.ColorStart);
 		timeline.Set("chessboard_dimensions",new Vector2(gsm.Width,gsm.Height));
+		timeline.Set("name",timelineLayer.ToString() + "L");
 		return timeline;
 	}
 	
 	public Node BoardToGodotNodes(Board b, int T, int L, bool color) 
 	{
-		var scene = ResourceLoader.Load<PackedScene>("res://Scenes/UI/BoardDrawer.tscn").Instantiate();
+		var boardScene = ResourceLoader.Load<PackedScene>("res://Scenes/UI/BoardDrawer.tscn").Instantiate();
 		var arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
@@ -87,13 +93,20 @@ public partial class GameContainer : Control
 				arr.Add(piece);
 			}	
 		}
-		scene.Set("board_width",gsm.Width);
-		scene.Set("board_height",gsm.Height);
-		scene.Set("board", arr);
-		scene.Set("multiverse_position", new Vector2(L,T));
-		scene.Set("color", color);
-		scene.Call("logicalBoardToUIBoard");
-		return scene;
+		boardScene.Set("board_width",gsm.Width);
+		boardScene.Set("board_height",gsm.Height);
+		boardScene.Set("board", arr);
+		boardScene.Set("multiverse_position", new Vector2(L,T));
+		boardScene.Set("color", color);
+		boardScene.Call("logicalBoardToUIBoard");
+		String colorchar;
+		if(color){
+			colorchar = "w";
+		}else{
+			colorchar = "b";
+		}
+		boardScene.Set("name",colorchar+L.ToString()+"T"+T.ToString());
+		return boardScene;
 	}
 	
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
@@ -125,8 +138,12 @@ public partial class GameContainer : Control
 						if(!color){
 							tile.Y += 1;
 						}
+						Node a = CreateArrow(SelectedMove,color);
+						TempArrows.Add(a);
+						AddChild(a);
 						EmitSignal(SignalName.MoveMade, tile, !color);
 					}
+					CheckForChecks();
 					UpdateRender();
 					//need to add cleanup
 				}
@@ -161,22 +178,6 @@ public partial class GameContainer : Control
 		//MoveGenerator.getMoves(piece,gsm,coord);
 	}
 	
-	public void SubmitTurn(){
-		bool SubmitSuccessful = gsm.SubmitMoves();
-		if( SubmitSuccessful ){
-			EmitSignal(SignalName.TurnChanged, gsm.Color, gsm.Present);
-		}
-		if( SubmitSuccessful && gsm.isMated()) {;
-			EmitSignal(SignalName.IsMated, gsm.Color);
-		}
-		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
-	}
-	
-	public void UndoTurn(){
-		gsm.undoTempMoves();
-		UpdateRender();
-	}
-	
 	public void UpdateRender(){
 		if(mvcontainer != null){
 			mvcontainer.Call("queue_free");
@@ -187,6 +188,62 @@ public partial class GameContainer : Control
 	}
 	
 	
+	public void CheckForChecks(){
+		foreach(Node child in CheckArrows){
+			child.Call("queue_free");
+		}
+		CheckArrows.Clear();
+		List<Move> moves = MoveGenerator.GetCurrentThreats(gsm,gsm.Color);
+		foreach(Move m in moves){
+			Node a = CreateArrow(m,!gsm.Color, new Color(1,0,0,(float)0.5));
+			AddChild(a);
+			CheckArrows.Add(a);
+		}
+	}
+	
+	public Vector2 GetPresentTile(){
+		CoordFour cf = gsm.GetPresentCoordinate(0);
+		return new Vector2(cf.L,cf.T);
+	}
+	
+	public Node CreateArrow(Move m, bool color)
+	{
+		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
+		arrow.Set("origin",GameInterface.CoordFourtoCoord5(m.Origin,color));
+		arrow.Set("dest",GameInterface.CoordFourtoCoord5(m.Dest,color));
+		return arrow;
+	}
+	
+	public Node CreateArrow(Move m, bool color, Color c)
+	{
+		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
+		arrow.Set("origin",GameInterface.CoordFourtoCoord5(m.Origin,color));
+		arrow.Set("dest",GameInterface.CoordFourtoCoord5(m.Dest,color));
+		arrow.Set("arrow_color",c);
+		return arrow;
+	}
+	
+	public void SubmitTurn(){
+		bool SubmitSuccessful = gsm.SubmitMoves();
+		if( SubmitSuccessful ){
+			EmitSignal(SignalName.TurnChanged, gsm.Color, gsm.Present);
+			Arrows.AddRange(TempArrows);
+			TempArrows.Clear();
+		}
+		if( SubmitSuccessful && gsm.isMated()) {;
+			EmitSignal(SignalName.IsMated, gsm.Color);
+		}
+		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
+	}
+	
+	public void UndoTurn(){
+		foreach(Node n in TempArrows){
+			n.Call("queue_free");
+		}
+		TempArrows.Clear();
+		gsm.undoTempMoves();
+		UpdateRender();
+	}
 	public void LoadGame(String filepath){
 		Console.WriteLine("chose Path: " + filepath);
 		gsm = FENParser.ShadSTDGSM(filepath);
@@ -196,21 +253,27 @@ public partial class GameContainer : Control
 		EmitSignal(SignalName.GameLoaded);
 	}
 	
-	
 	public void OpenFileDialog(){
 		GetNode("FileDialog").Call("show");
 	}
-	
 	
 	public void ExitGamePressed(){
 		EmitSignal(SignalName.ExitGame);
 	}
 	
-	
-	public Vector2 GetPresentTile(){
-		CoordFour cf = gsm.GetPresentCoordinate(0);
-		return new Vector2(cf.L,cf.T);
+	public void flip_pespective(){
+		mvcontainer.Call("flip_perspective");
 	}
+	
+	public void OnViewChanged(bool multiverse_perspective, int multiverseview)
+	{
+		foreach(Node arrow in Arrows)
+		{
+			arrow.Call("get_coordinate");
+		}
+	}
+	
+
 	
 	public override void _Input(InputEvent @event)
 	{
@@ -237,7 +300,5 @@ public partial class GameContainer : Control
 		}
 	}
 	
-	public void flip_pespective(){
-		mvcontainer.Call("flip_perspective");
-	}
+
 }

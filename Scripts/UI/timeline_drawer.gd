@@ -20,11 +20,17 @@ var chessboard_dimensions : Vector2
 
 func _ready() -> void:
 	place_children()
+	connect_children()
 	VisualSettings.view_changed.connect(on_view_changed)
 
 
 func _process(delta: float) -> void:
 	pass
+
+
+func connect_children():
+	for child in get_children():
+		child.square_clicked.connect(board_square_clicked)
 
 
 func place_children():
@@ -37,7 +43,6 @@ func place_children():
 				else:
 					child.show()
 				var ply = child.multiverse_position.y - TStart + 1
-				child.square_clicked.connect(board_square_clicked)
 				child.position = Vector2(ply,0) * Vector2(child.functional_width() + VisualSettings.board_horizontal_margin,child.functional_height() + VisualSettings.board_horizontal_margin)
 		VisualSettings.BLACK_VIEW:
 			for child in get_children():
@@ -47,7 +52,6 @@ func place_children():
 				else:
 					child.show()
 				var ply = child.multiverse_position.y - TStart + 1
-				child.square_clicked.connect(board_square_clicked)
 				child.position.x = ply * (child.functional_width() + VisualSettings.board_horizontal_margin) + VisualSettings.board_horizontal_margin/2
 		_:
 			for child in get_children():
@@ -58,7 +62,6 @@ func place_children():
 				else:
 					ply *= 2
 					ply += 1
-				child.square_clicked.connect(board_square_clicked)
 				child.position.x = ply * (VisualSettings.multiverse_tile_width / 2)
 				child.position.x += VisualSettings.board_horizontal_margin
 #TODO change all child.functional_width and height

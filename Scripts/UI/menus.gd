@@ -16,7 +16,6 @@ func _ready() -> void:
 	$"HBoxContainer/Load Game".pressed.connect(load_game_pressed)
 	$HBoxContainer2/OptionButton.item_selected.connect(view_changed)
 	$"HBoxContainer/Save Game".pressed.connect(save_game_pressed)
-	
 	$HBoxContainer2/Perspective.button_pressed = VisualSettings.perspective
 
 
@@ -39,7 +38,8 @@ func gotopresent_pressed():
 
 
 func flip_perspective_pressed():
-	flip_perspective.emit()
+	VisualSettings.perspective = !VisualSettings.perspective 
+	flip_perspective.emit()#Slated for removal to emit this, redundant.
 
 
 func set_turn_label(color : bool, present : int):
