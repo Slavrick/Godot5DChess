@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bvsag20shf3yr"]
+[gd_scene load_steps=9 format=3 uid="uid://bvsag20shf3yr"]
 
 [ext_resource type="Script" path="res://Scripts/UI/Board_drawer.gd" id="1_huwgt"]
+[ext_resource type="Texture2D" uid="uid://jiltjtby4dwe" path="res://Sprites/Undo.png" id="2_e2870"]
+[ext_resource type="Texture2D" uid="uid://c4dn71tpfrini" path="res://Sprites/CheckExclam.png" id="3_xq3cn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ehwp4"]
 bg_color = Color(0.737689, 0.571108, 0.239372, 1)
@@ -57,4 +59,25 @@ black_style_box = SubResource("StyleBoxFlat_86p1c")
 white_present_style_box = SubResource("StyleBoxFlat_eqylc")
 black_present_style_box = SubResource("StyleBoxFlat_8vcol")
 
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_left = -100.0
+offset_top = -1.0
+offset_bottom = 99.0
+texture = ExtResource("2_e2870")
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_left = 1.0
+offset_top = -101.0
+offset_right = 101.0
+offset_bottom = -1.0
+texture = ExtResource("3_xq3cn")
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

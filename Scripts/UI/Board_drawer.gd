@@ -30,6 +30,8 @@ var board : Array
 @export var color := false
 var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
+var mouse_hovering = false
+
 
 @onready var pawntres = load("res://Resources/Pieces/Pawn.tres")
 @onready var piecestext = load("res://Resources/res/Pieces-hirez.png")
@@ -114,6 +116,12 @@ func _ready() -> void:
 			add_theme_stylebox_override("panel",white_style_box)
 		else:
 			add_theme_stylebox_override("panel",black_style_box)
+
+
+func _process(delta: float) -> void:
+	if mouse_hovering:
+		queue_redraw()
+
 
 func place_children():
 	return
@@ -240,3 +248,11 @@ func local_position_to_square( local_pos ) -> Vector2:
 		file = board_width - floor((local_pos.x - margin) / SQUARE_WIDTH)  - 1
 		rank = floor((local_pos.y - margin) / SQUARE_WIDTH)
 	return Vector2(file,rank)
+
+
+func _on_mouse_entered() -> void:
+	mouse_hovering = true
+
+
+func _on_mouse_exited() -> void:
+	mouse_hovering = false

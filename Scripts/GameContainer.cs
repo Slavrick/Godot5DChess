@@ -28,6 +28,8 @@ public partial class GameContainer : Control
 	public List<Node> TempArrows;
 	public List<Node> CheckArrows;
 	
+	public bool AnalysisMode = false;
+	
 	Node mvcontainer;
 	
 	public override void _Ready()
@@ -42,6 +44,9 @@ public partial class GameContainer : Control
 		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
 		GetNode("/root/VisualSettings").Connect("view_changed", new Callable(this, nameof(OnViewChanged)));
+		if(AnalysisMode){
+			GetNode("SubViewport/Menus").Call("set_analysis_mode");
+		}
 	}
 
 	public override void _Process(double delta)
@@ -298,10 +303,10 @@ public partial class GameContainer : Control
 	
 	public void OnViewChanged(bool multiverse_perspective, int multiverseview)
 	{
-		foreach(Node arrow in Arrows)
-		{
-			arrow.Call("get_coordinate");
-		}
+		//foreach(Node arrow in Arrows)
+		//{
+			//arrow.Call("get_coordinate");
+		//}
 	}
 	
 

@@ -43,7 +43,7 @@ func place_children():
 				else:
 					child.show()
 				var ply = child.multiverse_position.y - TStart + 1
-				child.position = Vector2(ply,0) * Vector2(child.functional_width() + VisualSettings.board_horizontal_margin,child.functional_height() + VisualSettings.board_horizontal_margin)
+				child.position.x = ply * (child.functional_width() + VisualSettings.board_horizontal_margin) + VisualSettings.board_horizontal_margin/2
 		VisualSettings.BLACK_VIEW:
 			for child in get_children():
 				if child.color == true:

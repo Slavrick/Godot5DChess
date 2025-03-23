@@ -8,6 +8,8 @@ signal undo_turn
 signal flip_perspective
 signal change_view(view_type)
 
+var game : Node
+
 func _ready() -> void:
 	$HBoxContainer2/Submit.pressed.connect(submit_pressed)
 	$HBoxContainer2/Undo.pressed.connect(undo_turn_pressed)
@@ -17,7 +19,13 @@ func _ready() -> void:
 	$HBoxContainer2/OptionButton.item_selected.connect(view_changed)
 	$"HBoxContainer/Save Game".pressed.connect(save_game_pressed)
 	$HBoxContainer2/Perspective.button_pressed = VisualSettings.perspective
+	if game != null:
+		pass
 
+
+func set_analysis_mode():
+	$HBoxContainer.show()
+	$TurnTree.show()
 
 func submit_pressed():
 	submit_turn.emit()

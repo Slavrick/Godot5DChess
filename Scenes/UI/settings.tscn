@@ -61,7 +61,7 @@ theme = SubResource("Theme_b1vdr")
 script = ExtResource("1_y2bqf")
 
 [node name="MultiVerseDraw" parent="." instance=ExtResource("3_ja077")]
-position = Vector2(111, 192)
+position = Vector2(563, 596)
 SQUARE_LENGTH = 250
 SQUARE_HEIGHT = 250
 coord_font_size = 0
@@ -71,7 +71,7 @@ position = Vector2(107, 100)
 script = ExtResource("1_h3oha")
 
 [node name="TabContainer" type="TabContainer" parent="."]
-custom_minimum_size = Vector2(500, 500)
+custom_minimum_size = Vector2(500, 300)
 layout_mode = 2
 current_tab = 1
 
@@ -216,11 +216,6 @@ texture_normal = SubResource("GradientTexture2D_eyshr")
 layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_7liwe")
 
-[node name="return" type="Button" parent="TabContainer/Colors"]
-layout_mode = 2
-size_flags_horizontal = 4
-text = "Back To Main Menu"
-
 [node name="Controls" type="VBoxContainer" parent="TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 1
@@ -256,3 +251,81 @@ text = "Undo Turn"
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 6
+
+[node name="Camera Up" type="HBoxContainer" parent="TabContainer/Controls"]
+layout_mode = 2
+script = ExtResource("4_xl6a7")
+input_name = "CameraUp"
+input_description = "Camera Up"
+
+[node name="Label" type="Label" parent="TabContainer/Controls/Camera Up"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Camera Up
+"
+
+[node name="Button" type="Button" parent="TabContainer/Controls/Camera Up"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Camera Down" type="HBoxContainer" parent="TabContainer/Controls"]
+layout_mode = 2
+script = ExtResource("4_xl6a7")
+input_name = "CameraDown"
+input_description = "Camera Down"
+
+[node name="Label" type="Label" parent="TabContainer/Controls/Camera Down"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Undo Turn"
+
+[node name="Button" type="Button" parent="TabContainer/Controls/Camera Down"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Camera Left" type="HBoxContainer" parent="TabContainer/Controls"]
+layout_mode = 2
+script = ExtResource("4_xl6a7")
+input_name = "CameraLeft"
+input_description = "Camera Left"
+
+[node name="Label" type="Label" parent="TabContainer/Controls/Camera Left"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Undo Turn"
+
+[node name="Button" type="Button" parent="TabContainer/Controls/Camera Left"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Camera Right" type="HBoxContainer" parent="TabContainer/Controls"]
+layout_mode = 2
+script = ExtResource("4_xl6a7")
+input_name = "CameraRight"
+input_description = "Camera Right"
+
+[node name="Label" type="Label" parent="TabContainer/Controls/Camera Right"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Undo Turn"
+
+[node name="Button" type="Button" parent="TabContainer/Controls/Camera Right"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+
+[node name="return" type="Button" parent="Control"]
+layout_direction = 1
+layout_mode = 2
+offset_left = -90.0
+offset_top = 256.0
+offset_right = 70.0
+offset_bottom = 287.0
+size_flags_horizontal = 4
+text = "Back To Main Menu"

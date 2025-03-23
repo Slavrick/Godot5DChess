@@ -77,9 +77,7 @@ text = "Puzzles
 
 [node name="Analysis" type="Button" parent="Main/MenuVbox"]
 layout_mode = 2
-disabled = true
-text = "Analysis
-(coming in future Update)"
+text = "Analysis"
 
 [node name="Settings" type="Button" parent="Main/MenuVbox"]
 layout_mode = 2

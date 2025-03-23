@@ -76,6 +76,7 @@ func calculate_dimensions():
 			+ board_padding * 2 
 			+ board_horizontal_margin)
 
+
 func load_user_settings():
 	if not FileAccess.file_exists(visual_settings_path):
 		print_debug("Settings dont exist")
@@ -84,6 +85,7 @@ func load_user_settings():
 	var json_settings := file.get_line()
 	var visuals_dictionary = parsable_json_to_dict(json_settings)
 	load_dictionary(visuals_dictionary)
+
 
 func save_user_settings() -> void:
 	var save_data = dict_to_parsable_json(current_settings_to_dictionary())
@@ -105,6 +107,7 @@ func dict_to_parsable_json(dictionary : Dictionary):
 	for key in dictionary.keys():
 		new_dict[key] = dictionary[key].to_html()
 	return new_dict
+
 
 func parsable_json_to_dict(json : String) -> Dictionary:
 	var json_dict = JSON.parse_string(json)
@@ -145,6 +148,7 @@ func load_dictionary(settings_dictionary : Dictionary):
 	else:
 		black_multiverse_color = Color(0.306, 0.471, 0.216)
 
+#Needs to return top left of the tile.
 func position_of_multiverse_tile(tile : Vector2) -> Vector2:
 	tile = Vector2(tile.y-1,tile.x)
 	if(perspective or tile.y==0):
@@ -158,19 +162,24 @@ func position_of_coordinate(coord : Coord5):
 	if perspective:
 		position_ += Vector2(coord.v.x,game_board_dimensions.y - coord.v.y) * square_width
 		position_ += Vector2(square_width/2,-square_width/2)
-		position_ += Vector2(board_padding+board_horizontal_margin,board_padding + (VisualSettings.multiverse_tile_height / 2.0) - ((game_board_dimensions.y * 128) / 2.0))
+		position_.y += board_padding + (VisualSettings.multiverse_tile_height / 2.0) - ((game_board_dimensions.y * 128) / 2.0)
 	else:
 		position_ += Vector2(game_board_dimensions.x - coord.v.x, coord.v.y) * square_width
 		position_ += Vector2(square_width/2,square_width/2)
 		position_.y += board_padding + (VisualSettings.multiverse_tile_height / 2.0) - ((game_board_dimensions.y * 128) / 2.0)
-	if !coord.color:
-		position_.x += multiverse_tile_width/2
-		pass
-	print_debug(position_)
+	match multiverse_view:
+		FULL_VIEW:
+			position_.x += board_padding+board_horizontal_margin
+			if !coord.color and multiverse_view == FULL_VIEW:
+				position_.x += multiverse_tile_width/2
+		_:
+			position_.x += board_padding+board_horizontal_margin/2
 	return position_
 
 
-
+func reset_view():
+	multiverse_view = FULL_VIEW
+	perspective = true
 
 #------------------------------Palette----------------------------------------#
 

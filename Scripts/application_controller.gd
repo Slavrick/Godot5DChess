@@ -10,6 +10,7 @@ var game5D
 
 func _ready() -> void:
 	$MainMenu.load_game.connect(load_game)
+	$MainMenu.load_analysis_game.connect(load_analysis_game)
 
 
 func load_game(file_path : String):
@@ -20,6 +21,14 @@ func load_game(file_path : String):
 	game5D = game_node
 	main_menu.queue_free()
 
+func load_analysis_game(file_path : String):
+	var game_node = load(game_path).instantiate()
+	game_node.AnalysisMode = true
+	add_child(game_node)
+	game_node.call("LoadGame", file_path)
+	game_node.ExitGame.connect(exit_game)
+	game5D = game_node
+	main_menu.queue_free()
 
 func load_puzzles():
 	pass
@@ -33,5 +42,7 @@ func exit_game():
 	main_menu = load(main_menu_path).instantiate()
 	add_child(main_menu)
 	main_menu.load_game.connect(load_game)
+	main_menu.load_analysis_game.connect(load_analysis_game)
 	game5D.queue_free()
+	VisualSettings.reset_view()
 	

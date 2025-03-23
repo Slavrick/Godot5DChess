@@ -15,6 +15,7 @@ theme = ExtResource("1_iw4iw")
 script = ExtResource("1_ici0s")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -37,13 +38,23 @@ text = "Save Game
 (coming in future Update)
 "
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="TurnTree" type="ScrollContainer" parent="."]
 visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.157
+anchor_left = 0.841
+anchor_right = 0.998
 anchor_bottom = 1.0
-offset_right = 0.135986
+offset_left = 0.167969
+offset_right = 0.303955
+
+[node name="ItemList" type="ItemList" parent="TurnTree"]
+custom_minimum_size = Vector2(400, 10000)
+layout_mode = 2
+item_count = 3
+item_0/text = "sdfs"
+item_1/text = "s"
+item_2/text = "dasd"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
 layout_mode = 1

@@ -23,9 +23,11 @@ func _ready() -> void:
 	desired_zoom = Vector2(.3,.3)
 	zoomtweener = create_tween().set_ease(Tween.EASE_OUT)
 	zoomtweener.tween_property(self,"zoom",desired_zoom,1).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	VisualSettings.view_changed.connect(on_view_changed)
 	if(game != null):
 		game.MoveMade.connect(on_move_made)
 		game.GameLoaded.connect(_on_menus_goto_present)
+	
 
 
 func _process(delta: float) -> void:
@@ -102,7 +104,10 @@ func get_multiverse_position():
 
 #TODO doesn't work as well for black only or white only view
 func on_move_made(tile : Vector2, color : bool):
-	tile.x += .5
+	if VisualSettings.perspective:
+		tile.x += .5
+	else:
+		tile.x -= .5
 	if color:
 		tile.y += .25
 	else:
@@ -110,11 +115,18 @@ func on_move_made(tile : Vector2, color : bool):
 	force_pan_to_tile(tile,true,.5)
 
 
+func on_view_changed( perspective : bool, multiverse_view ):
+	_on_menus_goto_present()
+
+
 func _on_menus_goto_present() -> void:
 	if game != null:
 		var present = game.GetPresentTile()
 		if present == null:
 			return
+		if VisualSettings.perspective:#TODO find a better way to do this
+			present += Vector2(.5,.5)
+		else:
+			present += Vector2(.5,-.5)
 		present = Vector2(present.y,present.x) #translate from L,T to game coords
-		present += Vector2(.5,.5)
 		force_pan_to_tile(present,true,.5)

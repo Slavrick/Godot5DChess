@@ -11,8 +11,7 @@ func _ready() -> void:
 	
 	VisualSettings.load_user_settings()
 	set_colorpickers()
-	
-	$TabContainer/Colors/return.pressed.connect(returntomain)
+	$Control/return.pressed.connect(returntomain)
 	$TabContainer/Colors/Pallets/DefaultPalette.pressed.connect(set_pallet.bind(VisualSettings.default_palette))
 	$TabContainer/Colors/Pallets/GrayScalePalette.pressed.connect(set_pallet.bind(VisualSettings.grayscale_palette))
 	$TabContainer/Colors/Pallets/GlassPalette.pressed.connect(set_pallet.bind(VisualSettings.glass_palette))
