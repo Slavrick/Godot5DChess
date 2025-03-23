@@ -82,8 +82,6 @@ game = NodePath("..")
 
 [node name="MultiVerseDraw" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("1_fqsyd")]
 camera = NodePath("../Camera2D")
-light_color = Color(0.411765, 0.572549, 0.243137, 1)
-dark_color = Color(0.305882, 0.470588, 0.215686, 1)
 SQUARE_LENGTH = 2168
 
 [node name="FileDialog" type="FileDialog" parent="."]

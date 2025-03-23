@@ -1,6 +1,9 @@
 extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
+signal check_pressed
+signal undo_pressed
+
 
 enum TYPE {
 	PRESENT,
@@ -24,7 +27,18 @@ enum TYPE {
 @export_group("Visual Settings")
 @export var board_perspective := true
 @export var board_type := TYPE.PRESENT
-
+@export var in_check := false :
+	set(value):
+		if value:
+			$InCheckButton.show()
+		else:
+			$InCheckButton.hide()
+@export var temp_board := false :
+	set(value):
+		if value:
+			$UndoButton.show()
+		else:
+			$UndoButton.hide()
 var board : Array
 @export var multiverse_position = Vector2.ZERO
 @export var color := false
@@ -162,6 +176,12 @@ func _ready() -> void:
 	light_color = VisualSettings.light_square_color
 	dark_color = VisualSettings.dark_square_color
 	size = Vector2(SQUARE_WIDTH * board_width,SQUARE_WIDTH * board_height) + Vector2(margin,margin) * 2
+	$UndoButton.pressed.connect(func():
+		undo_pressed.emit()
+	)
+	$InCheckButton.pressed.connect(func():
+		check_pressed.emit()
+	)
 	#load_board_array() Slated for removal need to re_add highlighting when mousing over.
 	if board_type == TYPE.PRESENT:
 		if color:

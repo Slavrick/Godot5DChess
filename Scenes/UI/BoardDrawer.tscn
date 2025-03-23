@@ -60,24 +60,29 @@ black_style_box = SubResource("StyleBoxFlat_86p1c")
 white_present_style_box = SubResource("StyleBoxFlat_eqylc")
 black_present_style_box = SubResource("StyleBoxFlat_8vcol")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="UndoButton" type="TextureButton" parent="."]
 visible = false
 texture_filter = 1
 layout_mode = 0
 offset_left = -100.0
-offset_top = -1.0
-offset_bottom = 99.0
-texture = ExtResource("2_e2870")
+offset_bottom = 100.0
+texture_normal = ExtResource("2_e2870")
+texture_pressed = ExtResource("2_e2870")
+texture_hover = ExtResource("2_e2870")
+texture_disabled = ExtResource("2_e2870")
+texture_focused = ExtResource("2_e2870")
 
-[node name="TextureRect2" type="TextureRect" parent="."]
+[node name="InCheckButton" type="TextureButton" parent="."]
 visible = false
 texture_filter = 1
 layout_mode = 0
-offset_left = 1.0
-offset_top = -101.0
-offset_right = 101.0
-offset_bottom = -1.0
-texture = ExtResource("3_xq3cn")
+offset_top = -100.0
+offset_right = 100.0
+texture_normal = ExtResource("3_xq3cn")
+texture_pressed = ExtResource("3_xq3cn")
+texture_hover = ExtResource("3_xq3cn")
+texture_disabled = ExtResource("3_xq3cn")
+texture_focused = ExtResource("3_xq3cn")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

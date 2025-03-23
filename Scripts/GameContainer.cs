@@ -165,7 +165,6 @@ public partial class GameContainer : Control
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
 		}
-		
 	}
 	
 	public void GetDestinationsFromClick(Vector2 square, Vector2 Temporalposition, bool color){
@@ -213,7 +212,6 @@ public partial class GameContainer : Control
 			GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);
 		}
 	}
-	
 	
 	public void CheckForChecks(){
 		foreach(Node child in CheckArrows){
