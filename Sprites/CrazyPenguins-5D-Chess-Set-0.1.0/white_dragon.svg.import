@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm4dyry1hmtwa"
-path="res://.godot/imported/white_unicorn.svg-5265d567e8813ff9b0040b97dfb19ffa.ctex"
+uid="uid://c5jv1u7ag8cse"
+path="res://.godot/imported/white_dragon.svg-23a67f3ee77b25a24a47b9f7d6ac6469.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/CrazyPenguins-5D-Chess-Set-0.1.0/white_unicorn.svg"
-dest_files=["res://.godot/imported/white_unicorn.svg-5265d567e8813ff9b0040b97dfb19ffa.ctex"]
+source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_dragon.svg"
+dest_files=["res://.godot/imported/white_dragon.svg-23a67f3ee77b25a24a47b9f7d6ac6469.ctex"]
 
 [params]
 

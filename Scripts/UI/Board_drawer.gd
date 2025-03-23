@@ -32,71 +32,128 @@ var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
 var mouse_hovering = false
 
-
-@onready var pawntres = load("res://Resources/Pieces/Pawn.tres")
-@onready var piecestext = load("res://Resources/res/Pieces-hirez.png")
+#
+#@onready var pawntres = load("res://Resources/Pieces/Pawn.tres")
+#@onready var piecestext = load("res://Resources/res/Pieces-hirez.png")
+@onready var piecestext = load("res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/pieces.png")
 #Translates from what the array uses in my game manager to the positions of this.
 const translation_dict = {
-	0:0,
-	1:1,
-	2:2,
-	3:3,
-	4:4,
-	5:5,
-	6:6,
-	7:7,
-	8:8,
-	9:9,
-	10:11,
-	11:12,
-	12:13,
-	13:14,
-	14:15,
-	15:16,
-	16:17,
-	17:18,
-	18:19,
-	19:20,
-	20:22,
-	21:23,
-	22:24,
-	23:25,
-	24:26,
+	0:-1,
+	1:0,
+	2:1,
+	3:2,
+	4:3,
+	5:15,
+	6:4,
+	7:5,
+	8:13,
+	9:14,
+	10:12,
+	11:16,
+	12:17,
+	13:6,
+	14:7,
+	15:8,
+	16:9,
+	17:21,
+	18:10,
+	19:11,
+	20:19,
+	21:20,
+	22:18,
+	23:22,
+	24:23,
 	25:25,
 	26:26,
 	27:27
 }
 
-
 const piecedict = {
 	0: Vector2(0,0), # Empty
-	1: Vector2(128,0), #WPawn
-	2: Vector2(256,0), #WKnight
-	3: Vector2(384,0), 
-	4: Vector2(512,0),
-	5: Vector2(640,0),
-	6: Vector2(768,0),
-	7: Vector2(896,0),
-	8: Vector2(1024,0),
-	9: Vector2(1152,0),
-	10: Vector2(1280,0),
-	11: Vector2(0,128), #WBrawn
-	12: Vector2(128,128),
-	13: Vector2(256,128),
-	14: Vector2(384,128),
-	15: Vector2(512,128),
-	16: Vector2(640,128),
-	17: Vector2(768,128),
-	18: Vector2(896,128),
-	19: Vector2(1024,128),
-	20: Vector2(1152,128),
-	21: Vector2(1280,128),
-	22: Vector2(0,256), #BUnicorn
-	23: Vector2(128,256), #BDragon
-	24: Vector2(256,256),
-	25: Vector2(384,256),
-	26: Vector2(512,256),
+	1: Vector2(512,0), #WPawn
+	2: Vector2(1024,0), #WKnight
+	3: Vector2(1536,0), 
+	4: Vector2(2048,0),
+	5: Vector2(2560,0),
+	6: Vector2(0,500),
+	7: Vector2(512,500),
+	8: Vector2(1024,500),
+	9: Vector2(1536,500),
+	10: Vector2(2048,500),
+	11: Vector2(2560,500), #WBrawn
+	12: Vector2(0,1000),
+	13: Vector2(512,1000),
+	14: Vector2(1024,1000),
+	15: Vector2(1536,1000),
+	16: Vector2(2048,1000),
+	17: Vector2(2560,1000),
+	18: Vector2(0,1500),
+	19: Vector2(512,1500),
+	20: Vector2(1024,1500),
+	21: Vector2(1536,1500),
+	22: Vector2(2048,1500), #BUnicorn
+	23: Vector2(2560,1500), #BDragon
 }
+
+#const translation_dict = {
+	#0:0,
+	#1:1,
+	#2:2,
+	#3:3,
+	#4:4,
+	#5:5,
+	#6:6,
+	#7:7,
+	#8:8,
+	#9:9,
+	#10:11,
+	#11:12,
+	#12:13,
+	#13:14,
+	#14:15,
+	#15:16,
+	#16:17,
+	#17:18,
+	#18:19,
+	#19:20,
+	#20:22,
+	#21:23,
+	#22:24,
+	#23:25,
+	#24:26,
+	#25:25,
+	#26:26,
+	#27:27
+#}
+#const piecedict = {
+	#0: Vector2(0,0), # Empty
+	#1: Vector2(128,0), #WPawn
+	#2: Vector2(256,0), #WKnight
+	#3: Vector2(384,0), 
+	#4: Vector2(512,0),
+	#5: Vector2(640,0),
+	#6: Vector2(768,0),
+	#7: Vector2(896,0),
+	#8: Vector2(1024,0),
+	#9: Vector2(1152,0),
+	#10: Vector2(1280,0),
+	#11: Vector2(0,128), #WBrawn
+	#12: Vector2(128,128),
+	#13: Vector2(256,128),
+	#14: Vector2(384,128),
+	#15: Vector2(512,128),
+	#16: Vector2(640,128),
+	#17: Vector2(768,128),
+	#18: Vector2(896,128),
+	#19: Vector2(1024,128),
+	#20: Vector2(1152,128),
+	#21: Vector2(1280,128),
+	#22: Vector2(0,256), #BUnicorn
+	#23: Vector2(128,256), #BDragon
+	#24: Vector2(256,256),
+	#25: Vector2(384,256),
+	#26: Vector2(512,256),
+#}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -168,9 +225,11 @@ func _draw() -> void:
 				draw_rect(rect,dark_color,true)
 	if board_perspective:
 		for i in range(board.size()):
+			if(board[i] == -1):
+				continue
 			var file = i % board_width
 			var rank = floor(i / board_width)
-			draw_texture_rect_region(piecestext,Rect2(piece_local_position_white(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(128,128)))
+			draw_texture_rect_region(piecestext,Rect2(piece_local_position_white(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(500,500)))
 	else:
 		for i in range(board.size()):
 			var file = i % board_width

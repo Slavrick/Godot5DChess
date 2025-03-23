@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://htnics7jcbln"
-path="res://.godot/imported/white_knight.svg-7dd07f735e28ccc690e28b5f3164b5fc.ctex"
+uid="uid://dk0wnsutlubyo"
+path="res://.godot/imported/black_knight.svg-cca3300ab3200f8de810012f4f8dfb27.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/CrazyPenguins-5D-Chess-Set-0.1.0/white_knight.svg"
-dest_files=["res://.godot/imported/white_knight.svg-7dd07f735e28ccc690e28b5f3164b5fc.ctex"]
+source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/black_knight.svg"
+dest_files=["res://.godot/imported/black_knight.svg-cca3300ab3200f8de810012f4f8dfb27.ctex"]
 
 [params]
 

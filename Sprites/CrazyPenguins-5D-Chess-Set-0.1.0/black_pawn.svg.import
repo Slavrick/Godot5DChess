@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://83yhexnvv8ua"
-path="res://.godot/imported/white_rook.svg-2b52ea121c2f20478b8075e0ad9657d2.ctex"
+uid="uid://c0ou5khmanexk"
+path="res://.godot/imported/black_pawn.svg-f5ffd5611384d0225eb705a27f89d8a9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/CrazyPenguins-5D-Chess-Set-0.1.0/white_rook.svg"
-dest_files=["res://.godot/imported/white_rook.svg-2b52ea121c2f20478b8075e0ad9657d2.ctex"]
+source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/black_pawn.svg"
+dest_files=["res://.godot/imported/black_pawn.svg-f5ffd5611384d0225eb705a27f89d8a9.ctex"]
 
 [params]
 

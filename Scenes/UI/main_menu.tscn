@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bqco6q4bwai4m"]
+[gd_scene load_steps=7 format=3 uid="uid://bqco6q4bwai4m"]
 
 [ext_resource type="PackedScene" uid="uid://dg5b24p4ma8jb" path="res://Scenes/UI/settings.tscn" id="1_7blw5"]
 [ext_resource type="Theme" uid="uid://cbyooiahpjpb2" path="res://Resources/Main_Theme.tres" id="1_7m15c"]
 [ext_resource type="Script" path="res://Scripts/UI/main_menu.gd" id="1_656jk"]
 [ext_resource type="PackedScene" uid="uid://dgu2tqng234b2" path="res://Scenes/UI/multiverse_draw.tscn" id="2_yxuhw"]
 [ext_resource type="PackedScene" uid="uid://c8wa801n3kele" path="res://Scenes/UI/variant_selection_menu.tscn" id="4_lcxmb"]
+[ext_resource type="PackedScene" uid="uid://54o011b021r6" path="res://Scenes/attribution.tscn" id="6_brr4o"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -83,6 +84,10 @@ text = "Analysis"
 layout_mode = 2
 text = "Settings"
 
+[node name="Attribution" type="Button" parent="Main/MenuVbox"]
+layout_mode = 2
+text = "Attribution"
+
 [node name="Exit" type="Button" parent="Main/MenuVbox"]
 layout_mode = 2
 text = "Exit Game"
@@ -101,3 +106,11 @@ offset_right = -116.0
 offset_bottom = -55.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Attribution" parent="." instance=ExtResource("6_brr4o")]
+visible = false
+layout_mode = 1
+offset_left = -2.0
+offset_top = 5.0
+offset_right = -2.0
+offset_bottom = 5.0

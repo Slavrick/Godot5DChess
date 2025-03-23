@@ -10,6 +10,8 @@ func _ready() -> void:
 	$Settings.close.connect(close_settings)
 	$VariantSelectionMenu.variant_selected.connect(on_variant_selected)
 	$Main/MenuVbox/Analysis.pressed.connect(analysis_pressed)
+	$Main/MenuVbox/Attribution.pressed.connect(on_attribution_pressed)
+	$Attribution.close_attribution.connect(close_attribution)
 
 func play_game():
 	$Main.hide()
@@ -36,3 +38,13 @@ func exit_program():
 
 func on_variant_selected(variantfilepath : String):
 	load_game.emit(variantfilepath)
+
+
+func on_attribution_pressed():
+	$Main.hide()
+	$Attribution.show()
+
+
+func close_attribution():
+	$Attribution.hide()
+	$Main.show()

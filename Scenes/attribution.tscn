@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://54o011b021r6"]
+
+[ext_resource type="Script" path="res://Scripts/UI/attribution.gd" id="1_f5jgu"]
+
+[node name="Attribution" type="CenterContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f5jgu")
+
+[node name="PanelContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer"]
+custom_minimum_size = Vector2(600, 300)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]Attributions[/center]
+
+Pieces: CrazyPenguins-5D-Chess-Set By Crazy Penguin 
+[center]https://github.com/CrazyPenguin0111/CrazyPenguins-5D-Chess-Set [/center]
+
+Sounds by Kenny: 
+[center]Kenny.nl[/center]
+
+This project is open source on github 
+[center]https://github.com/Slavrick/Godot5DChess[/center]
+
+This game was made without reference to any source or decompiled code from the game 5D Chess With Multiverse Time Travel owned by ThunkSpace LLC
+
+"
+fit_content = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = -97.0
+offset_top = 183.0
+offset_right = 79.0
+offset_bottom = 214.0
+text = "Return To main Menu"

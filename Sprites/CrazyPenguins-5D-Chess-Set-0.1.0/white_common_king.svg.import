@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c37htn7x1s64a"
-path="res://.godot/imported/black_queen.svg-bd6905f749340983b9ededbc1c18d5a7.ctex"
+uid="uid://clbsililcc1lx"
+path="res://.godot/imported/white_common_king.svg-7a6653c2c8c05e4e2fc7bc963d664434.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/CrazyPenguins-5D-Chess-Set-0.1.0/black_queen.svg"
-dest_files=["res://.godot/imported/black_queen.svg-bd6905f749340983b9ededbc1c18d5a7.ctex"]
+source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_common_king.svg"
+dest_files=["res://.godot/imported/white_common_king.svg-7a6653c2c8c05e4e2fc7bc963d664434.ctex"]
 
 [params]
 

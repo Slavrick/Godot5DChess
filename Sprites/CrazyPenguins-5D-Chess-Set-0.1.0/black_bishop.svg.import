@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f0h7y4u5tbgu"
-path="res://.godot/imported/black_rook.svg-aa3cc1e8b90f85c62a036413c35ff453.ctex"
+uid="uid://ckh66hflvu6ty"
+path="res://.godot/imported/black_bishop.svg-9e7965beadc90fc484c13d854deae289.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/CrazyPenguins-5D-Chess-Set-0.1.0/black_rook.svg"
-dest_files=["res://.godot/imported/black_rook.svg-aa3cc1e8b90f85c62a036413c35ff453.ctex"]
+source_file="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/black_bishop.svg"
+dest_files=["res://.godot/imported/black_bishop.svg-9e7965beadc90fc484c13d854deae289.ctex"]
 
 [params]
 

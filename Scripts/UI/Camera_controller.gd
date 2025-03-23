@@ -33,13 +33,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if camera_locked:
 		return
-	if Input.is_key_pressed(KEY_W):
+	if Input.is_action_pressed("CameraUp"):
 		position.y -= SPEED * delta * (1/zoom.x)
-	if Input.is_key_pressed(KEY_S):
+	if Input.is_action_pressed("CameraDown"):
 		position.y += SPEED * delta * (1/zoom.x)
-	if Input.is_key_pressed(KEY_A):
+	if Input.is_action_pressed("CameraLeft"):
 		position.x -= SPEED * delta * (1/zoom.x)
-	if Input.is_key_pressed(KEY_D):
+	if Input.is_action_pressed("CameraRight"):
 		position.x += SPEED * delta * (1/zoom.x)
 	
 
