@@ -232,9 +232,11 @@ func _draw() -> void:
 			draw_texture_rect_region(piecestext,Rect2(piece_local_position_white(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(500,500)))
 	else:
 		for i in range(board.size()):
+			if(board[i] == -1):
+				continue
 			var file = i % board_width
 			var rank = floor(i / board_width)
-			draw_texture_rect_region(piecestext,Rect2(piece_local_position_black(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(128,128)))
+			draw_texture_rect_region(piecestext,Rect2(piece_local_position_black(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(500,500)))
 	for highlight in highlighted_squares:
 		if board_perspective:
 			var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + (board_height - highlight.square.y - 1) * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
