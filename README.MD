@@ -14,11 +14,10 @@ I used GitHub Copilot to initially port the code over, Im a little nervous about
 
 
 
-![Main Menu](https://i.imgur.com/wwCJFo9.png)
-
-
-
-![T0](https://i.imgur.com/IgEKOwV.png)
+![Main Menu](https://img.itch.zone/aW1nLzIwMzk5NTU0LnBuZw==/315x250%23c/mehjaE.png)
+![T0](https://img.itch.zone/aW1hZ2UvMzM5OTYxNS8yMDM5OTU1Ny5wbmc=/original/uDAuUA.png)
+![T0](https://img.itch.zone/aW1hZ2UvMzM5OTYxNS8yMDM5OTU1OS5wbmc=/original/D2RAdS.png)
+![T0](https://img.itch.zone/aW1hZ2UvMzM5OTYxNS8yMDM5OTU1OC5wbmc=/original/k0438D.png)
 
 
 
@@ -132,9 +131,7 @@ This engine was made without reference to source or decompiled code from the sof
 
 The project itself is open source.
 
-For the chess pieces currently i am using the chess font "Chess Adventurer" on the website: <https://www.enpassant.dk/chess/fonteng.htm> . I am going to change this in the future as it is unclear the licensing behind these pieces, althuogh the website does state "freeware" its possible i am breaking some copyright by redistributing.
-
-I might also use CrazyPenguin's open source chess pieces that other 5D Projects use:  <https://gitlab.com/adri326/the-amazing-5d-chess-piece-set>
+For the chess pieces currently i am using CrazyPenguin's open source chess pieces that other 5D Projects use:  <https://gitlab.com/adri326/the-amazing-5d-chess-piece-set>
 
 I also plan to implement other methods of modification of the looks, currently you can only really do a palette swap but in the future I plan to implement fully customizable pieces, chess boards, etc.
 
