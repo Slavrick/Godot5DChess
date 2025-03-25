@@ -26,19 +26,17 @@ I used GitHub Copilot to initially port the code over, Im a little nervous about
 * GUI For 5d Chess
 * All Rules and pieces of the base game implemented (Promotion, en passent need to be reimplemented)
 * Ability to load games through PGN/FEN files
+* White/Black only views
 
 ## Proposed Features
 
-* Ability to save games to a PGN/FEN files
-* Analysis tools such as sidelines, rewinding and jumping to positions(this is present in other implementations such as chessin5d but not in the base game)
-* White/Black only views
+* Ability to save games to a PGN/FEN files(*Need to port from old project)
+* Analysis tools such as sidelines, rewinding and jumping to positions(this is present in other implementations such as chessin5d but not in the base game) (*Need to port from old project)
 * Study System (Loading, creating, saving)
 * Ability to interface with 5d Engines in a UCI like protocol
 * Human V. Bot and Bot V. Bot Matches.
-* Variant Creator menu
+* Variant Creator menu(Shad already made one of these, not sure i will get to this.)
   
-  
-
 ## Limitations
 
 Godot has several issues with FileIO. First the Filedialog node is bugged so you cannot load anything outside of the base res:// Directory. additonally the Godot FileIO is sandboxed to only open files within the res:// directory. In the future this project will port to use CSharp File IO. If you would like to load your own games into the GUI, please clone the repository and add the game locally in your file system under the project files.
