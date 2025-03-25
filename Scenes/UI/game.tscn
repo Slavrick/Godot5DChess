@@ -22,6 +22,7 @@ script = ExtResource("1_hwe3s")
 layer = 3
 
 [node name="Mated" type="RichTextLabel" parent="SubViewport"]
+visible = false
 custom_minimum_size = Vector2(500, 500)
 anchors_preset = -1
 anchor_top = 0.21
@@ -80,7 +81,8 @@ position = Vector2(106, 130)
 script = ExtResource("1_ku55i")
 game = NodePath("..")
 
-[node name="MultiVerseDraw" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("1_fqsyd")]
+[node name="MultiVerseDraw" parent="." node_paths=PackedStringArray("game", "camera") instance=ExtResource("1_fqsyd")]
+game = NodePath("..")
 camera = NodePath("../Camera2D")
 SQUARE_LENGTH = 2168
 

@@ -1,5 +1,9 @@
-extends Control
-#TODO Make this a node2d, no clue what the deal is with it being a control...
+extends Node2D
+#TODO This originally was coded wierdly, need to unsphagettify.
+#TODO Control draw calls only show in its 'box' so to say. the timeline was pushed back and then
+#TODO the draw calls are pushed forward so you could have the tail of the timeline.
+#TODO change this so that not nessesary to push it back, simplifying the draw calls.
+#TODO Start with the multiverse container place timelines function.
 signal square_clicked(square : Vector2, temporal_position : Vector2, color : bool)
 
 enum DRAWMODE {
@@ -14,7 +18,7 @@ var TStart := 0
 var color_start := true
 var layer := 0
 var active := true
-var timeline_arrow_thickness := 80
+var timeline_arrow_thickness := 160
 var chessboard_dimensions : Vector2
 var inactive_color := Color.WEB_GRAY
 
@@ -75,9 +79,6 @@ func _draw():
 			var width = horizontal_stickout * 2
 			for child in get_children():
 						width += VisualSettings.multiverse_tile_width / 2
-			size.x = width + VisualSettings.multiverse_tile_width * 3 # all this does is make sure the tl stays on screen and draws even when on the edges.
-			size.y = get_child(0).functional_height() #TODO REPLACE with visualsettings.
-			
 			var tl_draw_position
 			if color_start:
 				tl_draw_position = Vector2(VisualSettings.multiverse_tile_width - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
@@ -87,8 +88,8 @@ func _draw():
 			draw_rect(Rect2(tl_draw_position,tl_arrow_dimension),draw_color,true)
 			draw_circle(tl_draw_position + Vector2(0,timeline_arrow_thickness/2),timeline_arrow_thickness/2,draw_color)
 			var points = PackedVector2Array()
-			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, -horizontal_stickout))
-			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, 2 * horizontal_stickout))
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, -timeline_arrow_thickness))
+			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x, 2 * timeline_arrow_thickness))
 			points.append(tl_draw_position + Vector2(tl_arrow_dimension.x + horizontal_stickout * 1.5, timeline_arrow_thickness/2))
 			draw_colored_polygon(points,draw_color)
 		VisualSettings.BLACK_VIEW:
@@ -96,9 +97,6 @@ func _draw():
 			for child in get_children():
 				if !child.color:
 					width += VisualSettings.multiverse_tile_width 
-			size.x = width + VisualSettings.multiverse_tile_width * 3 # all this does is make sure the tl stays on screen and draws even when on the edges.
-			size.y = get_child(0).functional_height() #TODO REPLACE with visualsettings.
-			
 			var tl_draw_position
 			tl_draw_position = Vector2(VisualSettings.multiverse_tile_width - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
 			var tl_arrow_dimension = Vector2(width,timeline_arrow_thickness)
@@ -116,9 +114,6 @@ func _draw():
 			for child in get_children():
 				if child.color:
 					width += VisualSettings.multiverse_tile_width 
-			size.x = width + VisualSettings.multiverse_tile_width * 3 # all this does is make sure the tl stays on screen and draws even when on the edges.
-			size.y = get_child(0).functional_height() #TODO REPLACE with visualsettings.
-			
 			var tl_draw_position
 			tl_draw_position = Vector2(VisualSettings.multiverse_tile_width - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
 			if !color_start:

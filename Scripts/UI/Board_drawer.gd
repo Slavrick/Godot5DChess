@@ -1,6 +1,7 @@
 extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
+signal square_right_clicked( square : Vector2, time : int, color : bool, pressed : bool)
 signal check_pressed
 signal undo_pressed
 
@@ -46,6 +47,7 @@ var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
 var mouse_hovering = false
 
+
 #
 #@onready var pawntres = load("res://Resources/Pieces/Pawn.tres")
 #@onready var piecestext = load("res://Resources/res/Pieces-hirez.png")
@@ -90,23 +92,23 @@ const piecedict = {
 	4: Vector2(2048,0),
 	5: Vector2(2560,0),
 	6: Vector2(0,500),
-	7: Vector2(512,500),
-	8: Vector2(1024,500),
-	9: Vector2(1536,500),
-	10: Vector2(2048,500),
-	11: Vector2(2560,500), #WBrawn
-	12: Vector2(0,1000),
-	13: Vector2(512,1000),
-	14: Vector2(1024,1000),
-	15: Vector2(1536,1000),
-	16: Vector2(2048,1000),
-	17: Vector2(2560,1000),
-	18: Vector2(0,1500),
-	19: Vector2(512,1500),
-	20: Vector2(1024,1500),
-	21: Vector2(1536,1500),
-	22: Vector2(2048,1500), #BUnicorn
-	23: Vector2(2560,1500), #BDragon
+	7: Vector2(512,512),
+	8: Vector2(1024,512),
+	9: Vector2(1536,512),
+	10: Vector2(2048,512),
+	11: Vector2(2560,512), #WBrawn
+	12: Vector2(0,1024),
+	13: Vector2(512,1024),
+	14: Vector2(1024,1024),
+	15: Vector2(1536,1024),
+	16: Vector2(2048,1024),
+	17: Vector2(2560,1024),
+	18: Vector2(0,1536),
+	19: Vector2(512,1536),
+	20: Vector2(1024,1536),
+	21: Vector2(1536,1536),
+	22: Vector2(2048,1536), #BUnicorn
+	23: Vector2(2560,1536), #BDragon
 }
 
 #const translation_dict = {

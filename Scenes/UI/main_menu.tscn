@@ -19,9 +19,9 @@ script = ExtResource("1_656jk")
 
 [node name="MultiVerseDraw" parent="." instance=ExtResource("2_yxuhw")]
 position = Vector2(416, 499)
+coord_font_size = 0
 SQUARE_LENGTH = 100
 SQUARE_HEIGHT = 100
-coord_font_size = 0
 
 [node name="Settings" parent="." instance=ExtResource("1_7blw5")]
 visible = false

@@ -7,6 +7,7 @@ signal goto_present
 signal undo_turn
 signal flip_perspective
 signal change_view(view_type)
+signal promotion_chosen( piece : int)
 
 var game : Node
 
@@ -19,9 +20,13 @@ func _ready() -> void:
 	$HBoxContainer2/OptionButton.item_selected.connect(view_changed)
 	$"HBoxContainer/Save Game".pressed.connect(save_game_pressed)
 	$HBoxContainer2/Perspective.button_pressed = VisualSettings.perspective
+	$PromotionPanel.promotion_chose.connect(on_promotion_chose)
 	if game != null:
 		pass
 
+
+func show_promotion():
+	$PromotionPanel.show()
 
 func set_analysis_mode():
 	$HBoxContainer.show()
@@ -65,3 +70,8 @@ func view_changed(index : int):
 			VisualSettings.multiverse_view = VisualSettings.BLACK_VIEW
 		2:
 			VisualSettings.multiverse_view = VisualSettings.WHITE_VIEW
+
+
+func on_promotion_chose( piece : int):
+	$PromotionPanel.hide()
+	promotion_chosen.emit(piece)

@@ -133,7 +133,7 @@ namespace Engine
 				newBoard.EnPassentSquare = m.Dest.Clone();
 				newBoard.EnPassentSquare.Y = (m.Dest.Y + m.Origin.Y) / 2;
 			}
-			if ((piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN || piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN) && b.EnPassentSquare != null && b.EnPassentSquare.Equals(m.Dest))
+			if ((piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN || piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN) && b.EnPassentSquare != null && b.EnPassentSquare.SpatialEquals(m.Dest))
 			{
 				CoordFour pawnSquare = m.Origin.Clone();
 				pawnSquare.X = m.Dest.X;
@@ -172,7 +172,13 @@ namespace Engine
 			return AddMove(newBoard);
 		}
 
-		// adds jumping origin move, basically just removes that piece from the board.
+
+		/// <summary>
+		/// adds jumping origin move, basically just removes that piece from the board.
+		/// </summary>
+		/// <param name="m">move to be made.</param>
+		/// <param name="moveColor">Color of the player moving.</param>
+		/// <returns>piece that moved. for example if a white knight jumps will return 2</returns>
 		public int AddJumpingMove(Move m, bool moveColor)
 		{
 			if (moveColor != ColorPlayable)
@@ -228,7 +234,10 @@ namespace Engine
 			return true;
 		}
 
-		// will pop off the last board to 'undo'
+		/// <summary>
+		/// Pops off the last board to undo the last move. Modifies the internal variables.
+		/// </summary>
+		/// <returns>Returns true if the last board on the timeline was removed, or false if the timeline still should exist</returns>
 		public bool UndoMove()
 		{
 			if (ColorPlayable)
@@ -250,7 +259,10 @@ namespace Engine
 			return false;
 		}
 
-		// prints the board in a primitive way
+		/// <summary>
+		/// Prints the timeline in the console. 
+		// This is mainly only used for debugging/developement purposes as usually you would want to view the timeline on the GUI
+		/// </summary>
 		public void PrintTimeline()
 		{
 			int lastWIndex = WBoards.Count;

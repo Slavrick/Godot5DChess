@@ -1,6 +1,6 @@
 extends Node2D
 
-
+@export var game : Control
 @export var camera : Node2D
 @export var camera_position := Vector2(10,10)
 @export var light_color := Color(0.412, 0.573, 0.243)
@@ -29,6 +29,8 @@ func _ready():
 		if camera.position != camera_position:
 			camera_position = camera.position
 			queue_redraw()
+	if game != null:
+		game.ActiveAreaChanged.connect(update_active_area)
 
 
 func _process( delta :float ) -> void:
@@ -41,15 +43,13 @@ func _process( delta :float ) -> void:
 func update_theme(visual_changed : String):
 	dark_color = VisualSettings.black_multiverse_color
 	light_color = VisualSettings.white_multiverse_color
-	inactive_light = desaturate_color(light_color,.1)
-	inactive_dark = desaturate_color(dark_color,.1)
+	inactive_light = desaturate_color(light_color,.4)
+	inactive_dark = desaturate_color(dark_color,.4)
 	queue_redraw()
 
 
 func desaturate_color(c : Color, d : float) -> Color:
-	return c.lerp(Color.WHITE,d)
-	#var avg = (c.r + c.b + c.g) / 3
-	#return Color(move_toward(c.r,avg,d),move_toward(c.g,avg,d),move_toward(c.b,avg,d),c.a)
+	return c.lerp(Color.SADDLE_BROWN,d)
 
 
 func update_dimensions():
@@ -114,3 +114,10 @@ func _draw() -> void:
 
 func on_view_changed( perspective : bool , view ):
 	update_dimensions()
+
+
+func update_active_area( new_present :int, minTL : int, maxTL : int):
+	present = new_present
+	min_active_tl = minTL
+	max_active_tl = maxTL
+	

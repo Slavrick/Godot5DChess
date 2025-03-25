@@ -257,7 +257,7 @@ namespace Engine {
 	  return true;
 	}
 
-	public bool MakeMove(Move m) {
+	public bool MakeMove(Move m) {//TODO validate Pawns moving to first or last rank and not promoting.
 	  if (m == null) {
 		return false;
 	  }
@@ -314,6 +314,7 @@ namespace Engine {
 		m.Type = Move.BRANCHINGMOVE;
 	  }
 	  determineActiveTLS();
+	  calcPresent();
 	  return true;
 	}
 
@@ -618,9 +619,12 @@ namespace Engine {
 	  }
 	}
 
-	// Sets the present time, and returns the color of the present. I may change
-	// that to a variable.
-	protected bool calcPresent() {
+
+	/// <summary>
+	/// Calculates the value of the present and sets the present variable in the gameState.
+	/// </summary>
+	/// <returns>returns the color which the present rests on.</returns>
+	public bool calcPresent() {
 	  int presentTime = GetTimeline(MinActiveTL).TEnd;
 	  bool presentColor = GetTimeline(MinActiveTL).ColorPlayable;
 	  for (int i = MinActiveTL; i <= MaxActiveTL; i++) {

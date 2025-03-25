@@ -466,6 +466,11 @@ namespace Engine
 		}
 	}
 	
+	/// <summary>
+	/// Takes in a piece code and returns whether the piece is a rider.
+	/// </summary>
+	/// <param name="piece">Piece to check</param>
+	/// <returns>returns trus if the piece is a rider and otherwise returns false</returns>
 	public static bool pieceIsRider(int piece) {
 		piece = piece < 0 ? piece * -1 : piece;
 		switch(piece) {
@@ -486,6 +491,11 @@ namespace Engine
 	}
 	
 	//Determines who or what piece counts toward checkmate. currently only the king and royal queen but flexable if you want to add more royal pieces.
+	/// <summary>
+	/// Takes in a piece and returns whether it is royal. Any Royal piece counts toward checkmate. Technically for example can change this to any piece being royal.
+	/// </summary>
+	/// <param name="piece">piece to check whether not it is considered royal</param>
+	/// <returns>boolean, true if royal false otherwise</returns>
 	public static bool pieceIsRoyal(int piece) {
 		piece = piece < 0 ? piece * -1 : piece;
 		switch(piece) {

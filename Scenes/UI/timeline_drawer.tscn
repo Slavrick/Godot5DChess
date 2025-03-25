@@ -2,8 +2,5 @@
 
 [ext_resource type="Script" path="res://Scripts/UI/timeline_drawer.gd" id="1_kfodc"]
 
-[node name="TimeLineDrawer" type="Control"]
-layout_mode = 3
-anchors_preset = 0
-mouse_filter = 2
+[node name="TimeLineDrawer" type="Node2D"]
 script = ExtResource("1_kfodc")

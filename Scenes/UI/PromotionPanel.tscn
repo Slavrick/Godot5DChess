@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3 uid="uid://eys3f7xu1pge"]
+
+[ext_resource type="Script" path="res://Scripts/UI/promotion_panel.gd" id="1_3y8p7"]
+[ext_resource type="Texture2D" uid="uid://cgc4t7fkvglqd" path="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_pawn.svg" id="1_px1hq"]
+[ext_resource type="Texture2D" uid="uid://htnics7jcbln" path="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_knight.svg" id="2_bw7p7"]
+[ext_resource type="Texture2D" uid="uid://dfvwbjevlnxap" path="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_bishop.svg" id="3_1dk7g"]
+[ext_resource type="Texture2D" uid="uid://83yhexnvv8ua" path="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_rook.svg" id="4_p7qny"]
+[ext_resource type="Texture2D" uid="uid://5pds7b28iwb4" path="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_queen.svg" id="5_qsh0r"]
+[ext_resource type="Texture2D" uid="uid://cldwbng3ty5be" path="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_king.svg" id="6_6pvib"]
+[ext_resource type="Texture2D" uid="uid://clbsililcc1lx" path="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_common_king.svg" id="7_q3u5s"]
+[ext_resource type="Texture2D" uid="uid://cm5llyh74dxj0" path="res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/white_princess.svg" id="7_vye0n"]
+
+[node name="Control" type="PanelContainer"]
+anchors_preset = -1
+anchor_right = 0.628
+anchor_bottom = 0.154
+offset_right = 0.543945
+offset_bottom = 0.207993
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3y8p7")
+
+[node name="PanelContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Pawn" type="TextureButton" parent="PanelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("1_px1hq")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Knight" type="TextureButton" parent="PanelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("2_bw7p7")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Bishop" type="TextureButton" parent="PanelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("3_1dk7g")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Rook" type="TextureButton" parent="PanelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("4_p7qny")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Queen" type="TextureButton" parent="PanelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("5_qsh0r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Princess" type="TextureButton" parent="PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("7_vye0n")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="King" type="TextureButton" parent="PanelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("6_6pvib")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="CommonKing" type="TextureButton" parent="PanelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("7_q3u5s")
+ignore_texture_size = true
+stretch_mode = 4

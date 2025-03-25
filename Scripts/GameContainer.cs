@@ -21,13 +21,22 @@ public partial class GameContainer : Control
 	[Signal]
 	public delegate void GameLoadedEventHandler();
 	
+	[Signal]
+	public delegate void ActiveAreaChangedEventHandler(int present, int minActiveTimeline, int maxActiveTimeline);
+	
+	
 	public GameStateManager gsm;
 	public List<CoordFour> destinations;
 	public CoordFive SelectedSquare;
 	public List<Node> Arrows;
 	public List<Node> TempArrows;
 	public List<Node> CheckArrows;
+	public Move PromotionMove;
+	public int VisualPresent = 1;
+	public int VisualMinL = 0;
+	public int VisualMaxL = 0;
 	
+	public bool PromotionPanelShowing = false;
 	public bool AnalysisMode = false;
 	
 	Node mvcontainer;
@@ -37,16 +46,16 @@ public partial class GameContainer : Control
 		CheckArrows = new List<Node>();
 		Arrows = new List<Node>();
 		TempArrows = new List<Node>();
+		GetNode("/root/VisualSettings").Connect("view_changed", new Callable(this, nameof(OnViewChanged)));
+		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
 		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
 		GetNode("SubViewport/Menus").Connect("undo_turn", new Callable(this,nameof(UndoTurn)));
-		//GetNode("SubViewport/Menus").Connect("checkforchecks", new Callable(this,nameof(CheckForChecks)));
 		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
-		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
-		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
-		GetNode("/root/VisualSettings").Connect("view_changed", new Callable(this, nameof(OnViewChanged)));
+		GetNode("SubViewport/Menus").Connect("promotion_chosen", new Callable(this,nameof(FinishPromotionMove)));
 		if(AnalysisMode){
 			GetNode("SubViewport/Menus").Call("set_analysis_mode");
 		}
+		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 	}
 
 	public override void _Process(double delta)
@@ -117,50 +126,45 @@ public partial class GameContainer : Control
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
 		CoordFour clicked = new CoordFour((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X);
 		int piece = gsm.GetSquare(clicked,color);
-		if( destinations == null ){
-			if(ValidateClickSquare(new CoordFive(clicked,color))){
+		if( destinations == null )
+		{
+			if(ValidateClickSquare(new CoordFive(clicked,color)))
+			{
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
 		}
-		else if(destinations.Contains(clicked)){
-			if(gsm.CoordIsPlayable(SelectedSquare)){
+		else if(destinations.Contains(clicked))
+		{
+			if(gsm.CoordIsPlayable(SelectedSquare))
+			{
+				piece = gsm.GetSquare(SelectedSquare,color);
+				if(piece < 0){
+					piece = piece * -1;
+				}
 				Move SelectedMove = new Move(SelectedSquare,clicked);
-				bool MoveStatus = gsm.MakeMove(SelectedMove);
-				if(MoveStatus){
-					if(SelectedMove.Type == 3 ){
-						Console.WriteLine("branching move detected");
-						int Layer;
-						if(color){
-							Layer = gsm.MaxTL;
-						}else{
-							Layer = gsm.MinTL;
-						}
-						Vector2 tile = new Vector2(Layer,clicked.T);
-						if(!color){
-							tile.Y += 1;
-						}
-						Node a = CreateArrow(SelectedMove,color);
-						TempArrows.Add(a);
-						AddChild(a);
-						EmitSignal(SignalName.MoveMade, tile,!color);
+				if(piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN 
+					|| piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN)
+				{
+					if(gsm.Color && clicked.Y == gsm.Height-1)
+					{
+						PromotionMove = SelectedMove;
+						GetNode("SubViewport/Menus").Call("show_promotion");
+						return;
 					}
-					else{
-						Vector2 tile = new Vector2(clicked.L,clicked.T);
-						if(!color){
-							tile.Y += 1;
-						}
-						Node a = CreateArrow(SelectedMove,color);
-						TempArrows.Add(a);
-						AddChild(a);
-						EmitSignal(SignalName.MoveMade, tile, !color);
-					}
-					CheckForChecks();
-					UpdateRender();
-					//need to add cleanup
+					else if(!gsm.Color && clicked.Y == 0)
+					{
+						PromotionMove = SelectedMove;
+						GetNode("SubViewport/Menus").Call("show_promotion");
+						return;
+					} 
+				}
+				bool moveStatus = MakeMove(SelectedMove,color);
+				if(moveStatus){
+					CheckActiveArea();
 				}
 			}
-			
-		}else{
+		}
+		else{
 			if(ValidateClickSquare(new CoordFive(clicked,color))){
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
@@ -204,6 +208,52 @@ public partial class GameContainer : Control
 		return true;
 	}
 	
+	public bool MakeMove(Move m, bool color)
+	{
+		bool moveStatus = gsm.MakeMove(m);
+		if(moveStatus)
+		{
+			if(m.Type == 3 )
+			{
+				//Branching Move
+				int Layer;
+				if(color)
+				{
+					Layer = gsm.MaxTL;
+				}
+				else
+				{
+					Layer = gsm.MinTL;
+				}
+				Vector2 tile = new Vector2(Layer,m.Dest.T);
+				if(!color)
+				{
+					tile.Y += 1;
+				}
+				Node a = CreateArrow(m,color);
+				TempArrows.Add(a);
+				AddChild(a);
+				EmitSignal(SignalName.MoveMade, tile,!color);
+			}
+			else
+			{
+				Vector2 tile = new Vector2(m.Dest.L,m.Dest.T);
+				if(!color)
+				{
+					tile.Y += 1;
+				}
+				Node a = CreateArrow(m,color);
+				TempArrows.Add(a);
+				AddChild(a);
+				EmitSignal(SignalName.MoveMade, tile, !color);
+			}
+			CheckForChecks();
+			UpdateRender();//TODO change this from being here, might need to put elsewhere
+			//need to add cleanup
+		}
+		return moveStatus;
+	}
+	
 	public void UpdateRender(){
 		if(mvcontainer != null){
 			mvcontainer.Call("queue_free");
@@ -213,7 +263,8 @@ public partial class GameContainer : Control
 		}
 	}
 	
-	public void CheckForChecks(){
+	public void CheckForChecks()
+	{
 		foreach(Node child in CheckArrows){
 			child.Call("queue_free");
 		}
@@ -223,6 +274,27 @@ public partial class GameContainer : Control
 			Node a = CreateArrow(m,!gsm.Color, new Color(1,0,0,(float)0.5));
 			AddChild(a);
 			CheckArrows.Add(a);
+		}
+	}
+	
+	public void CheckActiveArea()
+	{
+		gsm.calcPresent();
+		var changed = false;
+		if(gsm.Present != VisualPresent){
+			changed = true;
+			VisualPresent = gsm.Present;
+		}
+		if(gsm.MaxActiveTL != VisualMaxL){
+			changed = true;
+			VisualMaxL = gsm.MaxActiveTL;
+		}
+		if(gsm.MinActiveTL != VisualMinL){
+			changed = true;
+			VisualMinL = gsm.MinActiveTL;
+		}
+		if(changed){
+			EmitSignal(SignalName.ActiveAreaChanged, VisualPresent,VisualMinL,VisualMaxL);
 		}
 	}
 	
@@ -285,6 +357,7 @@ public partial class GameContainer : Control
 		UpdateRender();
 		ClearTurnArrows();
 		EmitSignal(SignalName.GameLoaded);
+		EmitSignal(SignalName.ActiveAreaChanged, VisualPresent,VisualMinL,VisualMaxL);
 	}
 	
 	public void OpenFileDialog(){
@@ -302,12 +375,31 @@ public partial class GameContainer : Control
 	public void OnViewChanged(bool multiverse_perspective, int multiverseview)
 	{
 		//foreach(Node arrow in Arrows)
-		//{
+		//{ XXX not needed since drawn nodes pay attention to this.
 			//arrow.Call("get_coordinate");
 		//}
 	}
 	
-
+	public void FinishPromotionMove( int piece )
+	{
+		if(PromotionMove == null)
+		{
+			return;
+		}
+		if(piece <= 1)
+		{
+			piece = 7;//troll the player if they choose pawn. (Doesn't work for white :( )
+		}
+		if(!gsm.Color)
+		{
+			piece += Board.numTypes;
+		}
+		PromotionMove.SpecialType = piece;
+		if(MakeMove(PromotionMove,gsm.Color))
+		{
+			CheckActiveArea();
+		}
+	}
 	
 	public override void _Input(InputEvent @event)
 	{
