@@ -12,6 +12,10 @@ I plan to expand on my previous 5D project by making it more portable, so more p
 
 I used GitHub Copilot to initially port the code over, Im a little nervous about bugs and performance but CSharp and Java should be similar enough that hopefully there is no issues. So far the project has not had any bugs from the porting itself as far as i can tell. I plan to do a partial rewrite to consolidate some of the code, improve checkmate detection, and the data structures i was using.
 
+### GitHub Copilot BugTraker :( / naughty list
+
+* Translated a function spatialEquals() to Equals, breaking EnPassent.
+
 
 
 ![Main Menu](https://img.itch.zone/aW1nLzIwMzk5NTU0LnBuZw==/315x250%23c/mehjaE.png)
