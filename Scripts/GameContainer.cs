@@ -72,6 +72,7 @@ public partial class GameContainer : Control
 		}
 		multiverse.Connect("square_clicked", new Callable(this,nameof(HandleClick)));
 		mvcontainer = multiverse;
+		multiverse.Set("game_container",this);
 		AddChild(multiverse);
 	}
 	
@@ -202,6 +203,9 @@ public partial class GameContainer : Control
 			return false;
 		}
 		int piece = gsm.GetSquare(cf);
+		if(piece == 0){
+			return false;
+		}
 		if(Board.GetColorBool(piece) != gsm.Color){
 			return false;
 		}

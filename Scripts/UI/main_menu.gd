@@ -4,6 +4,8 @@ signal load_game
 signal load_analysis_game(file_path : String)
 
 func _ready() -> void:
+	$MultiVerseDraw.SQUARE_LENGTH = 100
+	$MultiVerseDraw.SQUARE_HEIGHT = 100 # Overwrite last game widths and height.
 	$"Main/MenuVbox/Play Game".pressed.connect(play_game)
 	$Main/MenuVbox/Settings.pressed.connect(show_settings)
 	$Main/MenuVbox/Exit.pressed.connect(exit_program)

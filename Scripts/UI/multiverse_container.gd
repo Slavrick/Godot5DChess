@@ -5,12 +5,15 @@ signal square_clicked(square : Vector2, temporal_position : Vector2, color : boo
 var highlighted_squares = []
 var chessboard_dimensions : Vector2
 var perspective = true
+var game_container : Control
 
 func _ready() -> void:
 	VisualSettings.view_changed.connect(on_view_changed)
 	perspective = VisualSettings.perspective
 	connect_signals()
 	place_timelines()
+	if game_container != null:
+		game_container.ActiveAreaChanged.connect(update_active_area)
 
 
 func _process(delta: float) -> void:
@@ -50,6 +53,15 @@ func get_timeline_layer(layer : int) -> Node:
 		if child.layer == layer:
 			return child
 	return null
+
+
+func update_active_area( new_present :int, minTL : int, maxTL : int):
+	for tl in get_children():
+		var layer = tl.layer
+		if layer > maxTL or layer < minTL:
+			tl.active = false
+		else:
+			tl.active = true
 
 
 func timeline_square_clicked(square : Vector2 , temporal_position : Vector2, color : bool ):

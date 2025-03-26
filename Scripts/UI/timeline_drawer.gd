@@ -21,7 +21,7 @@ var active := true
 var timeline_arrow_thickness := 160
 var chessboard_dimensions : Vector2
 var inactive_color := Color.WEB_GRAY
-
+var present_board : Node
 
 func _ready() -> void:
 	place_children()
@@ -55,8 +55,15 @@ func place_children():
 				var ply = child.multiverse_position.y - TStart + 1
 				child.position.x = ply * (child.functional_width() + VisualSettings.board_horizontal_margin) + VisualSettings.board_horizontal_margin/2
 		_:
+			var max_time = -20
 			for child in get_children():
 				child.show()
+				var time = child.multiverse_position.y
+				if !child.color:
+					time += .5
+				if time >= max_time:
+					present_board = child
+					max_time = time
 				var ply = child.multiverse_position.y - TStart + 1
 				if child.color:
 					ply *= 2
@@ -65,7 +72,50 @@ func place_children():
 					ply += 1
 				child.position.x = ply * (VisualSettings.multiverse_tile_width / 2)
 				child.position.x += VisualSettings.board_horizontal_margin
+	for child in get_children():
+		child.board_type = 1
+	if present_board != null:
+		present_board.board_type = 0
 #TODO change all child.functional_width and height
+
+
+func place_child( child : Node ):
+	match VisualSettings.multiverse_view:
+		VisualSettings.WHITE_VIEW:
+			if !child.color:
+				child.hide()
+				return
+			else:
+				child.show()
+			var ply = child.multiverse_position.y - TStart + 1
+			child.position.x = ply * (child.functional_width() + VisualSettings.board_horizontal_margin) + VisualSettings.board_horizontal_margin/2
+		VisualSettings.BLACK_VIEW:
+			if child.color == true:
+				child.hide()
+				return
+			else:
+				child.show()
+			var ply = child.multiverse_position.y - TStart + 1
+			child.position.x = ply * (child.functional_width() + VisualSettings.board_horizontal_margin) + VisualSettings.board_horizontal_margin/2
+		_:
+			child.show()
+			var ply = child.multiverse_position.y - TStart + 1
+			if child.color:
+				ply *= 2
+			else:
+				ply *= 2
+				ply += 1
+			child.position.x = ply * (VisualSettings.multiverse_tile_width / 2)
+			child.position.x += VisualSettings.board_horizontal_margin
+
+
+func add_board_node( board : Node):
+	pass
+
+
+func add_board(board : Array, multiverse_position : Vector2):
+	var new_board = load("res://Scenes/UI/BoardDrawer.tscn").instantiate()
+	pass
 
 
 func _draw():

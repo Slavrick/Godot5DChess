@@ -7,7 +7,7 @@ signal goto_present
 signal undo_turn
 signal flip_perspective
 signal change_view(view_type)
-signal promotion_chosen( piece : int)
+signal promotion_chosen(piece : int)
 
 var game : Node
 

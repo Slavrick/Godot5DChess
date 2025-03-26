@@ -62,9 +62,9 @@ script = ExtResource("1_y2bqf")
 
 [node name="MultiVerseDraw" parent="." instance=ExtResource("3_ja077")]
 position = Vector2(563, 596)
+coord_font_size = 0
 SQUARE_LENGTH = 250
 SQUARE_HEIGHT = 250
-coord_font_size = 0
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2(107, 100)
@@ -73,10 +73,9 @@ script = ExtResource("1_h3oha")
 [node name="TabContainer" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(500, 300)
 layout_mode = 2
-current_tab = 1
+current_tab = 0
 
 [node name="Colors" type="VBoxContainer" parent="TabContainer"]
-visible = false
 custom_minimum_size = Vector2(500, 400)
 layout_mode = 2
 metadata/_tab_index = 0
@@ -217,6 +216,7 @@ layout_mode = 2
 texture_normal = SubResource("GradientTexture2D_7liwe")
 
 [node name="Controls" type="VBoxContainer" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 

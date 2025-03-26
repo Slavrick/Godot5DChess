@@ -2,6 +2,7 @@ extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
 signal square_right_clicked( square : Vector2, time : int, color : bool, pressed : bool)
+signal square_hovered(square : Vector2, time : int, color : bool) #TODO Change this to coord class?
 signal check_pressed
 signal undo_pressed
 
@@ -27,7 +28,19 @@ enum TYPE {
 @export var black_present_style_box : StyleBoxFlat
 @export_group("Visual Settings")
 @export var board_perspective := true
-@export var board_type := TYPE.PRESENT
+@export var board_type := TYPE.HISTORY:
+	set(value):
+		board_type = value
+		if board_type == TYPE.PRESENT:
+			if color:
+				add_theme_stylebox_override("panel",white_present_style_box)
+			else:
+				add_theme_stylebox_override("panel",black_present_style_box)
+		else:
+			if color:
+				add_theme_stylebox_override("panel",white_style_box)
+			else:
+				add_theme_stylebox_override("panel",black_style_box)
 @export var in_check := false :
 	set(value):
 		if value:
@@ -46,8 +59,7 @@ var board : Array
 var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
 var mouse_hovering = false
-
-
+var mouse_square : HighLightedSquare
 #
 #@onready var pawntres = load("res://Resources/Pieces/Pawn.tres")
 #@onready var piecestext = load("res://Resources/res/Pieces-hirez.png")
@@ -174,6 +186,8 @@ const piecedict = {
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	mouse_square = HighLightedSquare.new()
+	mouse_square.highlight_color = Color(0.1,0.9,0.1,0.6)
 	board_perspective = VisualSettings.perspective
 	light_color = VisualSettings.light_square_color
 	dark_color = VisualSettings.dark_square_color
@@ -199,26 +213,39 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if mouse_hovering:
+		mouse_square.square = local_position_to_square(get_local_mouse_position())
 		queue_redraw()
-
-
-func place_children():
-	return
-	for child in get_children():
-		if board_perspective :
-			child.position = piece_local_position_white(child.rank,child.file)
-		else:
-			child.position = piece_local_position_black(child.rank,child.file)
-
-func piece_local_position(rank, file):
-	return Vector2(margin + SQUARE_WIDTH * file, margin + SQUARE_WIDTH * rank)
 
 
 func piece_local_position_white(rank, file):
 	return Vector2(margin + SQUARE_WIDTH * file, margin + SQUARE_WIDTH * (board_height - rank - 1))
 
+
 func piece_local_position_black(rank, file):
 	return Vector2(margin + SQUARE_WIDTH * (board_width - file - 1), margin + SQUARE_WIDTH * rank)
+
+
+func local_position_to_square( local_pos ) -> Vector2:
+	var file
+	var rank
+	if board_perspective:
+		file = floor((local_pos.x - margin) / SQUARE_WIDTH)
+		rank = board_height - floor((local_pos.y - margin) / SQUARE_WIDTH) - 1
+	else:
+		file = board_width - floor((local_pos.x - margin) / SQUARE_WIDTH)  - 1
+		rank = floor((local_pos.y - margin) / SQUARE_WIDTH)
+	return Vector2(file,rank)
+
+
+#XXX Slated for removal
+#func place_children():
+	#return
+	#for child in get_children():
+		#if board_perspective :
+			#child.position = piece_local_position_white(child.rank,child.file)
+		#else:
+			#child.position = piece_local_position_black(child.rank,child.file)
+
 
 #func load_board_array(): XXX slated for removal, 
 	#for i in range(board.size()):
@@ -270,6 +297,13 @@ func _draw() -> void:
 		self_modulate = Color(1,1,1,.75)
 	if board_type == TYPE.INACTIVE:
 		self_modulate = Color(.67,.67,.67,1)
+	if mouse_hovering:
+		if board_perspective:
+			var rect = Rect2(margin + mouse_square.square.x * SQUARE_WIDTH, margin + (board_height - mouse_square.square.y - 1) * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
+			draw_rect(rect,mouse_square.highlight_color,true)
+		else:
+			var rect = Rect2(margin + (board_width - mouse_square.square.x - 1) * SQUARE_WIDTH, margin + mouse_square.square.y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
+			draw_rect(rect,mouse_square.highlight_color,true)
 
 
 func logicalBoardToUIBoard():
@@ -321,21 +355,10 @@ func _on_gui_input(event: InputEvent) -> void:
 			button_clicked(local_position_to_square(mouse_pos))
 
 
-func local_position_to_square( local_pos ) -> Vector2:
-	var file
-	var rank
-	if board_perspective:
-		file = floor((local_pos.x - margin) / SQUARE_WIDTH)
-		rank = board_height - floor((local_pos.y - margin) / SQUARE_WIDTH) - 1
-	else:
-		file = board_width - floor((local_pos.x - margin) / SQUARE_WIDTH)  - 1
-		rank = floor((local_pos.y - margin) / SQUARE_WIDTH)
-	return Vector2(file,rank)
-
-
 func _on_mouse_entered() -> void:
 	mouse_hovering = true
 
 
 func _on_mouse_exited() -> void:
 	mouse_hovering = false
+	queue_redraw() #so that the square no longer shows.

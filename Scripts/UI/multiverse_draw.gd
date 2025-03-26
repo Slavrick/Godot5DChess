@@ -17,8 +17,10 @@ extends Node2D
 @export var min_active_tl : int = -10 
 @export var max_active_tl : int = 10
 
-var inactive_light : Color
-var inactive_dark : Color
+var present_light : Color
+var present_dark : Color
+var inactive_light : Color#XXX Slated for removal both of these, unless i go back to drawing inactive area
+var inactive_dark : Color#XXX Slated for removal both of these.
 
 func _ready():
 	VisualSettings.visual_theme_changed.connect(update_theme)
@@ -45,6 +47,8 @@ func update_theme(visual_changed : String):
 	light_color = VisualSettings.white_multiverse_color
 	inactive_light = desaturate_color(light_color,.4)
 	inactive_dark = desaturate_color(dark_color,.4)
+	present_light = light_color.lightened(.3)
+	present_dark = dark_color.lightened(.3)
 	queue_redraw()
 
 
@@ -69,40 +73,40 @@ func _draw() -> void:
 	var starting_layer
 	if y_offset < 0:
 		starting_layer = (int(y_offset) / SQUARE_HEIGHT) - 2
+		if int(y_offset) % SQUARE_HEIGHT == 0:
+			starting_layer += 1
 	else:
 		starting_layer = (int(y_offset) / SQUARE_HEIGHT) - 1
 	if x_offset < 0:
 		starting_time = int(x_offset) / SQUARE_LENGTH
+		if int(x_offset) % SQUARE_LENGTH == 0:
+			starting_time += 1
 	else:
 		starting_time = (int(x_offset) / SQUARE_LENGTH) + 1
-	if int(y_offset) % SQUARE_HEIGHT == 0:
-		starting_layer += 1
-	if int(x_offset) % SQUARE_LENGTH == 0:
-		starting_time += 1
 	
 	for x in range(grid_width):
 		for y in range(grid_height):
 			var rect = Rect2(x * SQUARE_LENGTH + x_offset, y * SQUARE_HEIGHT + y_offset,SQUARE_LENGTH, SQUARE_HEIGHT)	
 			if odd_start:
 				if (x + y) % 2 == 0:
-					if(starting_time + x > present or starting_layer + y + 1 > max_active_tl or starting_layer + y + 1 < min_active_tl):
-						draw_rect(rect,inactive_light,true)
+					if(starting_time + x == present):
+						draw_rect(rect,present_light,true)
 					else:
 						draw_rect(rect,light_color,true)
 				else:
-					if(starting_time + x > present or starting_layer + y + 1 > max_active_tl or starting_layer + y + 1 < min_active_tl):
-						draw_rect(rect,inactive_dark,true)
+					if(starting_time + x == present):
+						draw_rect(rect,present_dark,true)
 					else:
 						draw_rect(rect,dark_color,true)
 			else:
 				if (x + y) % 2 == 0:
-					if(starting_time + x > present or starting_layer + y + 1 > max_active_tl or starting_layer + y + 1 < min_active_tl):
-						draw_rect(rect,inactive_dark,true)
+					if(starting_time + x == present):
+						draw_rect(rect,present_dark,true)
 					else:
 						draw_rect(rect,dark_color,true)
 				else:
-					if(starting_time + x > present or starting_layer + y + 1> max_active_tl or starting_layer + y + 1 < min_active_tl):
-						draw_rect(rect,inactive_light,true)
+					if(starting_time + x == present):
+						draw_rect(rect,present_light,true)
 					else:
 						draw_rect(rect,light_color,true)
 			if coord_font_size > 0:
@@ -120,4 +124,3 @@ func update_active_area( new_present :int, minTL : int, maxTL : int):
 	present = new_present
 	min_active_tl = minTL
 	max_active_tl = maxTL
-	
