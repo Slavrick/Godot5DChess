@@ -191,6 +191,8 @@ func _ready() -> void:
 	board_perspective = VisualSettings.perspective
 	light_color = VisualSettings.light_square_color
 	dark_color = VisualSettings.dark_square_color
+	board_width = VisualSettings.game_board_dimensions.x
+	board_height = VisualSettings.game_board_dimensions.y
 	size = Vector2(SQUARE_WIDTH * board_width,SQUARE_WIDTH * board_height) + Vector2(margin,margin) * 2
 	$UndoButton.pressed.connect(func():
 		undo_pressed.emit()

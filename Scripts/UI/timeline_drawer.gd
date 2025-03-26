@@ -17,7 +17,10 @@ enum DRAWMODE {
 var TStart := 0
 var color_start := true
 var layer := 0
-var active := true
+var active := true:
+	set(value):
+		active = value
+		queue_redraw()
 var timeline_arrow_thickness := 160
 var chessboard_dimensions : Vector2
 var inactive_color := Color.WEB_GRAY
@@ -113,9 +116,30 @@ func add_board_node( board : Node):
 	pass
 
 
-func add_board(board : Array, multiverse_position : Vector2):
+func add_board(board_array : Array, multiverse_position : Vector2, new_board_color : bool):
 	var new_board = load("res://Scenes/UI/BoardDrawer.tscn").instantiate()
-	pass
+	new_board.board = board_array
+	var new_time = multiverse_position
+	new_board.multiverse_position = multiverse_position
+	new_board.color = new_board_color
+	new_board.logicalBoardToUIBoard()
+	var colorchar;
+	if new_board_color :
+		colorchar = "w"
+	else:
+		colorchar = "b"
+	new_board.name = colorchar+str(multiverse_position.x)+"T"+str(multiverse_position.y)
+	if present_board != null:
+		present_board.board_type = 1
+		present_board.z_index = 0
+	present_board = new_board
+	present_board.z_index = 1
+	present_board.board_type = 0
+	new_board.square_clicked.connect(board_square_clicked)
+	place_child(new_board)
+	add_child(new_board)
+	queue_redraw()
+	#TODO Animate new board.
 
 
 func _draw():

@@ -162,6 +162,7 @@ public partial class GameContainer : Control
 				bool moveStatus = MakeMove(SelectedMove,color);
 				if(moveStatus){
 					CheckActiveArea();
+					mvcontainer.Call("clear_highlights");
 				}
 			}
 		}
@@ -238,6 +239,7 @@ public partial class GameContainer : Control
 				TempArrows.Add(a);
 				AddChild(a);
 				EmitSignal(SignalName.MoveMade, tile,!color);
+				AddTimelineToRender(m,color);
 			}
 			else
 			{
@@ -250,15 +252,98 @@ public partial class GameContainer : Control
 				TempArrows.Add(a);
 				AddChild(a);
 				EmitSignal(SignalName.MoveMade, tile, !color);
+				AddBoardToRender(m,color);
+				CheckForChecks();
+				return moveStatus;
 			}
 			CheckForChecks();
-			UpdateRender();//TODO change this from being here, might need to put elsewhere
+			//UpdateRender();//TODO change this from being here, might need to put elsewhere
 			//need to add cleanup
 		}
 		return moveStatus;
 	}
 	
+	//this adds a board instead of nuking everything.
+	public void AddBoardToRender(Move m, bool color)
+	{
+		Vector2 newBoardPosition = new Vector2(m.Dest.L,m.Dest.T);
+		CoordFive cfBoardPosition = new CoordFive(m.Dest,!color);
+		if(!color){
+			newBoardPosition.Y += 1;
+			cfBoardPosition.T += 1;
+		}
+		Board b = gsm.GetBoard(cfBoardPosition);
+		var arr = new Godot.Collections.Array();
+		for(int x = 0; x < b.Width; x++){
+			for(int y = 0; y < b.Height; y++){
+				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				if( piece < 0 ){
+					piece *= -1;
+				}
+				arr.Add(piece);
+			}	
+		}
+		mvcontainer.Call("add_board",arr,newBoardPosition,cfBoardPosition.Color);
+		if(m.Type == 1){
+			return;
+		}
+		newBoardPosition = new Vector2(m.Origin.L,m.Origin.T);
+		cfBoardPosition = new CoordFive(m.Origin,!color);
+		if(!color){
+			newBoardPosition.Y += 1;
+			cfBoardPosition.T += 1;
+		}
+		b = gsm.GetBoard(cfBoardPosition);
+		arr = new Godot.Collections.Array();
+		for(int x = 0; x < b.Width; x++){
+			for(int y = 0; y < b.Height; y++){
+				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				if( piece < 0 ){
+					piece *= -1;
+				}
+				arr.Add(piece);
+			}	
+		}
+		mvcontainer.Call("add_board",arr,newBoardPosition,cfBoardPosition.Color);
+	}
+	
+	public void AddTimelineToRender(Move m, bool color)
+	{
+		//Origin Board.
+		Vector2 newBoardPosition = new Vector2(m.Origin.L,m.Origin.T);
+		CoordFive cfBoardPosition = new CoordFive(m.Origin,!color);
+		if(!color){
+			newBoardPosition.Y += 1;
+			cfBoardPosition.T += 1;
+		}
+		Board b = gsm.GetBoard(cfBoardPosition);
+		var arr = new Godot.Collections.Array();
+		for(int x = 0; x < b.Width; x++){
+			for(int y = 0; y < b.Height; y++){
+				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				if( piece < 0 ){
+					piece *= -1;
+				}
+				arr.Add(piece);
+			}	
+		}
+		mvcontainer.Call("add_board",arr,newBoardPosition,cfBoardPosition.Color);
+		int new_layer;
+		if(color)
+		{
+			new_layer = gsm.MaxTL;
+		}
+		else
+		{
+			new_layer = gsm.MinTL;
+		}
+		Timeline new_timeline = gsm.GetTimeline(new_layer);
+		Node timeline_node = TimeLineToGodotNodes(new_timeline,new_layer);
+		mvcontainer.Call("add_timeline",timeline_node);
+	}
+	
 	public void UpdateRender(){
+		Console.WriteLine("nuking nodes");
 		if(mvcontainer != null){
 			mvcontainer.Call("queue_free");
 		}if(gsm != null){
@@ -324,7 +409,8 @@ public partial class GameContainer : Control
 		return arrow;
 	}
 	
-	public void ClearTurnArrows(){
+	public void ClearTurnArrows()
+	{
 		foreach(Node child in Arrows){
 			child.Call("queue_free");
 		}
@@ -350,9 +436,13 @@ public partial class GameContainer : Control
 			n.Call("queue_free");
 		}
 		TempArrows.Clear();
+		CheckActiveArea();
+		CheckForChecks();
 		gsm.undoTempMoves();
 		UpdateRender();
 	}
+	
+	//TODO clear check arrows.
 	public void LoadGame(String filepath){
 		Console.WriteLine("chose Path: " + filepath);
 		gsm = FENParser.ShadSTDGSM(filepath);
@@ -360,6 +450,7 @@ public partial class GameContainer : Control
 		GetNode("/root/VisualSettings").Call("change_game");
 		UpdateRender();
 		ClearTurnArrows();
+		CheckActiveArea();
 		EmitSignal(SignalName.GameLoaded);
 		EmitSignal(SignalName.ActiveAreaChanged, VisualPresent,VisualMinL,VisualMaxL);
 	}
@@ -402,6 +493,7 @@ public partial class GameContainer : Control
 		if(MakeMove(PromotionMove,gsm.Color))
 		{
 			CheckActiveArea();
+			mvcontainer.Call("clear_highlights");
 		}
 	}
 	

@@ -90,7 +90,6 @@ namespace Engine
 					t.AddNullMove();
 					NullAdded = true;
 				}
-				Console.WriteLine("Checking: " + i.ToString() + "L");
 				Board b = t.GetPlayableBoard();
 				for (int x = 0; x < g.Width; x++)
 				{
@@ -117,10 +116,6 @@ namespace Engine
 				if (NullAdded){
 					t.UndoMove();
 				}
-			}
-			Console.WriteLine("done");
-			foreach( Move m in moves){
-				Console.WriteLine(m);
 			}
 			return moves;
 		}
