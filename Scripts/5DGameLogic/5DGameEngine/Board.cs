@@ -6,47 +6,63 @@ namespace Engine
 	public class Board
 	{
 		// TODO possibly make this hold the position of pieces.
-		// TODO Make this board a 1d array and index that way, in order to have all the board contiguous and possibly faster
-		// Make this board private, so incorrect indexing doesn't happen
-		public int[][] Brd { get; set; }
-		public int Height { get; set; }
-		public int Width { get; set; }
-		// The board has no need for its location within the multiverse
+		/// <summary>
+		/// Board Array of integers held in the position. Each piece has a value, going from 0-24. 0 is empty and -63 is ERROR.
+		/// Negative values are unmoved pieces(kings, pawns). 1-12 is white 13-24 are black pieces.
+		/// </summary>
+		private int[] Brd;
+		public int Height;
+		public int Width;
 		//TODO possibly make this a 2d coordinate instead.
-		public CoordFour EnPassentSquare { get; set; }
+		/// <summary>
+		/// Square that holds the en passent. is not copied over on a clone.
+		/// </summary>
+		public CoordFour EnPassentSquare;
 
 		public static readonly int numTypes = 12;
 		public static readonly int ERRORSQUARE = -63;
 		public static readonly int EMPTYSQUARE = 0;
 
+		/// <summary>
+		/// Enums for the pieces.
+		/// </summary>
 		public enum Piece
 		{
 			EMPTY, WPAWN, WKNIGHT, WBISHOP, WROOK, WPRINCESS, WQUEEN, WKING, WUNICORN, WDRAGON, WBRAWN, WROYALQUEEN, WCOMMONKING, BPAWN, BKNIGHT,
 			BBISHOP, BROOK, BPRINCESS, BQUEEN, BKING, BUNICORN, BDRAGON, BBRAWN, BROYALQUEEN, BCOMMONKING
 		}
 
-		public static readonly char[] PieceChars = {
+		/// <summary>
+		/// Chars used to print the pieces and some other functions with translating characters to ints
+		/// </summary>
+		public static readonly char[] PieceChars = 
+		{
 			'_', 'P', 'N', 'B', 'R', 'S', 'Q', 'K', 'U', 'D', 'W', 'Y', 'C', 'p', 'n', 'b', 'r', 's', 'q', 'k', 'u', 'd', 'w', 'y', 'c'
 		};
 
+		/// <summary>
+		/// Board constructor to clone a board
+		/// </summary>
+		/// <param name="b">board to clone</param>
 		public Board(Board b)
 		{
-			Brd = new int[b.Width][];
-			for (int i = 0; i < b.Width; i++)
+			Brd = new int[b.Width * b.Height];
+			for(int i = 0; i < b.Width * b.Height; i++)
 			{
-				Brd[i] = (int[])b.Brd[i].Clone();
+				this.Brd[i] = b.Brd[i];
 			}
 			Height = b.Height;
 			Width = b.Width;
 		}
 
+		/// <summary>
+		/// Creates an empty board of size heigth and width
+		/// </summary>
+		/// <param name="height">board heigth</param>
+		/// <param name="width">board width</param>
 		public Board(int height, int width)
 		{
-			Brd = new int[width][];
-			for (int i = 0; i < width; i++)
-			{
-				Brd[i] = new int[height];
-			}
+			Brd = new int[width * height];
 			Height = height;
 			Width = width;
 		}
@@ -54,13 +70,15 @@ namespace Engine
 		/// <summary>
 		/// Gets a piece code at the coordinate specified. Does bounds checking.
 		/// </summary>
-		/// <param name="x">The 'file' to get. Starts at 0, so a=0, h=7.</param>
-		/// <param name="y">The 'rank' to get. Starts at 0, so 0 would be the first rank.</param>
+		/// <param name="file">The 'file' to get. Starts at 0, so a=0, h=7.</param>
+		/// <param name="rank">The 'rank' to get. Starts at 0, so 0 would be the first rank.</param>
 		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
-		public int getSquare(int x, int y)
+		public int GetSquare(int file, int rank)
 		{
-			if (IsInBounds(x, y))
-				return Brd[y][x];
+			if (IsInBounds(file, rank))
+			{
+				return Brd[rank * Width + file];
+			}
 			return ERRORSQUARE;
 		}
 
@@ -69,34 +87,47 @@ namespace Engine
 		/// </summary>
 		/// <param name="c">Coordinate to get piece code.</param>
 		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
-		public int getSquare(CoordFour c)
+		public int GetSquare(CoordFour c)
 		{
 			if (IsInBounds(c))
-				return Brd[c.Y][c.X];
+			{
+				return Brd[c.Y * Width + c.X];
+			}
 			return ERRORSQUARE;
 		}
 
-		public void setSquare(CoordFour c, int piece)
+		/// <summary>
+		/// Sets specified square to specified piece. Currently does not bounds checking.
+		/// </summary>
+		/// <param name="c">coord of piece to get</param>
+		/// <param name="piece">piece to add to the board</param>
+		public void SetSquare(CoordFour c, int piece)
 		{
-			Brd[c.Y][c.X] = piece;
+			Brd[c.Y * Width + c.X] = piece;
 		}
 
-		public void setSquare(int x, int y, int piece)
+		/// <summary>
+		/// Sets specified square to specified piece. Currently does not bounds checking.
+		/// </summary>
+		/// <param name="file">file of piece</param>
+		/// <param name="rank">rank of piece</param>
+		/// <param name="piece">piece to add to the board</param>
+		public void SetSquare(int file, int rank, int piece)
 		{
-			Brd[y][x] = piece;
+			Brd[rank * Width + file] = piece;
 		}
 
 		/// <summary>
 		/// Determine whether a coordinate is in bounds.
 		/// </summary>
-		/// <param name="x">The 'file' to check. Starts at 0, so a=0, h=7.</param>
-		/// <param name="y">The 'rank' to check. Starts at 0, so 0 would be the first rank.</param>
+		/// <param name="file">The 'file' to check. Starts at 0, so a=0, h=7.</param>
+		/// <param name="rank">The 'rank' to check. Starts at 0, so 0 would be the first rank.</param>
 		/// <returns>Boolean indicating whether the x,y was in bounds.</returns>
-		public bool IsInBounds(int x, int y)
+		public bool IsInBounds(int file, int rank)
 		{
-			if (x < 0 || x >= Width)
+			if (file < 0 || file >= Width)
 				return false;
-			if (y < 0 || y >= Height)
+			if (rank < 0 || rank >= Height)
 				return false;
 			return true;
 		}
@@ -108,7 +139,11 @@ namespace Engine
 		/// <returns>Boolean indicating whether the coordinate is in bounds spatially.</returns>
 		public bool IsInBounds(CoordFour cf)
 		{
-			return IsInBounds(cf.X, cf.Y);
+			if (cf.X < 0 || cf.X >= Width)
+				return false;
+			if (cf.Y < 0 || cf.Y >= Height)
+				return false;
+			return true;
 		}
 
 		/// <summary>
@@ -121,7 +156,7 @@ namespace Engine
 			{
 				for (int y = 0; y < Height; y++)
 				{
-					int piece = Brd[x][y];
+					int piece = GetSquare(x,y);
 					piece = piece < 0 ? piece * -1 : piece;
 					temp += PieceChars[piece];
 				}
@@ -142,7 +177,7 @@ namespace Engine
 				return false;
 			if (pieceCode >= (int)Piece.BPAWN)
 				return false;//GameState.BLACK;
-			return true;//GameState.WHITE;
+			return true;//GameState.WHITE; TODO Add this global back in.
 		}
 
 		/// <summary>

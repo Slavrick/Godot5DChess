@@ -48,7 +48,7 @@ namespace Engine
 			{
 				for (int y = 0; y < g.Height; y++)
 				{
-					int piece = b.getSquare(x, y);
+					int piece = b.GetSquare(x, y);
 					if (piece != 0 && Board.GetColorBool(piece) == spatialCoord.Color)
 					{
 						CoordFive currSquare = new CoordFive(x, y, spatialCoord.T, spatialCoord.L, spatialCoord.Color);
@@ -95,7 +95,7 @@ namespace Engine
 				{
 					for (int y = 0; y < g.Height; y++)
 					{
-						int piece = b.getSquare(x, y);
+						int piece = b.GetSquare(x, y);
 						if (Board.GetColorBool(piece) != defender)
 						{
 							CoordFour srcLocation = new CoordFour(x, y, t.TEnd, i);
@@ -128,7 +128,7 @@ namespace Engine
 			{
 				for (int y = 0; y < g.Height; y++)
 				{
-					int piece = b.getSquare(x, y);
+					int piece = b.GetSquare(x, y);
 					if (Board.GetColorBool(piece) == color)
 					{
 						CoordFour srcLocation = new CoordFour(x, y, T, L);
@@ -386,7 +386,7 @@ namespace Engine
 			CoordFour currSquare = CoordFour.Add(source, movementVec);
 			while (true)
 			{
-				int currPiece = b.getSquare(currSquare);
+				int currPiece = b.GetSquare(currSquare);
 				if (currPiece == Board.ERRORSQUARE)
 				{
 					return null;
@@ -463,7 +463,7 @@ namespace Engine
 			CoordFour currSquare = CoordFour.Add(sourceCoord, movementVec);
 			while (b.IsInBounds(currSquare))
 			{
-				int currPiece = b.getSquare(currSquare);
+				int currPiece = b.GetSquare(currSquare);
 				if (currPiece != EMPTYSQUARE)
 				{
 					bool currColor = Board.GetColorBool(currPiece);
@@ -492,7 +492,7 @@ namespace Engine
 			CoordFour currSquare = CoordFour.Add(sourceCoord, movementVec);
 			while (b.IsInBounds(currSquare))
 			{
-				int currPiece = b.getSquare(currSquare);
+				int currPiece = b.GetSquare(currSquare);
 				if (currPiece != EMPTYSQUARE)
 				{
 					bool currColor = Board.GetColorBool(currPiece);
@@ -596,10 +596,10 @@ namespace Engine
 			// Check For Clearance.
 			CoordFour left = new CoordFour(1, 0, 0, 0);
 			CoordFour index = CoordFour.Add(kingSquare, left);
-			while (b.getSquare(index) == EMPTYSQUARE) {
+			while (b.GetSquare(index) == EMPTYSQUARE) {
 				index.Add(left);
 			}
-			int firstNonEmpty = b.getSquare(index);
+			int firstNonEmpty = b.GetSquare(index);
 			if (firstNonEmpty != unmvdRk) {
 				return null;
 			}
@@ -621,10 +621,10 @@ namespace Engine
 			// Check For Clearance.
 			CoordFour right = new CoordFour(-1, 0, 0, 0);
 			CoordFour index = CoordFour.Add(kingSquare, right);
-			while (b.getSquare(index) == EMPTYSQUARE) {
+			while (b.GetSquare(index) == EMPTYSQUARE) {
 				index.Add(right);
 			}
-			int firstNonEmpty = b.getSquare(index);
+			int firstNonEmpty = b.GetSquare(index);
 			if (firstNonEmpty != unmvdRk) {
 				return null;
 			}
@@ -651,7 +651,7 @@ namespace Engine
 	private static bool isSquareAttacked(Board b, CoordFive target) {
 		for (int x = 0; x < b.Width; x++) {
 			for (int y = 0; y < b.Height; y++) {
-				int piece = b.getSquare(x, y);
+				int piece = b.GetSquare(x, y);
 				if (piece != EMPTYSQUARE && Board.GetColorBool(piece) != target.Color) {
 					Move attack = new Move(new CoordFour(x, y, target.T, target.L), target);
 					if (MoveGenerator.validateSpatialPath(b, piece, attack)) {
@@ -681,7 +681,7 @@ namespace Engine
 			}
 		}
 		while (!index.Equals(attack.Dest)) {
-			if (b.getSquare(index) != EMPTYSQUARE) {
+			if (b.GetSquare(index) != EMPTYSQUARE) {
 				return false;
 			}
 			index.Add(attackVector);
@@ -714,7 +714,7 @@ namespace Engine
 					CoordFour result = destSquare.clone();
 					while(true) {
 						result = CoordFour.Sub(result, vector);
-						int square = b.getSquare(result);
+						int square = b.GetSquare(result);
 						square = square < 0 ? square * -1 : square;
 						if(square == EMPTYSQUARE) {
 							continue;
@@ -745,7 +745,7 @@ namespace Engine
 			foreach(CoordFour vector in moveVecs) {
 				if(vector.IsSpatial()) {
 					CoordFour result = CoordFour.Sub(destSquare, vector);
-					if(b.getSquare(result) == pieceType || b.getSquare(result) * -1 == pieceType) {
+					if(b.GetSquare(result) == pieceType || b.GetSquare(result) * -1 == pieceType) {
 						if( (file == -1 || result.X == file) && (rank == -1 || result.Y == rank)) {
 							return result;
 						}
@@ -761,7 +761,7 @@ namespace Engine
 			};
 			foreach(CoordFour vector in CastleLkup) {
 				CoordFour result = CoordFour.Sub(destSquare, vector);
-				if(b.getSquare(result) == pieceType || b.getSquare(result) * -1 == pieceType) {
+				if(b.GetSquare(result) == pieceType || b.GetSquare(result) * -1 == pieceType) {
 					if( (file == -1 || result.X == file) && (rank == -1 || result.Y == rank)) {
 							return result;
 					}
@@ -775,7 +775,7 @@ namespace Engine
 	public static CoordFour findPiece(Board b, int target) {
 		for (int x = 0; x < b.Width; x++) {
 			for (int y = 0; y < b.Height; y++) {
-				if(b.getSquare(x,y) == target) {
+				if(b.GetSquare(x,y) == target) {
 					return new CoordFour(x,y,0,0);
 				}
 			}

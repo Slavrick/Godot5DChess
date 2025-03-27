@@ -101,7 +101,7 @@ public partial class GameContainer : Control
 		var arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				int piece = b.GetSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}
@@ -276,7 +276,7 @@ public partial class GameContainer : Control
 		var arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				int piece = b.GetSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}
@@ -297,7 +297,7 @@ public partial class GameContainer : Control
 		arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				int piece = b.GetSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}
@@ -320,7 +320,7 @@ public partial class GameContainer : Control
 		var arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				int piece = b.GetSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}

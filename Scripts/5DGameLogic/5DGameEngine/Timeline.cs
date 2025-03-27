@@ -112,7 +112,7 @@ namespace Engine
 			Board b = GetBoard(c.T, color);
 			if (b != null)
 			{
-				return b.getSquare(c);
+				return b.GetSquare(c);
 			}
 			return Board.ERRORSQUARE;
 		}
@@ -123,11 +123,11 @@ namespace Engine
 				return false;
 			Board b = GetPlayableBoard();
 			Board newBoard = new Board(b);
-			int piece = newBoard.getSquare(m.Origin);
+			int piece = newBoard.GetSquare(m.Origin);
 			piece = piece < 0 ? piece * -1 : piece;
 			m.PieceMoved = piece;
-			newBoard.setSquare(m.Origin, (int)Board.Piece.EMPTY);
-			newBoard.setSquare(m.Dest, piece);
+			newBoard.SetSquare(m.Origin, (int)Board.Piece.EMPTY);
+			newBoard.SetSquare(m.Dest, piece);
 			if ((piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN || piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN) && Math.Abs(m.Dest.Y - m.Origin.Y) == 2)
 			{
 				newBoard.EnPassentSquare = m.Dest.Clone();
@@ -137,7 +137,7 @@ namespace Engine
 			{
 				CoordFour pawnSquare = m.Origin.Clone();
 				pawnSquare.X = m.Dest.X;
-				newBoard.setSquare(pawnSquare, Board.EMPTYSQUARE);
+				newBoard.SetSquare(pawnSquare, Board.EMPTYSQUARE);
 			}
 			return AddMove(newBoard);
 		}
@@ -146,20 +146,20 @@ namespace Engine
 		{
 			Board b = GetPlayableBoard();
 			Board newBoard = new Board(b);
-			int king = newBoard.getSquare(m.Origin) * -1;
+			int king = newBoard.GetSquare(m.Origin) * -1;
 			CoordFour direction = CoordFour.Sub(m.Dest, m.Origin);
 			direction.Flatten();
 			CoordFour index = CoordFour.Add(direction, m.Origin);
-			while (b.getSquare(index) != (int)Board.Piece.WROOK * -1 && b.getSquare(index) != (int)Board.Piece.BROOK * -1)
+			while (b.GetSquare(index) != (int)Board.Piece.WROOK * -1 && b.GetSquare(index) != (int)Board.Piece.BROOK * -1)
 			{
 				index.Add(direction);
 			}
 			m.PieceMoved = king;
-			int rook = newBoard.getSquare(index) * -1;
-			newBoard.setSquare(m.Origin, Board.EMPTYSQUARE);
-			newBoard.setSquare(index, Board.EMPTYSQUARE);
-			newBoard.setSquare(m.Dest, king);
-			newBoard.setSquare(CoordFour.Sub(m.Dest, direction), rook);
+			int rook = newBoard.GetSquare(index) * -1;
+			newBoard.SetSquare(m.Origin, Board.EMPTYSQUARE);
+			newBoard.SetSquare(index, Board.EMPTYSQUARE);
+			newBoard.SetSquare(m.Dest, king);
+			newBoard.SetSquare(CoordFour.Sub(m.Dest, direction), rook);
 			return AddMove(newBoard);
 		}
 
@@ -167,8 +167,8 @@ namespace Engine
 		{
 			Board b = GetPlayableBoard();
 			Board newBoard = new Board(b);
-			newBoard.setSquare(m.Origin, (int)Board.Piece.EMPTY);
-			newBoard.setSquare(m.Dest, m.SpecialType);
+			newBoard.SetSquare(m.Origin, (int)Board.Piece.EMPTY);
+			newBoard.SetSquare(m.Dest, m.SpecialType);
 			return AddMove(newBoard);
 		}
 
@@ -186,10 +186,10 @@ namespace Engine
 			CoordFour origin = m.Origin;
 			Board b = GetPlayableBoard();
 			Board newBoard = new Board(b);
-			int piece = newBoard.getSquare(origin);
+			int piece = newBoard.GetSquare(origin);
 			piece = piece < 0 ? piece * -1 : piece;
 			m.PieceMoved = piece;
-			newBoard.setSquare(origin, (int)Board.Piece.EMPTY);
+			newBoard.SetSquare(origin, (int)Board.Piece.EMPTY);
 			AddMove(newBoard);
 			return piece;
 		}
@@ -200,7 +200,7 @@ namespace Engine
 		{
 			Board b = GetBoard(dest.T, moveColor);
 			Board newBoard = new Board(b);
-			newBoard.setSquare(dest, piece);
+			newBoard.SetSquare(dest, piece);
 			if (dest.T != TEnd || moveColor != ColorPlayable)
 			{
 				return newBoard;

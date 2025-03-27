@@ -128,11 +128,11 @@ namespace FileIO5D {
 				piece *= -1;
 				charat++;
 			  }
-			  b.setSquare(col, height - row - 1, piece);
+			  b.SetSquare(col, height - row - 1, piece);
 			  col++;
 			} else if (c <= '9' && c >= '1') {
 			  for (int i = 0; i < c - '0'; i++) {
-				b.setSquare(col,height - row - 1, Board.EMPTYSQUARE);
+				b.SetSquare(col,height - row - 1, Board.EMPTYSQUARE);
 				col++;
 			  }
 			} else {
@@ -170,11 +170,11 @@ namespace FileIO5D {
 				piece *= -1;
 				charat++;
 			  }
-			  b.setSquare(height - row - 1,col, piece);
+			  b.SetSquare(height - row - 1,col, piece);
 			  col++;
 			} else if (c <= '9' && c >= '1') {
 			  for (int i = 0; i < c - '0'; i++) {
-				b.setSquare(col,height - row - 1, Board.EMPTYSQUARE);
+				b.SetSquare(col,height - row - 1, Board.EMPTYSQUARE);
 				col++;
 			  }
 			} else {
