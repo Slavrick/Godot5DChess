@@ -5,6 +5,8 @@ extends Node2D
 #TODO change this so that not nessesary to push it back, simplifying the draw calls.
 #TODO Start with the multiverse container place timelines function.
 signal square_clicked(square : Vector2, temporal_position : Vector2, color : bool)
+signal square_hovered( c : Coord5)
+signal mouse_hovered()
 
 enum DRAWMODE {
 	FULL,
@@ -35,6 +37,7 @@ func _ready() -> void:
 func connect_children():
 	for child in get_children():
 		child.square_clicked.connect(board_square_clicked)
+		child.square_hovered.connect(board_square_hovered)
 
 
 func place_children():
@@ -58,15 +61,8 @@ func place_children():
 				var ply = child.multiverse_position.y - TStart + 1
 				child.position.x = ply * (child.functional_width() + VisualSettings.board_horizontal_margin) + VisualSettings.board_horizontal_margin/2
 		_:
-			var max_time = -20
 			for child in get_children():
 				child.show()
-				var time = child.multiverse_position.y
-				if !child.color:
-					time += .5
-				if time >= max_time:
-					present_board = child
-					max_time = time
 				var ply = child.multiverse_position.y - TStart + 1
 				if child.color:
 					ply *= 2
@@ -75,10 +71,7 @@ func place_children():
 					ply += 1
 				child.position.x = ply * (VisualSettings.multiverse_tile_width / 2)
 				child.position.x += VisualSettings.board_horizontal_margin
-	for child in get_children():
-		child.board_type = 1
-	if present_board != null:
-		present_board.board_type = 0
+	set_present_board()
 #TODO change all child.functional_width and height
 
 
@@ -113,7 +106,7 @@ func place_child( child : Node ):
 
 
 func add_board_node( board : Node):
-	pass
+	pass#TODO
 
 
 func add_board(board_array : Array, multiverse_position : Vector2, new_board_color : bool):
@@ -136,10 +129,34 @@ func add_board(board_array : Array, multiverse_position : Vector2, new_board_col
 	present_board.z_index = 1
 	present_board.board_type = 0
 	new_board.square_clicked.connect(board_square_clicked)
+	new_board.square_hovered.connect(board_square_hovered)
 	place_child(new_board)
 	add_child(new_board)
 	queue_redraw()
 	#TODO Animate new board.
+
+
+func pop_board_off():
+	if(get_child_count() == 1):
+		queue_free()
+	present_board.queue_free()
+	set_present_board()
+	queue_redraw()
+
+
+func set_present_board():
+	var max_time = -20
+	for child in get_children():
+		var time = child.multiverse_position.y
+		if !child.color:
+			time += .5
+		if time >= max_time:
+			present_board = child
+			max_time = time
+	for child in get_children():
+		child.board_type = 1
+	if present_board != null:
+		present_board.board_type = 0
 
 
 func _draw():
@@ -207,6 +224,11 @@ func _draw():
 
 func board_square_clicked(square ,time, color):
 	square_clicked.emit(square,Vector2(layer,time),color)
+
+
+func board_square_hovered( c : Coord5 ):
+	c.v.z = layer
+	square_hovered.emit(c)
 
 
 func highlight_square(square : Vector4, color : bool ):

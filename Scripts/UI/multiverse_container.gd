@@ -1,6 +1,7 @@
 extends Control
 
 signal square_clicked(square : Vector2, temporal_position : Vector2, color : bool)
+signal square_hovered(c : Coord5)
 
 var highlighted_squares = []
 var chessboard_dimensions : Vector2
@@ -41,6 +42,7 @@ func add_timeline(new_timeline : Node2D):
 	else:
 		new_timeline.position.y =  (-new_timeline.layer) * VisualSettings.multiverse_tile_height + centering_offset
 		new_timeline.position.x = (new_timeline.TStart - 2) * VisualSettings.multiverse_tile_width
+	new_timeline.square_hovered.connect(on_square_hovered)
 	add_child(new_timeline)
 
 func highlight_squares(squares : Array, color : bool):
@@ -57,6 +59,7 @@ func clear_highlights():
 func connect_signals():
 	for child in get_children():
 		child.square_clicked.connect(timeline_square_clicked)
+		child.square_hovered.connect(on_square_hovered)
 
 
 func place_timelines():
@@ -108,3 +111,17 @@ func flip_perspective():
 func on_view_changed( perspective : bool , view ):
 	place_timelines()
 	set_perspective(VisualSettings.perspective)
+
+
+func on_square_hovered(c : Coord5):
+	square_hovered.emit(c)
+
+
+func undo_moves( turntimelines : Array):
+	print_debug(turntimelines)
+	for layer in turntimelines: #this is so dumb, idk if there is a better way. Maybe if we know the array is sorted.
+		var timeline = get_timeline_layer(layer)
+		if timeline == null:
+			print_debug(str(turntimelines) + "TL nill exists")
+			return
+		timeline.pop_board_off()

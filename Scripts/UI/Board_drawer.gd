@@ -2,7 +2,7 @@ extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
 signal square_right_clicked( square : Vector2, time : int, color : bool, pressed : bool)
-signal square_hovered(square : Vector2, time : int, color : bool) #TODO Change this to coord class?
+signal square_hovered(square : Coord5) #TODO Change this to coord class?
 signal check_pressed
 signal undo_pressed
 
@@ -215,7 +215,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if mouse_hovering:
+		#TODO only emit when it changed. also nullify the square when mouse exits.
 		mouse_square.square = local_position_to_square(get_local_mouse_position())
+		mouse_square.square.x = clamp(mouse_square.square.x,0,board_width-1)
+		mouse_square.square.y = clamp(mouse_square.square.y,0,board_height-1)
+		var hover = Coord5.Create(Vector4(mouse_square.square.x,mouse_square.square.y,multiverse_position.x,multiverse_position.y),color)
+		square_hovered.emit(hover)
 		queue_redraw()
 
 

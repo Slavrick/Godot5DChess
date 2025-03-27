@@ -26,12 +26,17 @@ public partial class GameContainer : Control
 	
 	
 	public GameStateManager gsm;
+	
 	public List<CoordFour> destinations;
+	public List<CoordFour> HoveredDestinations;
+	public CoordFive HoveredSquare;
 	public CoordFive SelectedSquare;
+	public Move PromotionMove;
+	
 	public List<Node> Arrows;
 	public List<Node> TempArrows;
 	public List<Node> CheckArrows;
-	public Move PromotionMove;
+	
 	public int VisualPresent = 1;
 	public int VisualMinL = 0;
 	public int VisualMaxL = 0;
@@ -71,6 +76,7 @@ public partial class GameContainer : Control
 			multiverse.AddChild(TimeLineToGodotNodes(gsm.Multiverse[i],gsm.MinTL+i));
 		}
 		multiverse.Connect("square_clicked", new Callable(this,nameof(HandleClick)));
+		multiverse.Connect("square_hovered", new Callable(this,nameof(OnSquareHovered)));
 		mvcontainer = multiverse;
 		multiverse.Set("game_container",this);
 		AddChild(multiverse);
@@ -191,7 +197,6 @@ public partial class GameContainer : Control
 			mvcontainer.Call("clear_highlights");
 			mvcontainer.Call("highlight_squares",DestinationsGodot,color);
 		}
-		
 		//CoordFive coord = new CoordFive(); based on what was passed
 		//MoveGenerator.getMoves(piece,gsm,coord);
 	}
@@ -253,13 +258,12 @@ public partial class GameContainer : Control
 				AddChild(a);
 				EmitSignal(SignalName.MoveMade, tile, !color);
 				AddBoardToRender(m,color);
-				CheckForChecks();
-				return moveStatus;
 			}
-			CheckForChecks();
-			//UpdateRender();//TODO change this from being here, might need to put elsewhere
-			//need to add cleanup
+			//TODO this function can maybe be shorter
 		}
+		CheckForChecks();
+		SelectedSquare = null;
+		destinations = null;
 		return moveStatus;
 	}
 	
@@ -427,19 +431,28 @@ public partial class GameContainer : Control
 		if( SubmitSuccessful && gsm.isMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
-		destinations = null;
 		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
 	}
 	
 	public void UndoTurn(){
+		//This is completely fucked.
+		//The TurnTLS Data structure is getting corrupted somehow, looking into this
+		//instead of just having 0 for the main tl, it has 0 1 0
 		foreach(Node n in TempArrows){
 			n.Call("queue_free");
 		}
 		TempArrows.Clear();
+		Godot.Collections.Array<int> arr = new Godot.Collections.Array<int>();
+		int[] turnTLS = gsm.GetTurnTLS();
+		foreach( int i in turnTLS )
+		{
+			arr.Add(i);
+		}
+		mvcontainer.Call("undo_moves",arr);
+		gsm.undoTempMoves();
 		CheckActiveArea();
 		CheckForChecks();
-		gsm.undoTempMoves();
-		UpdateRender();
+		//UpdateRender();
 	}
 	
 	//TODO clear check arrows.
@@ -494,6 +507,32 @@ public partial class GameContainer : Control
 		{
 			CheckActiveArea();
 			mvcontainer.Call("clear_highlights");
+		}
+	}
+	
+	public void OnSquareHovered(Coord5 c)
+	{
+		if(SelectedSquare != null){
+			return;
+		}
+		CoordFive hover = GameInterface.Coord5toFive(c);
+		if( HoveredSquare == null || !hover.Equals(HoveredSquare)){
+			HoveredSquare = hover;
+			//TODO possibly make it so that you can only hover your own pieces.
+			int piece = gsm.GetSquare(HoveredSquare);
+			if(piece == Board.ERRORSQUARE || piece == Board.EMPTYSQUARE){
+				mvcontainer.Call("clear_highlights");
+				return;
+			}
+			HoveredDestinations = MoveGenerator.GetMoves(piece,gsm,HoveredSquare);
+			Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
+			foreach( CoordFour cd in HoveredDestinations ){
+				DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
+			}
+			if( mvcontainer != null){
+				mvcontainer.Call("clear_highlights");
+				mvcontainer.Call("highlight_squares",DestinationsGodot,HoveredSquare.Color);
+			}
 		}
 	}
 	

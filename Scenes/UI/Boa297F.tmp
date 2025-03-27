@@ -1,0 +1,100 @@
+[gd_scene load_steps=9 format=3 uid="uid://bvsag20shf3yr"]
+
+[ext_resource type="Script" path="res://Scripts/UI/Board_drawer.gd" id="1_huwgt"]
+[ext_resource type="Texture2D" uid="uid://jiltjtby4dwe" path="res://Sprites/Undo.png" id="2_e2870"]
+[ext_resource type="Texture2D" uid="uid://c4dn71tpfrini" path="res://Sprites/CheckExclam.png" id="3_xq3cn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ehwp4"]
+bg_color = Color(0.737689, 0.571108, 0.239372, 1)
+border_color = Color(0.921569, 0.109804, 0.858824, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8un4g"]
+bg_color = Color(0.847464, 0.50903, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_86p1c"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqylc"]
+bg_color = Color(0.847464, 0.50903, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 40.0
+expand_margin_top = 40.0
+expand_margin_right = 40.0
+expand_margin_bottom = 40.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vcol"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 40.0
+expand_margin_top = 40.0
+expand_margin_right = 40.0
+expand_margin_bottom = 40.0
+
+[node name="BoardDrawer" type="Panel"]
+texture_filter = 6
+offset_right = 100.0
+offset_bottom = 100.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ehwp4")
+script = ExtResource("1_huwgt")
+SQUARE_WIDTH = null
+board_height = null
+board_width = null
+margin = null
+light_color = null
+dark_color = Color(0.29219, 0.29219, 0.29219, 1)
+white_style_box = SubResource("StyleBoxFlat_8un4g")
+black_style_box = SubResource("StyleBoxFlat_86p1c")
+white_present_style_box = SubResource("StyleBoxFlat_eqylc")
+black_present_style_box = SubResource("StyleBoxFlat_8vcol")
+board_perspective = null
+board_type = null
+in_check = null
+temp_board = null
+multiverse_position = null
+color = null
+
+[node name="UndoButton" type="TextureButton" parent="."]
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_left = -100.0
+offset_bottom = 100.0
+texture_normal = ExtResource("2_e2870")
+texture_pressed = ExtResource("2_e2870")
+texture_hover = ExtResource("2_e2870")
+texture_disabled = ExtResource("2_e2870")
+texture_focused = ExtResource("2_e2870")
+
+[node name="InCheckButton" type="TextureButton" parent="."]
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_top = -100.0
+offset_right = 100.0
+texture_normal = ExtResource("3_xq3cn")
+texture_pressed = ExtResource("3_xq3cn")
+texture_hover = ExtResource("3_xq3cn")
+texture_disabled = ExtResource("3_xq3cn")
+texture_focused = ExtResource("3_xq3cn")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

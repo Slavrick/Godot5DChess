@@ -258,10 +258,13 @@ namespace Engine {
 	}
 
 	public bool MakeMove(Move m) {//TODO validate Pawns moving to first or last rank and not promoting.
+		Console.WriteLine("Making Move");
+		Console.WriteLine(String.Join("\n", TurnTLS));
+		Console.WriteLine(m.ToString());
 	  if (m == null) {
 		return false;
 	  }
-	  if (m.SpecialType == Move.NULLMOVE && this.GetTimeline(m.Origin.L).ColorPlayable == this.Color) {
+	  if (m.SpecialType == Move.NULLMOVE && this.GetTimeline(m.Origin.L).ColorPlayable == this.Color) {//Potential bug not adding to TurnTLS
 		GetTimeline(m.Origin.L).AddSpatialMove(m, Color);
 		return true;
 	  }
@@ -272,7 +275,7 @@ namespace Engine {
 		if (m.SpecialType >= Move.PROMOTION) {
 		  if (this.Promote(m)) {
 			TurnTLS.Add(m.Dest.L);
-			TurnMoves.Add(m);
+			TurnMoves.Add(m);//TODO make sure this validates move for promotion
 			return true;
 		  } else {
 			return false;
@@ -523,6 +526,14 @@ namespace Engine {
 	  return Board.ERRORSQUARE;
 	}
 
+	public int[] GetTurnTLS()
+	{
+		Console.WriteLine("printing tls");
+		Console.WriteLine(String.Join("\n", TurnTLS));
+		Console.WriteLine("printing done");
+		return TurnTLS.ToArray();
+	}
+
 	public void PrintMultiverse() {
 	  Console.WriteLine("Turn: " + Color);
 	  int tl = MinTL;
@@ -589,6 +600,7 @@ namespace Engine {
 		  }
 		}
 	  }
+	  calcPresent();
 	  determineActiveTLS();
 	  TurnTLS.Clear();
 	  TurnMoves.Clear();
@@ -653,6 +665,9 @@ namespace Engine {
 	}
 
 	public bool isMated() {
+		if(TurnTLS.Count > 0){
+			Console.WriteLine("WHAT");
+		}
 	  determineActiveTLS();
 	  calcPresent();
 	  if (OpponentCanCaptureKing()) {

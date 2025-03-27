@@ -21,6 +21,7 @@ func load_game(file_path : String):
 	game5D = game_node
 	main_menu.queue_free()
 
+
 func load_analysis_game(file_path : String):
 	var game_node = load(game_path).instantiate()
 	game_node.AnalysisMode = true
