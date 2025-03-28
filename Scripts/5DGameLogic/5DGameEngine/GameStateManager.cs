@@ -62,7 +62,7 @@ namespace Engine
 				//}
 				//else
 				//{
-					//List<CoordFour> checkingPiece = MoveGenerator.GetAllCheckingPieces(this);
+					//List<CoordFive> checkingPiece = MoveGenerator.GetAllCheckingPieces(this);
 					//MessageEvent m = new MessageEvent("Submitting now Would Allow your opponent to capture your king. \n For example, the piece on: " + checkingPiece + " can capture your piece");
 					//GUI.Globals.ES.BroadcastEvent(m);
 				//}
@@ -196,17 +196,17 @@ namespace Engine
 		}
 
 		//this is for the game UI, no functional attributes to this function. this is used to pan the board.
-		public CoordFour GetPresentCoordinate(int skip){
+		public CoordFive GetPresentCoordinate(int skip){
 			for(int i = MinActiveTL ; i <= MaxActiveTL; i++){
 				Timeline t = GetTimeline(i); 
 				if(t.ColorPlayable == this.Color && t.TEnd <= Present){
-					return new CoordFour(0,0,i,t.TEnd);
+					return new CoordFive(0,0,i,t.TEnd);
 				}
 			}
 			//fallback
 			for(int i = MinActiveTL ; i <= MinActiveTL; i++){
 				Timeline t = GetTimeline(getTLIndex(i,MinTL));
-				return new CoordFour(0,0,i,t.TEnd);
+				return new CoordFive(0,0,i,t.TEnd);
 			}
 			return null;
 		}

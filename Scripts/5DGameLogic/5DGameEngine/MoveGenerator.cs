@@ -10,21 +10,21 @@ namespace Engine
 		public static readonly int BKING = (int)Board.Piece.BKING;
 		public static readonly int UNMOVEDROOK = (int)Board.Piece.WROOK * -1;
 
-		public bool CanCaptureSquare(GameState g, bool color, CoordFour origin, CoordFour target, int pieceType)
+		public bool CanCaptureSquare(GameState g, bool color, CoordFive origin, CoordFive target, int pieceType)
 		{
 			bool rider = Board.GetColorBool(pieceType);
 			if (pieceType <= 0 || pieceType > (Board.numTypes) * 3)
 			{
 				return false;
 			}
-			CoordFour vectorTo = CoordFour.Sub(target, origin);
+			CoordFive vectorTo = CoordFive.Sub(target, origin);
 			// FIXME finish this function.
 			return false;
 		}
 
-		public static List<CoordFour> GetAllCheckingPieces(GameState g)
+		public static List<CoordFive> GetAllCheckingPieces(GameState g)
 		{
-			List<CoordFour> attackingPieces = new List<CoordFour>();
+			List<CoordFive> attackingPieces = new List<CoordFive>();
 			foreach (Timeline t in g.Multiverse)
 			{
 				if (t.ColorPlayable != g.Color)
@@ -35,9 +35,9 @@ namespace Engine
 			return attackingPieces;
 		}
 
-		public static List<CoordFour> GetCheckingPieces(GameState g, CoordFive spatialCoord)
+		public static List<CoordFive> GetCheckingPieces(GameState g, CoordFive spatialCoord)
 		{
-			List<CoordFour> attackingPieces = new List<CoordFour>();
+			List<CoordFive> attackingPieces = new List<CoordFive>();
 			Board b = g.GetBoard(spatialCoord);
 			if (b == null)
 			{
@@ -52,8 +52,8 @@ namespace Engine
 					if (piece != 0 && Board.GetColorBool(piece) == spatialCoord.Color)
 					{
 						CoordFive currSquare = new CoordFive(x, y, spatialCoord.T, spatialCoord.L, spatialCoord.Color);
-						List<CoordFour> currSquareCaps = GetCaptures(piece, g, currSquare);
-						foreach (CoordFour square in currSquareCaps)
+						List<CoordFive> currSquareCaps = GetCaptures(piece, g, currSquare);
+						foreach (CoordFive square in currSquareCaps)
 						{
 							int attackedPiece = g.GetSquare(square, spatialCoord.Color);
 							attackedPiece = attackedPiece < 0 ? attackedPiece * -1 : attackedPiece;
@@ -98,13 +98,13 @@ namespace Engine
 						int piece = b.GetSquare(x, y);
 						if (Board.GetColorBool(piece) != defender)
 						{
-							CoordFour srcLocation = new CoordFour(x, y, t.TEnd, i);
-							List<CoordFour> captures = GetCaptures(piece, g, new CoordFive(srcLocation, !defender));
+							CoordFive srcLocation = new CoordFive(x, y, t.TEnd, i);
+							List<CoordFive> captures = GetCaptures(piece, g, new CoordFive(srcLocation, !defender));
 							if (captures == null)
 							{
 								continue;
 							}
-							foreach (CoordFour dest in captures)
+							foreach (CoordFive dest in captures)
 							{
 								if(MoveNotation.pieceIsRoyal(g.GetSquare(dest,!defender))){
 									moves.Add(new Move(srcLocation, dest));
@@ -131,13 +131,13 @@ namespace Engine
 					int piece = b.GetSquare(x, y);
 					if (Board.GetColorBool(piece) == color)
 					{
-						CoordFour srcLocation = new CoordFour(x, y, T, L);
-						List<CoordFour> moveLocations = GetMoves(piece, g, new CoordFive(srcLocation, color));
+						CoordFive srcLocation = new CoordFive(x, y, T, L);
+						List<CoordFive> moveLocations = GetMoves(piece, g, new CoordFive(srcLocation, color));
 						if (moveLocations == null)
 						{
 							continue;
 						}
-						foreach (CoordFour dest in moveLocations)
+						foreach (CoordFive dest in moveLocations)
 						{
 							moves.Add(new Move(srcLocation, dest));
 						}
@@ -147,7 +147,7 @@ namespace Engine
 			return moves;
 		}
 
-		public static List<CoordFour> GetMoves(int piece, GameState g, CoordFive source)
+		public static List<CoordFive> GetMoves(int piece, GameState g, CoordFive source)
 		{
 			bool unMoved = false;
 			if (piece < 0)
@@ -163,17 +163,17 @@ namespace Engine
 			}
 			if (piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN)
 			{
-				List<CoordFour> moves = GetPawnMoves(piece, g, source, unMoved);
+				List<CoordFive> moves = GetPawnMoves(piece, g, source, unMoved);
 				moves.AddRange(GetCaptures(piece, g, source));
 				return moves;
 			}
 			if (piece == WKING || piece == BKING)
 			{
-				List<CoordFour> moves = new List<CoordFour>();
+				List<CoordFive> moves = new List<CoordFive>();
 				if (unMoved)
 				{
-					CoordFour rookLocq = kingCanCastle(g.GetBoard(source), source, true);
-					CoordFour rookLock = kingCanCastle(g.GetBoard(source), source, false);
+					CoordFive rookLocq = kingCanCastle(g.GetBoard(source), source, true);
+					CoordFive rookLock = kingCanCastle(g.GetBoard(source), source, false);
 					if (rookLocq != null)
 					{
 						moves.Add(rookLocq);
@@ -196,7 +196,7 @@ namespace Engine
 			}
 		}
 
-		public static List<CoordFour> GetCaptures(int piece, GameState g, CoordFive source)
+		public static List<CoordFive> GetCaptures(int piece, GameState g, CoordFive source)
 		{
 			if (piece < 0)
 			{
@@ -228,9 +228,9 @@ namespace Engine
 			}
 		}
 
-		private static List<CoordFour> GetPawnMoves(int piece, GameState g, CoordFive source, bool unmoved)
+		private static List<CoordFive> GetPawnMoves(int piece, GameState g, CoordFive source, bool unmoved)
 		{
-			List<CoordFour> destCoords = new List<CoordFour>();
+			List<CoordFive> destCoords = new List<CoordFive>();
 			if (unmoved)
 			{
 				destCoords.AddRange(GetSliderMoves(g, source.Color, source, MoveNotation.getMoveVectors(piece), 2));
@@ -239,7 +239,7 @@ namespace Engine
 			{
 				destCoords.AddRange(GetLeaperMoves(g, source.Color, source, MoveNotation.getMoveVectors(piece)));
 			}
-			CoordFour[] Movementvec;
+			CoordFive[] Movementvec;
 			if (Board.GetColorBool(piece))
 			{
 				Movementvec = MoveNotation.whitePawnAttack;
@@ -251,18 +251,18 @@ namespace Engine
 			destCoords.AddRange(GetLeaperCaptures(g, source.Color, source, Movementvec));
 			if (g.GetBoard(source).EnPassentSquare != null)
 			{
-				CoordFour enPassent = g.GetBoard(source).EnPassentSquare;
-				CoordFour left;
-				CoordFour right;
+				CoordFive enPassent = g.GetBoard(source).EnPassentSquare;
+				CoordFive left;
+				CoordFive right;
 				if (source.Color)
 				{
-					left = CoordFour.Add(source, MoveNotation.whitePawnAttack[0]);
-					right = CoordFour.Add(source, MoveNotation.whitePawnAttack[1]);
+					left = CoordFive.Add(source, MoveNotation.whitePawnAttack[0]);
+					right = CoordFive.Add(source, MoveNotation.whitePawnAttack[1]);
 				}
 				else
 				{
-					left = CoordFour.Add(source, MoveNotation.blackPawnattack[0]);
-					right = CoordFour.Add(source, MoveNotation.blackPawnattack[1]);
+					left = CoordFive.Add(source, MoveNotation.blackPawnattack[0]);
+					right = CoordFive.Add(source, MoveNotation.blackPawnattack[1]);
 				}
 				if (left.SpatialEquals(enPassent))
 				{
@@ -276,68 +276,68 @@ namespace Engine
 			return destCoords;
 		}
 
-		public static List<CoordFour> GetLeaperMovesAndCaptures(GameState g, bool color, CoordFour sourceCoord, CoordFour[] movementVec)
+		public static List<CoordFive> GetLeaperMovesAndCaptures(GameState g, bool color, CoordFive sourceCoord, CoordFive[] movementVec)
 		{
-			List<CoordFour> destCoords = new List<CoordFour>();
-			foreach (CoordFour leap in movementVec)
+			List<CoordFive> destCoords = new List<CoordFive>();
+			foreach (CoordFive leap in movementVec)
 			{
-				int piece = g.GetSquare(CoordFour.Add(sourceCoord, leap), color);
+				int piece = g.GetSquare(CoordFive.Add(sourceCoord, leap), color);
 				if (piece == Board.ERRORSQUARE)
 				{
 					continue;
 				}
 				if (piece == EMPTYSQUARE)
 				{
-					destCoords.Add(CoordFour.Add(sourceCoord, leap));
+					destCoords.Add(CoordFive.Add(sourceCoord, leap));
 				}
 				else if (Board.GetColorBool(piece) != color)
 				{
-					destCoords.Add(CoordFour.Add(sourceCoord, leap));
+					destCoords.Add(CoordFive.Add(sourceCoord, leap));
 				}
 			}
 			return destCoords;
 		}
 
-		public static List<CoordFour> GetLeaperCaptures(GameState g, bool color, CoordFour sourceCoord, CoordFour[] movementVec)
+		public static List<CoordFive> GetLeaperCaptures(GameState g, bool color, CoordFive sourceCoord, CoordFive[] movementVec)
 		{
-			List<CoordFour> destCoords = new List<CoordFour>();
-			foreach (CoordFour leap in movementVec)
+			List<CoordFive> destCoords = new List<CoordFive>();
+			foreach (CoordFive leap in movementVec)
 			{
-				int piece = g.GetSquare(CoordFour.Add(sourceCoord, leap), color);
+				int piece = g.GetSquare(CoordFive.Add(sourceCoord, leap), color);
 				if (piece == EMPTYSQUARE || piece == Board.ERRORSQUARE)
 				{
 					continue;
 				}
 				else if (Board.GetColorBool(piece) != color)
 				{
-					destCoords.Add(CoordFour.Add(sourceCoord, leap));
+					destCoords.Add(CoordFive.Add(sourceCoord, leap));
 				}
 			}
 			return destCoords;
 		}
 
-		public static List<CoordFour> GetLeaperMoves(GameState g, bool color, CoordFour sourceCoord, CoordFour[] movementVec)
+		public static List<CoordFive> GetLeaperMoves(GameState g, bool color, CoordFive sourceCoord, CoordFive[] movementVec)
 		{
-			List<CoordFour> destCoords = new List<CoordFour>();
-			foreach (CoordFour leap in movementVec)
+			List<CoordFive> destCoords = new List<CoordFive>();
+			foreach (CoordFive leap in movementVec)
 			{
-				int piece = g.GetSquare(CoordFour.Add(sourceCoord, leap), color);
+				int piece = g.GetSquare(CoordFive.Add(sourceCoord, leap), color);
 				if (piece == Board.ERRORSQUARE)
 				{
 					continue;
 				}
 				if (piece == EMPTYSQUARE)
 				{
-					destCoords.Add(CoordFour.Add(sourceCoord, leap));
+					destCoords.Add(CoordFive.Add(sourceCoord, leap));
 				}
 			}
 			return destCoords;
 		}
 
-		public static List<CoordFour> GetRiderMoves(GameState g, bool color, CoordFour sourceCoord, CoordFour[] movementVec)
+		public static List<CoordFive> GetRiderMoves(GameState g, bool color, CoordFive sourceCoord, CoordFive[] movementVec)
 		{
-			List<CoordFour> moveList = new List<CoordFour>();
-			foreach (CoordFour cf in movementVec)
+			List<CoordFive> moveList = new List<CoordFive>();
+			foreach (CoordFive cf in movementVec)
 			{
 				if (cf.IsSpatial())
 				{
@@ -351,14 +351,14 @@ namespace Engine
 			return moveList;
 		}
 
-		private static List<CoordFour> GetRiderCaptures(GameState g, bool color, CoordFive source, CoordFour[] moveVectors)
+		private static List<CoordFive> GetRiderCaptures(GameState g, bool color, CoordFive source, CoordFive[] moveVectors)
 		{
-			List<CoordFour> moveList = new List<CoordFour>();
-			foreach (CoordFour cf in moveVectors)
+			List<CoordFive> moveList = new List<CoordFive>();
+			foreach (CoordFive cf in moveVectors)
 			{
 				if (cf.IsSpatial())
 				{
-					CoordFour capture = MoveGenerator.GetSpatialRiderCapture(g, color, source, cf);
+					CoordFive capture = MoveGenerator.GetSpatialRiderCapture(g, color, source, cf);
 					if (capture != null)
 					{
 						moveList.Add(capture);
@@ -366,7 +366,7 @@ namespace Engine
 				}
 				else
 				{
-					CoordFour capture = MoveGenerator.GetTemporalRiderCaptures(g, color, source, cf);
+					CoordFive capture = MoveGenerator.GetTemporalRiderCaptures(g, color, source, cf);
 					if (capture != null)
 					{
 						moveList.Add(capture);
@@ -376,14 +376,14 @@ namespace Engine
 			return moveList;
 		}
 
-		private static CoordFour GetSpatialRiderCapture(GameState g, bool color, CoordFive source, CoordFour movementVec)
+		private static CoordFive GetSpatialRiderCapture(GameState g, bool color, CoordFive source, CoordFive movementVec)
 		{
 			if (!movementVec.IsSpatial())
 			{
 				return null;
 			}
 			Board b = g.GetBoard(source, color);
-			CoordFour currSquare = CoordFour.Add(source, movementVec);
+			CoordFive currSquare = CoordFive.Add(source, movementVec);
 			while (true)
 			{
 				int currPiece = b.GetSquare(currSquare);
@@ -404,9 +404,9 @@ namespace Engine
 			}
 		}
 
-		private static CoordFour GetTemporalRiderCaptures(GameState g, bool color, CoordFive source, CoordFour movementVec)
+		private static CoordFive GetTemporalRiderCaptures(GameState g, bool color, CoordFive source, CoordFive movementVec)
 		{
-			CoordFour currSquare = CoordFour.Add(source, movementVec);
+			CoordFive currSquare = CoordFive.Add(source, movementVec);
 			while (true)
 			{
 				int currPiece = g.GetSquare(currSquare, color);
@@ -430,37 +430,37 @@ namespace Engine
 			return null;
 		}
 
-		public static List<CoordFour>[] GetRiderMovesAndCaps(GameState g, bool color, CoordFour sourceCoord, CoordFour[] movementVec)
+		public static List<CoordFive>[] GetRiderMovesAndCaps(GameState g, bool color, CoordFive sourceCoord, CoordFive[] movementVec)
 		{
-			List<CoordFour> moveList = new List<CoordFour>();
-			List<CoordFour> capList = new List<CoordFour>();
-			foreach (CoordFour cf in movementVec)
+			List<CoordFive> moveList = new List<CoordFive>();
+			List<CoordFive> capList = new List<CoordFive>();
+			foreach (CoordFive cf in movementVec)
 			{
 				if (cf.IsSpatial())
 				{
-					List<CoordFour>[] list = MoveGenerator.GetSpatialRiderMovesAndCaptures(g, color, sourceCoord, cf);
+					List<CoordFive>[] list = MoveGenerator.GetSpatialRiderMovesAndCaptures(g, color, sourceCoord, cf);
 					moveList.AddRange(list[0]);
 					capList.AddRange(list[1]);
 				}
 				else
 				{
-					List<CoordFour>[] list = MoveGenerator.GetTemporalRiderMovesAndCaptures(g, color, sourceCoord, cf);
+					List<CoordFive>[] list = MoveGenerator.GetTemporalRiderMovesAndCaptures(g, color, sourceCoord, cf);
 					moveList.AddRange(list[0]);
 					capList.AddRange(list[1]);
 				}
 			}
-			return new List<CoordFour>[] { moveList, capList };
+			return new List<CoordFive>[] { moveList, capList };
 		}
 
-		public static List<CoordFour> GetSpatialRiderMoves(GameState g, bool color, CoordFour sourceCoord, CoordFour movementVec)
+		public static List<CoordFive> GetSpatialRiderMoves(GameState g, bool color, CoordFive sourceCoord, CoordFive movementVec)
 		{
-			List<CoordFour> destCoords = new List<CoordFour>();
+			List<CoordFive> destCoords = new List<CoordFive>();
 			if (!movementVec.IsSpatial())
 			{
 				return null;
 			}
 			Board b = g.GetBoard(sourceCoord, color);
-			CoordFour currSquare = CoordFour.Add(sourceCoord, movementVec);
+			CoordFive currSquare = CoordFive.Add(sourceCoord, movementVec);
 			while (b.IsInBounds(currSquare))
 			{
 				int currPiece = b.GetSquare(currSquare);
@@ -480,16 +480,16 @@ namespace Engine
 			return destCoords;
 		}
 
-		public static List<CoordFour>[] GetSpatialRiderMovesAndCaptures(GameState g, bool color, CoordFour sourceCoord, CoordFour movementVec)
+		public static List<CoordFive>[] GetSpatialRiderMovesAndCaptures(GameState g, bool color, CoordFive sourceCoord, CoordFive movementVec)
 		{
-			List<CoordFour> destCoords = new List<CoordFour>();
-			List<CoordFour> capCoords = new List<CoordFour>();
+			List<CoordFive> destCoords = new List<CoordFive>();
+			List<CoordFive> capCoords = new List<CoordFive>();
 			if (!movementVec.IsSpatial())
 			{
 				return null;
 			}
 			Board b = g.GetBoard(sourceCoord, color);
-			CoordFour currSquare = CoordFour.Add(sourceCoord, movementVec);
+			CoordFive currSquare = CoordFive.Add(sourceCoord, movementVec);
 			while (b.IsInBounds(currSquare))
 			{
 				int currPiece = b.GetSquare(currSquare);
@@ -507,13 +507,13 @@ namespace Engine
 				destCoords.Add(currSquare.Clone());
 				currSquare.Add(movementVec);
 			}
-			return new List<CoordFour>[] { destCoords, capCoords };
+			return new List<CoordFive>[] { destCoords, capCoords };
 		}
 
-		public static List<CoordFour> GetTemporalRiderMoves(GameState g, bool color, CoordFour sourceCoord, CoordFour movementVec)
+		public static List<CoordFive> GetTemporalRiderMoves(GameState g, bool color, CoordFive sourceCoord, CoordFive movementVec)
 		{
-			List<CoordFour> destCoords = new List<CoordFour>();
-			CoordFour currSquare = CoordFour.Add(sourceCoord, movementVec);
+			List<CoordFive> destCoords = new List<CoordFive>();
+			CoordFive currSquare = CoordFive.Add(sourceCoord, movementVec);
 			int currPiece = g.GetSquare(currSquare, color);
 			while (currPiece != Board.ERRORSQUARE)
 			{
@@ -537,11 +537,11 @@ namespace Engine
 			return destCoords;
 		}
 
-		private static List<CoordFour>[] GetTemporalRiderMovesAndCaptures(GameState g, bool color, CoordFour sourceCoord, CoordFour movementVec)
+		private static List<CoordFive>[] GetTemporalRiderMovesAndCaptures(GameState g, bool color, CoordFive sourceCoord, CoordFive movementVec)
 		{
-			List<CoordFour> destCoords = new List<CoordFour>();
-			List<CoordFour> capCoords = new List<CoordFour>();
-			CoordFour currSquare = CoordFour.Add(sourceCoord, movementVec);
+			List<CoordFive> destCoords = new List<CoordFive>();
+			List<CoordFive> capCoords = new List<CoordFive>();
+			CoordFive currSquare = CoordFive.Add(sourceCoord, movementVec);
 			int currPiece = g.GetSquare(currSquare, color);
 			while (currPiece != Board.ERRORSQUARE)
 			{
@@ -563,17 +563,17 @@ namespace Engine
 				currSquare.Add(movementVec);
 				currPiece = g.GetSquare(currSquare, color);
 			}
-			return new List<CoordFour>[] { destCoords, capCoords };
+			return new List<CoordFive>[] { destCoords, capCoords };
 		}
 
-		private static List<CoordFour> GetSliderMoves(GameState g, bool color, CoordFour sourceCoord, CoordFour[] movementVec, int range)
+		private static List<CoordFive> GetSliderMoves(GameState g, bool color, CoordFive sourceCoord, CoordFive[] movementVec, int range)
 		{
 			if (range <= 0)
 				return null;
-			List<CoordFour> destCoords = new List<CoordFour>();
-			foreach (CoordFour vec in movementVec)
+			List<CoordFive> destCoords = new List<CoordFive>();
+			foreach (CoordFive vec in movementVec)
 			{
-				CoordFour newsrc = CoordFour.Add(vec, sourceCoord);
+				CoordFive newsrc = CoordFive.Add(vec, sourceCoord);
 				int rangeLeft = range - 1;
 				while (rangeLeft >= 0 && g.GetSquare(newsrc, color) == EMPTYSQUARE)
 				{
@@ -587,15 +587,15 @@ namespace Engine
 
 //START OF JAVA CODE This stuff was not ported by copilot
 
-	   public static CoordFour kingCanCastle(Board b, CoordFive kingSquare, bool kside) {
+	   public static CoordFive kingCanCastle(Board b, CoordFive kingSquare, bool kside) {
 		int unmvdRk = UNMOVEDROOK;
 		if (!kingSquare.Color) {
 			unmvdRk -= Board.numTypes;
 		}
 		if (kside) {
 			// Check For Clearance.
-			CoordFour left = new CoordFour(1, 0, 0, 0);
-			CoordFour index = CoordFour.Add(kingSquare, left);
+			CoordFive left = new CoordFive(1, 0, 0, 0);
+			CoordFive index = CoordFive.Add(kingSquare, left);
 			while (b.GetSquare(index) == EMPTYSQUARE) {
 				index.Add(left);
 			}
@@ -604,7 +604,7 @@ namespace Engine
 				return null;
 			}
 			// Check For check
-			CoordFive target = kingSquare.clone();
+			CoordFive target = kingSquare.Clone();
 			if (MoveGenerator.isSquareAttacked(b, target)) {
 				return null;
 			}
@@ -616,11 +616,11 @@ namespace Engine
 			if (MoveGenerator.isSquareAttacked(b, target)) {
 				return null;
 			}
-			return CoordFour.Add(kingSquare, CoordFour.Add(left,left));
+			return CoordFive.Add(kingSquare, CoordFive.Add(left,left));
 		} else {
 			// Check For Clearance.
-			CoordFour right = new CoordFour(-1, 0, 0, 0);
-			CoordFour index = CoordFour.Add(kingSquare, right);
+			CoordFive right = new CoordFive(-1, 0, 0, 0);
+			CoordFive index = CoordFive.Add(kingSquare, right);
 			while (b.GetSquare(index) == EMPTYSQUARE) {
 				index.Add(right);
 			}
@@ -629,7 +629,7 @@ namespace Engine
 				return null;
 			}
 			// Check For check
-			CoordFive target = kingSquare.clone();
+			CoordFive target = kingSquare.Clone();
 			if (MoveGenerator.isSquareAttacked(b, target)) {
 				return null;
 			}
@@ -641,7 +641,7 @@ namespace Engine
 			if (MoveGenerator.isSquareAttacked(b, target)) {
 				return null;
 			}
-			return CoordFour.Add(kingSquare, CoordFour.Add(right,right));
+			return CoordFive.Add(kingSquare, CoordFive.Add(right,right));
 		}
 	}
 	
@@ -653,7 +653,7 @@ namespace Engine
 			for (int y = 0; y < b.Height; y++) {
 				int piece = b.GetSquare(x, y);
 				if (piece != EMPTYSQUARE && Board.GetColorBool(piece) != target.Color) {
-					Move attack = new Move(new CoordFour(x, y, target.T, target.L), target);
+					Move attack = new Move(new CoordFive(x, y, target.T, target.L), target);
 					if (MoveGenerator.validateSpatialPath(b, piece, attack)) {
 						return true;
 					}
@@ -665,12 +665,12 @@ namespace Engine
 
 	//TODO not sure this works with pawns/brawns. -- it doesnt.
 	private static bool validateSpatialPath(Board b, int piece, Move attack) {
-		CoordFour attackVector = CoordFour.Sub(attack.Dest, attack.Origin);
+		CoordFive attackVector = CoordFive.Sub(attack.Dest, attack.Origin);
 		attackVector.Flatten();
 		if (!arrContains(MoveNotation.getMoveVectors(piece), attackVector)) {
 			return false;
 		}
-		CoordFour index = attack.Origin.Clone();
+		CoordFive index = attack.Origin.Clone();
 		index.Add(attackVector);
 		if(!MoveNotation.pieceIsRider(piece)) {
 			if(index.Equals(attack.Dest)) {
@@ -690,8 +690,8 @@ namespace Engine
 	}
 
 	//Slated for removal. this is probalby a c# function
-	public static bool arrContains(CoordFour[] array, CoordFour target) {
-		foreach (CoordFour element in array) {
+	public static bool arrContains(CoordFive[] array, CoordFive target) {
+		foreach (CoordFive element in array) {
 			if (element.Equals(target)) {
 				return true;
 			}
@@ -702,18 +702,18 @@ namespace Engine
 	//this will return the origin square given a coord, used for parsing the moves such as Nf3
 	//where you would not know the destination and would have to search for it.
 	//this only works for spatial moves, really full coordinates should be entered for anything other than a spatial move.
-	public static CoordFour reverseLookup(GameState g, CoordFive destSquare, int pieceType, int rank, int file) {
+	public static CoordFive reverseLookup(GameState g, CoordFive destSquare, int pieceType, int rank, int file) {
 		Board b = g.GetBoard(destSquare);
 		if(b == null) {
 			return null;
 		}
 		if(MoveNotation.pieceIsRider(pieceType)) {
-			CoordFour[] moveVecs = MoveNotation.getMoveVectors(pieceType);
-			foreach(CoordFour vector in moveVecs) {
+			CoordFive[] moveVecs = MoveNotation.getMoveVectors(pieceType);
+			foreach(CoordFive vector in moveVecs) {
 				if(vector.IsSpatial()) {
-					CoordFour result = destSquare.clone();
+					CoordFive result = destSquare.Clone();
 					while(true) {
-						result = CoordFour.Sub(result, vector);
+						result = CoordFive.Sub(result, vector);
 						int square = b.GetSquare(result);
 						square = square < 0 ? square * -1 : square;
 						if(square == EMPTYSQUARE) {
@@ -732,7 +732,7 @@ namespace Engine
 				}
 			}
 		}else {
-			CoordFour[] moveVecs = MoveNotation.getMoveVectors(pieceType);
+			CoordFive[] moveVecs = MoveNotation.getMoveVectors(pieceType);
 			if(pieceType == (int) Board.Piece.WPAWN) {
 				moveVecs = MoveNotation.whitePawnRLkup;
 			}else if(pieceType == (int) Board.Piece.WPAWN + Board.numTypes) {
@@ -742,9 +742,9 @@ namespace Engine
 			}else if(pieceType == (int) Board.Piece.WBRAWN + Board.numTypes) {
 				moveVecs = MoveNotation.blackBrawnRLkup;
 			}
-			foreach(CoordFour vector in moveVecs) {
+			foreach(CoordFive vector in moveVecs) {
 				if(vector.IsSpatial()) {
-					CoordFour result = CoordFour.Sub(destSquare, vector);
+					CoordFive result = CoordFive.Sub(destSquare, vector);
 					if(b.GetSquare(result) == pieceType || b.GetSquare(result) * -1 == pieceType) {
 						if( (file == -1 || result.X == file) && (rank == -1 || result.Y == rank)) {
 							return result;
@@ -755,12 +755,12 @@ namespace Engine
 		}
 		//Parse For castling
 		if(pieceType == WKING || pieceType == BKING) {
-			CoordFour[] CastleLkup = {
-					new CoordFour(2,0,0,0),
-					new CoordFour(-2,0,0,0)
+			CoordFive[] CastleLkup = {
+					new CoordFive(2,0,0,0),
+					new CoordFive(-2,0,0,0)
 			};
-			foreach(CoordFour vector in CastleLkup) {
-				CoordFour result = CoordFour.Sub(destSquare, vector);
+			foreach(CoordFive vector in CastleLkup) {
+				CoordFive result = CoordFive.Sub(destSquare, vector);
 				if(b.GetSquare(result) == pieceType || b.GetSquare(result) * -1 == pieceType) {
 					if( (file == -1 || result.X == file) && (rank == -1 || result.Y == rank)) {
 							return result;
@@ -772,11 +772,11 @@ namespace Engine
 	}
 	
 	//search for piece, returns first index of the piece, searching from 0, width 0, height
-	public static CoordFour findPiece(Board b, int target) {
+	public static CoordFive findPiece(Board b, int target) {
 		for (int x = 0; x < b.Width; x++) {
 			for (int y = 0; y < b.Height; y++) {
 				if(b.GetSquare(x,y) == target) {
-					return new CoordFour(x,y,0,0);
+					return new CoordFive(x,y,0,0);
 				}
 			}
 		}

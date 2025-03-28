@@ -15,7 +15,7 @@ public partial class Tester : Node
 	
 	public void _on_timer_timeout(){
 		TurnTester.TestTurnEquals();
-		CoordTester.TestAllCoordFourFuncs();
+		CoordTester.TestAllCoordFiveFuncs();
 		FENParserTest.TestMoveParser();
 		FENParserTest.TestSANParser();
 		FENParserTest.TestShadParser();

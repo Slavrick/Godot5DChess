@@ -12,12 +12,12 @@ namespace Test
 		public static void TestMoveParser()
 		{
 			Console.Write("    Testing Move Parser: ");
-			CoordFour x = FENParser.StringToCoord("(0,0,0,0)");
-			if (!new CoordFour(0, 0, 0, 0).Equals(x)) throw new Exception(x.ToString());
+			CoordFive x = FENParser.StringToCoord("(0,0,0,0)");
+			if (!new CoordFive(0, 0, 0, 0).Equals(x)) throw new Exception(x.ToString());
 			x = FENParser.StringToCoord("(10,5,10,5)");
-			if (!new CoordFour(10, 5, 10, 5).Equals(x)) throw new Exception(x.ToString());
+			if (!new CoordFive(10, 5, 10, 5).Equals(x)) throw new Exception(x.ToString());
 			x = FENParser.StringToCoord("(-10,-5,-2,-1)");
-			if (!new CoordFour(-10, -5, -2, -1).Equals(x)) throw new Exception(x.ToString());
+			if (!new CoordFive(-10, -5, -2, -1).Equals(x)) throw new Exception(x.ToString());
 			Console.WriteLine("passed.");
 		}
 
@@ -42,10 +42,10 @@ namespace Test
 			string san2 = "h8";
 			string san3 = "e4";
 			string san4 = "m42";
-			CoordFour c1 = FENParser.SANToCoord(san1);
-			CoordFour c2 = FENParser.SANToCoord(san2);
-			CoordFour c3 = FENParser.SANToCoord(san3);
-			CoordFour c4 = FENParser.SANToCoord(san4);
+			CoordFive c1 = FENParser.SANToCoord(san1);
+			CoordFive c2 = FENParser.SANToCoord(san2);
+			CoordFive c3 = FENParser.SANToCoord(san3);
+			CoordFive c4 = FENParser.SANToCoord(san4);
 			CoordTester.TestCoord(c1, 0, 0, 0, 0);
 			CoordTester.TestCoord(c2, 7, 7, 0, 0);
 			CoordTester.TestCoord(c3, 4, 3, 0, 0);
@@ -55,14 +55,14 @@ namespace Test
 		public static void TestShadParser()
 		{
 			Console.WriteLine("    Testing Full Coord Parser.");
-			CoordFour h1 = FENParser.HalfStringToCoord("(0T0)a1", false);
-			CoordFour h2 = FENParser.HalfStringToCoord("(0T0)Na1", false);
-			CoordFour h3 = FENParser.HalfStringToCoord("(0T1)e3", false);
-			CoordFour h4 = FENParser.HalfStringToCoord("(-1T3)Nh7", false);
-			CoordFour h5 = FENParser.HalfStringToCoord("(-0T3)Nh7", true);
-			CoordFour h6 = FENParser.HalfStringToCoord("(+0T3)Nh7", true);
-			CoordFour h7 = FENParser.HalfStringToCoord("(2T3)Nh7", true);
-			CoordFour h8 = FENParser.HalfStringToCoord("(-1T3)Nh7", true);
+			CoordFive h1 = FENParser.HalfStringToCoord("(0T0)a1", false);
+			CoordFive h2 = FENParser.HalfStringToCoord("(0T0)Na1", false);
+			CoordFive h3 = FENParser.HalfStringToCoord("(0T1)e3", false);
+			CoordFive h4 = FENParser.HalfStringToCoord("(-1T3)Nh7", false);
+			CoordFive h5 = FENParser.HalfStringToCoord("(-0T3)Nh7", true);
+			CoordFive h6 = FENParser.HalfStringToCoord("(+0T3)Nh7", true);
+			CoordFive h7 = FENParser.HalfStringToCoord("(2T3)Nh7", true);
+			CoordFive h8 = FENParser.HalfStringToCoord("(-1T3)Nh7", true);
 			CoordTester.TestCoord(h1, 0, 0, 0, 0);
 			CoordTester.TestCoord(h2, 0, 0, 0, 0);
 			CoordTester.TestCoord(h3, 4, 2, 1, 0);
@@ -97,15 +97,15 @@ namespace Test
 		public static void TestAmbiguityInfoParser()
 		{
 			Console.Write("    Testing Ambiguity Getter.");
-			CoordFour t1 = FENParser.GetAmbiguityInfo("Ng3");
+			CoordFive t1 = FENParser.GetAmbiguityInfo("Ng3");
 			CoordTester.TestCoord(t1, -1, -1, -1, -1);
-			CoordFour t2 = FENParser.GetAmbiguityInfo("Nfg3");
+			CoordFive t2 = FENParser.GetAmbiguityInfo("Nfg3");
 			CoordTester.TestCoord(t2, 5, -1, -1, -1);
-			CoordFour t3 = FENParser.GetAmbiguityInfo("N3g3");
+			CoordFive t3 = FENParser.GetAmbiguityInfo("N3g3");
 			CoordTester.TestCoord(t3, -1, 2, -1, -1);
-			CoordFour t4 = FENParser.GetAmbiguityInfo("Nc5g3");
+			CoordFive t4 = FENParser.GetAmbiguityInfo("Nc5g3");
 			CoordTester.TestCoord(t4, 2, 4, -1, -1);
-			CoordFour t5 = FENParser.GetAmbiguityInfo("(0T1)N1g3");
+			CoordFive t5 = FENParser.GetAmbiguityInfo("(0T1)N1g3");
 			CoordTester.TestCoord(t5, -1, 0, -1, -1);
 			Console.WriteLine(" passed.");
 		}

@@ -17,20 +17,20 @@ public partial class GameInterface : Node
 	public static MoveGD MovetoGD(Move m)
 	{
 		var newMove = new MoveGD();
-		newMove.Origin = CoordFourtoVector(m.Origin);
-		newMove.Dest = CoordFourtoVector(m.Dest);
+		newMove.Origin = CoordFivetoVector(m.Origin);
+		newMove.Dest = CoordFivetoVector(m.Dest);
 		return newMove;
 	}
 	
 	
-	public static Vector4 CoordFourtoVector(CoordFour coord)
+	public static Vector4 CoordFivetoVector(CoordFive coord)
 	{
 		// Create a Vector4 from your custom C# object
 		Vector4 godotVector = new Vector4(coord.X, coord.Y, coord.L, coord.T);
 		return godotVector;
 	}
 	
-	public static Coord5 CoordFourtoCoord5(CoordFour coord)
+	public static Coord5 CoordFivetoCoord5(CoordFive coord)
 	{
 		Vector4 godotVector = new Vector4(coord.X, coord.Y, coord.L, coord.T);
 		var coord5GD = new Coord5();
@@ -40,7 +40,7 @@ public partial class GameInterface : Node
 	}
 	
 	
-	public static Coord5 CoordFourtoCoord5(CoordFour coord, bool color)
+	public static Coord5 CoordFivetoCoord5(CoordFive coord, bool color)
 	{
 		Vector4 godotVector = new Vector4(coord.X, coord.Y, coord.L, coord.T);
 		var coord5GD = new Coord5();

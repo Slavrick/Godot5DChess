@@ -196,7 +196,7 @@ namespace FileIO5D {
 	  } else {
 		int file = fields[2][0] - 'a';
 		int rank = fields[2][1] - '1';
-		b.EnPassentSquare = new CoordFour(file, rank, 0, 0);
+		b.EnPassentSquare = new CoordFive(file, rank, 0, 0);
 	  }
 
 	  bool color = fields[3][0] == 'w';
@@ -233,7 +233,7 @@ namespace FileIO5D {
 			moves[i].SpecialType = promotion;
 
 		  } else if (token.Contains("0000")) {
-			CoordFour boardOrigin = new CoordFour(0, 0, 0, 0);
+			CoordFive boardOrigin = new CoordFive(0, 0, 0, 0);
 			if (token.Contains("(")) {
 			  boardOrigin.Add(TemporalToCoord(token.Substring(token.IndexOf('('), token.IndexOf(')') + 1), evenStarters));
 			} else {
@@ -263,7 +263,7 @@ namespace FileIO5D {
 	  }
 	  Board origin = g.GetBoard(temporalOrigin);
 	  int target = g.Color ? -1 * (int) Board.Piece.WKING : -1 * (int) Board.Piece.BKING;
-	  CoordFour spatialOrigin = MoveGenerator.findPiece(origin, target);
+	  CoordFive spatialOrigin = MoveGenerator.findPiece(origin, target);
 	  temporalOrigin.Add(spatialOrigin);
 	  Move castle = new Move(temporalOrigin, MoveGenerator.kingCanCastle(origin, temporalOrigin, side));
 	  return castle;
@@ -314,10 +314,10 @@ namespace FileIO5D {
 		piece = (int) Board.Piece.WPAWN;
 	  }
 	  piece = g.Color ? piece : piece + Board.numTypes;
-	  CoordFour ambiguity = GetAmbiguityInfo(move);
+	  CoordFive ambiguity = GetAmbiguityInfo(move);
 	  int file = ambiguity.X;
 	  int rank = ambiguity.Y;
-	  CoordFour origin = MoveGenerator.reverseLookup(g, dest, piece, rank, file);
+	  CoordFive origin = MoveGenerator.reverseLookup(g, dest, piece, rank, file);
 	  if (origin == null) {
 		Console.WriteLine("Could not find ReverseLookup for this move: " + move);
 		return null;
@@ -325,8 +325,8 @@ namespace FileIO5D {
 	  return new Move(origin, dest);
 	}
 
-	public static CoordFour GetAmbiguityInfo(string move) {
-	  CoordFour temp = new CoordFour(-1, -1, -1, -1);
+	public static CoordFive GetAmbiguityInfo(string move) {
+	  CoordFive temp = new CoordFive(-1, -1, -1, -1);
 	  move = move.Trim();
 	  int index = 0;
 	  int rindex = move.Length;
@@ -359,14 +359,14 @@ namespace FileIO5D {
 	  return temp;
 	}
 
-	public static CoordFour HalfStringToCoord(string halfmove, bool evenStarters) {
+	public static CoordFive HalfStringToCoord(string halfmove, bool evenStarters) {
 	  string sancoord;
 	  if (halfmove[halfmove.Length - 1] == 'x') {
 		sancoord = halfmove.Substring(halfmove.Length - 3, 2);
 	  } else {
 		sancoord = halfmove.Substring(halfmove.Length - 2);
 	  }
-	  CoordFour coord = SANToCoord(sancoord);
+	  CoordFive coord = SANToCoord(sancoord);
 	  if (halfmove.Contains("(")) {
 		coord.Add(TemporalToCoord(halfmove.Substring(halfmove.IndexOf('('), halfmove.IndexOf(')') + 1), evenStarters));
 	  } else {
@@ -376,38 +376,38 @@ namespace FileIO5D {
 	  return coord;
 	}
 
-	public static CoordFour StringToCoord(string coord) {
+	public static CoordFive StringToCoord(string coord) {
 	  coord = coord.Substring(1, coord.Length - 2);
 	  string[] coords = coord.Split(',');
 	  int x = int.Parse(coords[0]);
 	  int y = int.Parse(coords[1]);
 	  int t = int.Parse(coords[2]);
 	  int l = int.Parse(coords[3]);
-	  return new CoordFour(x, y, t, l);
+	  return new CoordFive(x, y, t, l);
 	}
 
 	public static Move StringToMove(string move) {
-	  CoordFour c1 = StringToCoord(move.Substring(0, move.IndexOf(')') + 1));
-	  CoordFour c2 = StringToCoord(move.Substring(move.IndexOf(')') + 1));
+	  CoordFive c1 = StringToCoord(move.Substring(0, move.IndexOf(')') + 1));
+	  CoordFive c2 = StringToCoord(move.Substring(move.IndexOf(')') + 1));
 	  return new Move(c1, c2);
 	}
 
 	public static Move StringToMove(string coord1, string coord2) {
-	  CoordFour c1 = StringToCoord(coord1);
-	  CoordFour c2 = StringToCoord(coord2);
+	  CoordFive c1 = StringToCoord(coord1);
+	  CoordFive c2 = StringToCoord(coord2);
 	  return new Move(c1, c2);
 	}
 
-	public static CoordFour TemporalToCoord(string temporal, bool evenStarters) {
+	public static CoordFive TemporalToCoord(string temporal, bool evenStarters) {
 	  int T = int.Parse(temporal.Substring(temporal.IndexOf('T') + 1, temporal.IndexOf(')') - temporal.IndexOf('T') - 1));
 	  int L = ParseLayer(temporal.Substring(1, temporal.IndexOf('T') - 1), evenStarters);
-	  return new CoordFour(0, 0, T, L);
+	  return new CoordFive(0, 0, T, L);
 	}
 
-	public static CoordFour SANToCoord(string san) {
+	public static CoordFive SANToCoord(string san) {
 	  char file = san[0];
 	  string rank = san.Substring(1);
-	  return new CoordFour(file - 'a', int.Parse(rank) - 1, 0, 0);
+	  return new CoordFive(file - 'a', int.Parse(rank) - 1, 0, 0);
 	}
 
 	public static int ParseLayer(string layer, bool evenStarters) {

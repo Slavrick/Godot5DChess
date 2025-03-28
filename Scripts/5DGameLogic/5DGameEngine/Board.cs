@@ -17,7 +17,7 @@ namespace Engine
 		/// <summary>
 		/// Square that holds the en passent. is not copied over on a clone.
 		/// </summary>
-		public CoordFour EnPassentSquare;
+		public CoordFive EnPassentSquare;
 
 		public static readonly int numTypes = 12;
 		public static readonly int ERRORSQUARE = -63;
@@ -87,7 +87,7 @@ namespace Engine
 		/// </summary>
 		/// <param name="c">Coordinate to get piece code.</param>
 		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
-		public int GetSquare(CoordFour c)
+		public int GetSquare(CoordFive c)
 		{
 			if (IsInBounds(c))
 			{
@@ -101,7 +101,7 @@ namespace Engine
 		/// </summary>
 		/// <param name="c">coord of piece to get</param>
 		/// <param name="piece">piece to add to the board</param>
-		public void SetSquare(CoordFour c, int piece)
+		public void SetSquare(CoordFive c, int piece)
 		{
 			Brd[c.Y * Width + c.X] = piece;
 		}
@@ -137,7 +137,7 @@ namespace Engine
 		/// </summary>
 		/// <param name="cf">Coordinate to test.</param>
 		/// <returns>Boolean indicating whether the coordinate is in bounds spatially.</returns>
-		public bool IsInBounds(CoordFour cf)
+		public bool IsInBounds(CoordFive cf)
 		{
 			if (cf.X < 0 || cf.X >= Width)
 				return false;

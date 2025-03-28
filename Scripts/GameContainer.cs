@@ -26,7 +26,7 @@ public partial class GameContainer : Control
 	
 	
 	public GameStateManager gsm;
-	public List<CoordFour> destinations;
+	public List<CoordFive> destinations;
 	public CoordFive SelectedSquare;
 	public List<Node> Arrows;
 	public List<Node> TempArrows;
@@ -125,7 +125,7 @@ public partial class GameContainer : Control
 	}
 	
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
-		CoordFour clicked = new CoordFour((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X);
+		CoordFive clicked = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X);
 		int piece = gsm.GetSquare(clicked,color);
 		if( destinations == null )
 		{
@@ -184,7 +184,7 @@ public partial class GameContainer : Control
 		}
 		destinations = MoveGenerator.GetMoves(piece,gsm,coord);
 		Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
-		foreach( CoordFour cd in destinations ){
+		foreach( CoordFive cd in destinations ){
 			DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
 		}
 		if( mvcontainer != null){
@@ -388,23 +388,23 @@ public partial class GameContainer : Control
 	}
 	
 	public Vector2 GetPresentTile(){
-		CoordFour cf = gsm.GetPresentCoordinate(0);
+		CoordFive cf = gsm.GetPresentCoordinate(0);
 		return new Vector2(cf.L,cf.T);
 	}
 	
 	public Node CreateArrow(Move m, bool color)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
-		arrow.Set("origin",GameInterface.CoordFourtoCoord5(m.Origin,color));
-		arrow.Set("dest",GameInterface.CoordFourtoCoord5(m.Dest,color));
+		arrow.Set("origin",GameInterface.CoordFivetoCoord5(m.Origin,color));
+		arrow.Set("dest",GameInterface.CoordFivetoCoord5(m.Dest,color));
 		return arrow;
 	}
 	
 	public Node CreateArrow(Move m, bool color, Color c)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
-		arrow.Set("origin",GameInterface.CoordFourtoCoord5(m.Origin,color));
-		arrow.Set("dest",GameInterface.CoordFourtoCoord5(m.Dest,color));
+		arrow.Set("origin",GameInterface.CoordFivetoCoord5(m.Origin,color));
+		arrow.Set("dest",GameInterface.CoordFivetoCoord5(m.Dest,color));
 		arrow.Set("arrow_color",c);
 		return arrow;
 	}

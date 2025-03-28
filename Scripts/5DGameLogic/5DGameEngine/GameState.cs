@@ -456,7 +456,7 @@ namespace Engine {
 	  for (int i = MinTL; i <= MaxTL; i++) {
 		Timeline t = GetTimeline(i);
 		if (t.ColorPlayable != Color) {
-		  List < CoordFour > attackingPieces = MoveGenerator.GetCheckingPieces(this,
+		  List < CoordFive > attackingPieces = MoveGenerator.GetCheckingPieces(this,
 			new CoordFive(0, 0, t.TEnd, i, !this.Color));
 		  if (attackingPieces.Count != 0)
 			return true;
@@ -465,7 +465,7 @@ namespace Engine {
 	  return false;
 	}
 
-	public bool IsInBounds(CoordFour c, bool boardColor) {
+	public bool IsInBounds(CoordFive c, bool boardColor) { //TODO make this not use boardcolor
 	  if (c.L > MaxTL || c.L < MinTL) {
 		return false;
 	  }
@@ -503,7 +503,7 @@ namespace Engine {
 	  return Multiverse[layer + (-1 * MinTL)];
 	}
 
-	public Board GetBoard(CoordFour c, bool boardColor) {
+	public Board GetBoard(CoordFive c, bool boardColor) {//TODO make this not use boardcolor
 	  if (!LayerExists(c.L)) {
 		return null;
 	  }
@@ -517,7 +517,7 @@ namespace Engine {
 	public int GetSquare(CoordFive C){
 		return GetSquare(C, C.Color);
 	}
-	public int GetSquare(CoordFour c, bool color) {
+	public int GetSquare(CoordFive c, bool color) {//TODO make this not use boardcolor
 	  if (LayerExists(c.L))
 		return GetTimeline(c.L).getSquare(c, color);
 	  return Board.ERRORSQUARE;

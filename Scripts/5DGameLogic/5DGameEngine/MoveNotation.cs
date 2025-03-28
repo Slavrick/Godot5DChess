@@ -21,319 +21,319 @@ namespace Engine
 		public static readonly int[] KING = { 1, 2, 3, 4 };
 		public static readonly int[] QUEEN = { 1, 2, 3, 4 }; */
 
-		public static readonly CoordFour[] NULLMOVESET = { };
+		public static readonly CoordFive[] NULLMOVESET = { };
 
-		public static readonly CoordFour[] ROOKMOVESET = {
+		public static readonly CoordFive[] ROOKMOVESET = {
 			// spatial
-			new CoordFour(1, 0, 0, 0),
-			new CoordFour(0, 1, 0, 0),
-			new CoordFour(-1, 0, 0, 0),
-			new CoordFour(0, -1, 0, 0),
+			new CoordFive(1, 0, 0, 0),
+			new CoordFive(0, 1, 0, 0),
+			new CoordFive(-1, 0, 0, 0),
+			new CoordFive(0, -1, 0, 0),
 			// temporal
-			new CoordFour(0, 0, 0, 1),
-			new CoordFour(0, 0, -1, 0),
-			new CoordFour(0, 0, 0, -1)
+			new CoordFive(0, 0, 0, 1),
+			new CoordFive(0, 0, -1, 0),
+			new CoordFive(0, 0, 0, -1)
 		};
 
-		public static readonly CoordFour[] BISHOPMOVESET = {
+		public static readonly CoordFive[] BISHOPMOVESET = {
 			// pure spatial
-			new CoordFour(1, 1, 0, 0),
-			new CoordFour(1, -1, 0, 0),
-			new CoordFour(-1, 1, 0, 0),
-			new CoordFour(-1, -1, 0, 0),
+			new CoordFive(1, 1, 0, 0),
+			new CoordFive(1, -1, 0, 0),
+			new CoordFive(-1, 1, 0, 0),
+			new CoordFive(-1, -1, 0, 0),
 			// pure Temporal
-			new CoordFour(0, 0, 1, 1),
-			new CoordFour(0, 0, 1, -1),
-			new CoordFour(0, 0, -1, 1),
-			new CoordFour(0, 0, -1, -1),
+			new CoordFive(0, 0, 1, 1),
+			new CoordFive(0, 0, 1, -1),
+			new CoordFive(0, 0, -1, 1),
+			new CoordFive(0, 0, -1, -1),
 			// +L
-			new CoordFour(1, 0, 0, 1),
-			new CoordFour(-1, 0, 0, 1),
-			new CoordFour(0, 1, 0, 1),
-			new CoordFour(0, -1, 0, 1),
+			new CoordFive(1, 0, 0, 1),
+			new CoordFive(-1, 0, 0, 1),
+			new CoordFive(0, 1, 0, 1),
+			new CoordFive(0, -1, 0, 1),
 			// -L
-			new CoordFour(1, 0, 0, -1),
-			new CoordFour(-1, 0, 0, -1),
-			new CoordFour(0, 1, 0, -1),
-			new CoordFour(0, -1, 0, -1),
+			new CoordFive(1, 0, 0, -1),
+			new CoordFive(-1, 0, 0, -1),
+			new CoordFive(0, 1, 0, -1),
+			new CoordFive(0, -1, 0, -1),
 			// -T
-			new CoordFour(1, 0, -1, 0),
-			new CoordFour(-1, 0, -1, 0),
-			new CoordFour(0, 1, -1, 0),
-			new CoordFour(0, -1, -1, 0)
+			new CoordFive(1, 0, -1, 0),
+			new CoordFive(-1, 0, -1, 0),
+			new CoordFive(0, 1, -1, 0),
+			new CoordFive(0, -1, -1, 0)
 		};
 
-		public static readonly CoordFour[] UnicornMoveset = {
-			new CoordFour(1, 1, 0, 1),
-			new CoordFour(1, 0, 1, 1),
-			new CoordFour(0, 1, 1, 1),
-			new CoordFour(-1, 1, 0, 1),
-			new CoordFour(-1, 0, 1, 1),
-			new CoordFour(0, -1, 1, 1),
-			new CoordFour(1, -1, 0, 1),
-			new CoordFour(1, 0, -1, 1),
-			new CoordFour(0, 1, -1, 1),
-			new CoordFour(1, 1, -1, 0),
-			new CoordFour(1, 1, 0, -1),
-			new CoordFour(1, 0, 1, -1),
-			new CoordFour(0, 1, 1, -1),
-			new CoordFour(-1, -1, 0, 1),
-			new CoordFour(-1, 0, -1, 1),
-			new CoordFour(0, -1, -1, 1),
-			new CoordFour(-1, 1, -1, 0),
-			new CoordFour(-1, 1, 0, -1),
-			new CoordFour(-1, 0, 1, -1),
-			new CoordFour(0, -1, 1, -1),
-			new CoordFour(1, -1, -1, 0),
-			new CoordFour(1, -1, 0, -1),
-			new CoordFour(1, 0, -1, -1),
-			new CoordFour(0, 1, -1, -1),
-			new CoordFour(-1, -1, -1, 0),
-			new CoordFour(-1, -1, 0, -1),
-			new CoordFour(-1, 0, -1, -1),
-			new CoordFour(0, -1, -1, -1)
+		public static readonly CoordFive[] UnicornMoveset = {
+			new CoordFive(1, 1, 0, 1),
+			new CoordFive(1, 0, 1, 1),
+			new CoordFive(0, 1, 1, 1),
+			new CoordFive(-1, 1, 0, 1),
+			new CoordFive(-1, 0, 1, 1),
+			new CoordFive(0, -1, 1, 1),
+			new CoordFive(1, -1, 0, 1),
+			new CoordFive(1, 0, -1, 1),
+			new CoordFive(0, 1, -1, 1),
+			new CoordFive(1, 1, -1, 0),
+			new CoordFive(1, 1, 0, -1),
+			new CoordFive(1, 0, 1, -1),
+			new CoordFive(0, 1, 1, -1),
+			new CoordFive(-1, -1, 0, 1),
+			new CoordFive(-1, 0, -1, 1),
+			new CoordFive(0, -1, -1, 1),
+			new CoordFive(-1, 1, -1, 0),
+			new CoordFive(-1, 1, 0, -1),
+			new CoordFive(-1, 0, 1, -1),
+			new CoordFive(0, -1, 1, -1),
+			new CoordFive(1, -1, -1, 0),
+			new CoordFive(1, -1, 0, -1),
+			new CoordFive(1, 0, -1, -1),
+			new CoordFive(0, 1, -1, -1),
+			new CoordFive(-1, -1, -1, 0),
+			new CoordFive(-1, -1, 0, -1),
+			new CoordFive(-1, 0, -1, -1),
+			new CoordFive(0, -1, -1, -1)
 		};
 
-		public static readonly CoordFour[] DragonMoveset = {
-			new CoordFour(1, 1, 1, 1),
-			new CoordFour(-1, 1, 1, 1),
-			new CoordFour(1, -1, 1, 1),
-			new CoordFour(1, 1, -1, 1),
-			new CoordFour(1, 1, 1, -1),
-			new CoordFour(-1, -1, 1, 1),
-			new CoordFour(-1, 1, -1, 1),
-			new CoordFour(-1, 1, 1, -1),
-			new CoordFour(1, -1, -1, 1),
-			new CoordFour(1, -1, 1, -1),
-			new CoordFour(1, 1, -1, -1),
-			new CoordFour(1, -1, -1, -1),
-			new CoordFour(-1, 1, -1, -1),
-			new CoordFour(-1, -1, 1, -1),
-			new CoordFour(-1, -1, -1, 1),
-			new CoordFour(-1, -1, -1, -1)
+		public static readonly CoordFive[] DragonMoveset = {
+			new CoordFive(1, 1, 1, 1),
+			new CoordFive(-1, 1, 1, 1),
+			new CoordFive(1, -1, 1, 1),
+			new CoordFive(1, 1, -1, 1),
+			new CoordFive(1, 1, 1, -1),
+			new CoordFive(-1, -1, 1, 1),
+			new CoordFive(-1, 1, -1, 1),
+			new CoordFive(-1, 1, 1, -1),
+			new CoordFive(1, -1, -1, 1),
+			new CoordFive(1, -1, 1, -1),
+			new CoordFive(1, 1, -1, -1),
+			new CoordFive(1, -1, -1, -1),
+			new CoordFive(-1, 1, -1, -1),
+			new CoordFive(-1, -1, 1, -1),
+			new CoordFive(-1, -1, -1, 1),
+			new CoordFive(-1, -1, -1, -1)
 		};
 
-		public static readonly CoordFour[] KNIGHTMOVESET = {
+		public static readonly CoordFive[] KNIGHTMOVESET = {
 			// pure Spatial
-			new CoordFour(1, 2, 0, 0),
-			new CoordFour(2, 1, 0, 0),
-			new CoordFour(-1, 2, 0, 0),
-			new CoordFour(-2, 1, 0, 0),
-			new CoordFour(-2, -1, 0, 0),
-			new CoordFour(-1, -2, 0, 0),
-			new CoordFour(1, -2, 0, 0),
-			new CoordFour(2, -1, 0, 0),
+			new CoordFive(1, 2, 0, 0),
+			new CoordFive(2, 1, 0, 0),
+			new CoordFive(-1, 2, 0, 0),
+			new CoordFive(-2, 1, 0, 0),
+			new CoordFive(-2, -1, 0, 0),
+			new CoordFive(-1, -2, 0, 0),
+			new CoordFive(1, -2, 0, 0),
+			new CoordFive(2, -1, 0, 0),
 			// pure temporal
-			new CoordFour(0, 0, 1, 2),
-			new CoordFour(0, 0, 2, 1),
-			new CoordFour(0, 0, -1, 2),
-			new CoordFour(0, 0, -2, 1),
-			new CoordFour(0, 0, -2, -1),
-			new CoordFour(0, 0, -1, -2),
-			new CoordFour(0, 0, 1, -2),
-			new CoordFour(0, 0, 2, -1),
+			new CoordFive(0, 0, 1, 2),
+			new CoordFive(0, 0, 2, 1),
+			new CoordFive(0, 0, -1, 2),
+			new CoordFive(0, 0, -2, 1),
+			new CoordFive(0, 0, -2, -1),
+			new CoordFive(0, 0, -1, -2),
+			new CoordFive(0, 0, 1, -2),
+			new CoordFive(0, 0, 2, -1),
 			// Half Spatial/temporal
 			// +L
-			new CoordFour(2, 0, 0, 1),
-			new CoordFour(-2, 0, 0, 1),
-			new CoordFour(0, 2, 0, 1),
-			new CoordFour(0, -2, 0, 1),
-			new CoordFour(1, 0, 0, 2),
-			new CoordFour(-1, 0, 0, 2),
-			new CoordFour(0, 1, 0, 2),
-			new CoordFour(0, -1, 0, 2),
+			new CoordFive(2, 0, 0, 1),
+			new CoordFive(-2, 0, 0, 1),
+			new CoordFive(0, 2, 0, 1),
+			new CoordFive(0, -2, 0, 1),
+			new CoordFive(1, 0, 0, 2),
+			new CoordFive(-1, 0, 0, 2),
+			new CoordFive(0, 1, 0, 2),
+			new CoordFive(0, -1, 0, 2),
 			// -L
-			new CoordFour(2, 0, 0, -1),
-			new CoordFour(-2, 0, 0, -1),
-			new CoordFour(0, 2, 0, -1),
-			new CoordFour(0, -2, 0, -1),
-			new CoordFour(1, 0, 0, -2),
-			new CoordFour(-1, 0, 0, -2),
-			new CoordFour(0, 1, 0, -2),
-			new CoordFour(0, -1, 0, -2),
+			new CoordFive(2, 0, 0, -1),
+			new CoordFive(-2, 0, 0, -1),
+			new CoordFive(0, 2, 0, -1),
+			new CoordFive(0, -2, 0, -1),
+			new CoordFive(1, 0, 0, -2),
+			new CoordFive(-1, 0, 0, -2),
+			new CoordFive(0, 1, 0, -2),
+			new CoordFive(0, -1, 0, -2),
 			// -T
-			new CoordFour(2, 0, -1, 0),
-			new CoordFour(-2, 0, -1, 0),
-			new CoordFour(0, 2, -1, 0),
-			new CoordFour(0, -2, -1, 0),
-			new CoordFour(1, 0, -2, 0),
-			new CoordFour(-1, 0, -2, 0),
-			new CoordFour(0, 1, -2, 0),
-			new CoordFour(0, -1, -2, 0)
+			new CoordFive(2, 0, -1, 0),
+			new CoordFive(-2, 0, -1, 0),
+			new CoordFive(0, 2, -1, 0),
+			new CoordFive(0, -2, -1, 0),
+			new CoordFive(1, 0, -2, 0),
+			new CoordFive(-1, 0, -2, 0),
+			new CoordFive(0, 1, -2, 0),
+			new CoordFive(0, -1, -2, 0)
 		};
 
-		public static readonly CoordFour[] PRINCESSMOVESET = {
+		public static readonly CoordFive[] PRINCESSMOVESET = {
 			// ROOK
 			// spatial
-			new CoordFour(1, 0, 0, 0),
-			new CoordFour(0, 1, 0, 0),
-			new CoordFour(-1, 0, 0, 0),
-			new CoordFour(0, -1, 0, 0),
+			new CoordFive(1, 0, 0, 0),
+			new CoordFive(0, 1, 0, 0),
+			new CoordFive(-1, 0, 0, 0),
+			new CoordFive(0, -1, 0, 0),
 			// temporal
-			new CoordFour(0, 0, 0, 1),
-			new CoordFour(0, 0, -1, 0),
-			new CoordFour(0, 0, 0, -1),
+			new CoordFive(0, 0, 0, 1),
+			new CoordFive(0, 0, -1, 0),
+			new CoordFive(0, 0, 0, -1),
 			// Bishop
 			// pure spatial
-			new CoordFour(1, 1, 0, 0),
-			new CoordFour(1, -1, 0, 0),
-			new CoordFour(-1, 1, 0, 0),
-			new CoordFour(-1, -1, 0, 0),
+			new CoordFive(1, 1, 0, 0),
+			new CoordFive(1, -1, 0, 0),
+			new CoordFive(-1, 1, 0, 0),
+			new CoordFive(-1, -1, 0, 0),
 			// pure Temporal
-			new CoordFour(0, 0, 1, 1),
-			new CoordFour(0, 0, 1, -1),
-			new CoordFour(0, 0, -1, 1),
-			new CoordFour(0, 0, -1, -1),
+			new CoordFive(0, 0, 1, 1),
+			new CoordFive(0, 0, 1, -1),
+			new CoordFive(0, 0, -1, 1),
+			new CoordFive(0, 0, -1, -1),
 			// +L
-			new CoordFour(1, 0, 0, 1),
-			new CoordFour(-1, 0, 0, 1),
-			new CoordFour(0, 1, 0, 1),
-			new CoordFour(0, -1, 0, 1),
+			new CoordFive(1, 0, 0, 1),
+			new CoordFive(-1, 0, 0, 1),
+			new CoordFive(0, 1, 0, 1),
+			new CoordFive(0, -1, 0, 1),
 			// -L
-			new CoordFour(1, 0, 0, -1),
-			new CoordFour(-1, 0, 0, -1),
-			new CoordFour(0, 1, 0, -1),
-			new CoordFour(0, -1, 0, -1),
+			new CoordFive(1, 0, 0, -1),
+			new CoordFive(-1, 0, 0, -1),
+			new CoordFive(0, 1, 0, -1),
+			new CoordFive(0, -1, 0, -1),
 			// -T
-			new CoordFour(1, 0, -1, 0),
-			new CoordFour(-1, 0, -1, 0),
-			new CoordFour(0, 1, -1, 0),
-			new CoordFour(0, -1, -1, 0)
+			new CoordFive(1, 0, -1, 0),
+			new CoordFive(-1, 0, -1, 0),
+			new CoordFive(0, 1, -1, 0),
+			new CoordFive(0, -1, -1, 0)
 		};
 
-		public static readonly CoordFour[] KINGMOVESET = {
+		public static readonly CoordFive[] KINGMOVESET = {
 			// pure Spatial
-			new CoordFour(1, 0, 0, 0),
-			new CoordFour(1, 1, 0, 0),
-			new CoordFour(1, -1, 0, 0),
-			new CoordFour(-1, 0, 0, 0),
-			new CoordFour(-1, 1, 0, 0),
-			new CoordFour(-1, -1, 0, 0),
-			new CoordFour(0, 1, 0, 0),
-			new CoordFour(0, -1, 0, 0),
+			new CoordFive(1, 0, 0, 0),
+			new CoordFive(1, 1, 0, 0),
+			new CoordFive(1, -1, 0, 0),
+			new CoordFive(-1, 0, 0, 0),
+			new CoordFive(-1, 1, 0, 0),
+			new CoordFive(-1, -1, 0, 0),
+			new CoordFive(0, 1, 0, 0),
+			new CoordFive(0, -1, 0, 0),
 			// +L board
-			new CoordFour(1, 0, 0, 1),
-			new CoordFour(1, 1, 0, 1),
-			new CoordFour(1, -1, 0, 1),
-			new CoordFour(-1, 0, 0, 1),
-			new CoordFour(-1, 1, 0, 1),
-			new CoordFour(-1, -1, 0, 1),
-			new CoordFour(0, 1, 0, 1),
-			new CoordFour(0, -1, 0, 1),
-			new CoordFour(0, 0, 0, 1),
+			new CoordFive(1, 0, 0, 1),
+			new CoordFive(1, 1, 0, 1),
+			new CoordFive(1, -1, 0, 1),
+			new CoordFive(-1, 0, 0, 1),
+			new CoordFive(-1, 1, 0, 1),
+			new CoordFive(-1, -1, 0, 1),
+			new CoordFive(0, 1, 0, 1),
+			new CoordFive(0, -1, 0, 1),
+			new CoordFive(0, 0, 0, 1),
 			// -L board
-			new CoordFour(1, 0, 0, -1),
-			new CoordFour(1, 1, 0, -1),
-			new CoordFour(1, -1, 0, -1),
-			new CoordFour(-1, 0, 0, -1),
-			new CoordFour(-1, 1, 0, -1),
-			new CoordFour(-1, -1, 0, -1),
-			new CoordFour(0, 1, 0, -1),
-			new CoordFour(0, -1, 0, -1),
-			new CoordFour(0, 0, 0, -1),
+			new CoordFive(1, 0, 0, -1),
+			new CoordFive(1, 1, 0, -1),
+			new CoordFive(1, -1, 0, -1),
+			new CoordFive(-1, 0, 0, -1),
+			new CoordFive(-1, 1, 0, -1),
+			new CoordFive(-1, -1, 0, -1),
+			new CoordFive(0, 1, 0, -1),
+			new CoordFive(0, -1, 0, -1),
+			new CoordFive(0, 0, 0, -1),
 			// -T board
-			new CoordFour(1, 0, -1, 0),
-			new CoordFour(1, 1, -1, 0),
-			new CoordFour(1, -1, -1, 0),
-			new CoordFour(-1, 0, -1, 0),
-			new CoordFour(-1, 1, -1, 0),
-			new CoordFour(-1, -1, -1, 0),
-			new CoordFour(0, 1, -1, 0),
-			new CoordFour(0, -1, -1, 0),
-			new CoordFour(0, 0, -1, 0),
+			new CoordFive(1, 0, -1, 0),
+			new CoordFive(1, 1, -1, 0),
+			new CoordFive(1, -1, -1, 0),
+			new CoordFive(-1, 0, -1, 0),
+			new CoordFive(-1, 1, -1, 0),
+			new CoordFive(-1, -1, -1, 0),
+			new CoordFive(0, 1, -1, 0),
+			new CoordFive(0, -1, -1, 0),
+			new CoordFive(0, 0, -1, 0),
 			// -T,-L
-			new CoordFour(1, 0, -1, -1),
-			new CoordFour(1, 1, -1, -1),
-			new CoordFour(1, -1, -1, -1),
-			new CoordFour(-1, 0, -1, -1),
-			new CoordFour(-1, 1, -1, -1),
-			new CoordFour(-1, -1, -1, -1),
-			new CoordFour(0, 1, -1, -1),
-			new CoordFour(0, -1, -1, -1),
-			new CoordFour(0, 0, -1, -1),
+			new CoordFive(1, 0, -1, -1),
+			new CoordFive(1, 1, -1, -1),
+			new CoordFive(1, -1, -1, -1),
+			new CoordFive(-1, 0, -1, -1),
+			new CoordFive(-1, 1, -1, -1),
+			new CoordFive(-1, -1, -1, -1),
+			new CoordFive(0, 1, -1, -1),
+			new CoordFive(0, -1, -1, -1),
+			new CoordFive(0, 0, -1, -1),
 			// -T,+L
-			new CoordFour(1, 0, -1, 1),
-			new CoordFour(1, 1, -1, 1),
-			new CoordFour(1, -1, -1, 1),
-			new CoordFour(-1, 0, -1, 1),
-			new CoordFour(-1, 1, -1, 1),
-			new CoordFour(-1, -1, -1, 1),
-			new CoordFour(0, 1, -1, 1),
-			new CoordFour(0, -1, -1, 1),
-			new CoordFour(0, 0, -1, 1),
+			new CoordFive(1, 0, -1, 1),
+			new CoordFive(1, 1, -1, 1),
+			new CoordFive(1, -1, -1, 1),
+			new CoordFive(-1, 0, -1, 1),
+			new CoordFive(-1, 1, -1, 1),
+			new CoordFive(-1, -1, -1, 1),
+			new CoordFive(0, 1, -1, 1),
+			new CoordFive(0, -1, -1, 1),
+			new CoordFive(0, 0, -1, 1),
 			// +T,+L
-			new CoordFour(1, 0, 1, 1),
-			new CoordFour(1, 1, 1, 1),
-			new CoordFour(1, -1, 1, 1),
-			new CoordFour(-1, 0, 1, 1),
-			new CoordFour(-1, 1, 1, 1),
-			new CoordFour(-1, -1, 1, 1),
-			new CoordFour(0, 1, 1, 1),
-			new CoordFour(0, -1, 1, 1),
-			new CoordFour(0, 0, 1, 1),
+			new CoordFive(1, 0, 1, 1),
+			new CoordFive(1, 1, 1, 1),
+			new CoordFive(1, -1, 1, 1),
+			new CoordFive(-1, 0, 1, 1),
+			new CoordFive(-1, 1, 1, 1),
+			new CoordFive(-1, -1, 1, 1),
+			new CoordFive(0, 1, 1, 1),
+			new CoordFive(0, -1, 1, 1),
+			new CoordFive(0, 0, 1, 1),
 			// +T,-L
-			new CoordFour(1, 0, 1, -1),
-			new CoordFour(1, 1, 1, -1),
-			new CoordFour(1, -1, 1, -1),
-			new CoordFour(-1, 0, 1, -1),
-			new CoordFour(-1, 1, 1, -1),
-			new CoordFour(-1, -1, 1, -1),
-			new CoordFour(0, 1, 1, -1),
-			new CoordFour(0, -1, 1, -1),
-			new CoordFour(0, 0, 1, -1)
+			new CoordFive(1, 0, 1, -1),
+			new CoordFive(1, 1, 1, -1),
+			new CoordFive(1, -1, 1, -1),
+			new CoordFive(-1, 0, 1, -1),
+			new CoordFive(-1, 1, 1, -1),
+			new CoordFive(-1, -1, 1, -1),
+			new CoordFive(0, 1, 1, -1),
+			new CoordFive(0, -1, 1, -1),
+			new CoordFive(0, 0, 1, -1)
 		};
 
-		public static readonly CoordFour[] whitePawnMovement = {
-			new CoordFour(0, 1, 0, 0),
-			new CoordFour(0, 0, 0, -1)
+		public static readonly CoordFive[] whitePawnMovement = {
+			new CoordFive(0, 1, 0, 0),
+			new CoordFive(0, 0, 0, -1)
 		};
 
-		public static readonly CoordFour[] whitePawnAttack = {
-			new CoordFour(1, 1, 0, 0),
-			new CoordFour(-1, 1, 0, 0),
-			new CoordFour(0, 0, 1, -1),
-			new CoordFour(0, 0, -1, -1)
+		public static readonly CoordFive[] whitePawnAttack = {
+			new CoordFive(1, 1, 0, 0),
+			new CoordFive(-1, 1, 0, 0),
+			new CoordFive(0, 0, 1, -1),
+			new CoordFive(0, 0, -1, -1)
 		};
 
-		public static readonly CoordFour[] blackPawnMovement = {
-			new CoordFour(0, -1, 0, 0),
-			new CoordFour(0, 0, 0, 1)
+		public static readonly CoordFive[] blackPawnMovement = {
+			new CoordFive(0, -1, 0, 0),
+			new CoordFive(0, 0, 0, 1)
 		};
 
-		public static readonly CoordFour[] blackPawnattack = {
-			new CoordFour(1,-1,0,0),
-			new CoordFour(-1,-1,0,0),
-			new CoordFour(0,0,1,1),
-			new CoordFour(0,0,-1,1)
+		public static readonly CoordFive[] blackPawnattack = {
+			new CoordFive(1,-1,0,0),
+			new CoordFive(-1,-1,0,0),
+			new CoordFive(0,0,1,1),
+			new CoordFive(0,0,-1,1)
 		};
 
 	
-	public static readonly CoordFour[] whiteBrawnattack = {
+	public static readonly CoordFive[] whiteBrawnattack = {
 			//Pawn Captures
-			new CoordFour(1,1,0,0),
-			new CoordFour(-1,1,0,0),
-			new CoordFour(0,0,1,-1),
-			new CoordFour(0,0,-1,-1),
+			new CoordFive(1,1,0,0),
+			new CoordFive(-1,1,0,0),
+			new CoordFive(0,0,1,-1),
+			new CoordFive(0,0,-1,-1),
 			//Brawn Specific Captures
-			new CoordFour(0,1,-1,0),
-			//new CoordFour(0,1,1,0),
-			new CoordFour(0,1,0,-1),
-			new CoordFour(1,0,0,-1),
-			new CoordFour(-1,0,0,-1),
+			new CoordFive(0,1,-1,0),
+			//new CoordFive(0,1,1,0),
+			new CoordFive(0,1,0,-1),
+			new CoordFive(1,0,0,-1),
+			new CoordFive(-1,0,0,-1),
 	};
 	
-	public static readonly CoordFour[] blackBrawnattack = {
+	public static readonly CoordFive[] blackBrawnattack = {
 			//Pawn Captures
-			new CoordFour(1,-1,0,0),
-			new CoordFour(-1,-1,0,0),
-			new CoordFour(0,0,1,1),
-			new CoordFour(0,0,-1,1),
+			new CoordFive(1,-1,0,0),
+			new CoordFive(-1,-1,0,0),
+			new CoordFive(0,0,1,1),
+			new CoordFive(0,0,-1,1),
 			//Brawn Captures
-			new CoordFour(0,-1,-1,0),
-			new CoordFour(0,-1,1,0),
-			new CoordFour(0,-1,0,1),
-			new CoordFour(1,0,0,1),
-			new CoordFour(-1,0,0,1),
+			new CoordFive(0,-1,-1,0),
+			new CoordFive(0,-1,1,0),
+			new CoordFive(0,-1,0,1),
+			new CoordFive(1,0,0,1),
+			new CoordFive(-1,0,0,1),
 			
 	};
 	
@@ -342,68 +342,68 @@ namespace Engine
 	//Notice the 1 or two movement. This could fail if there is an inproper configuration, ie. the reverse lookup is destined to fail(this doesnt have any validations)
 	//However say 2 pawns are in a line, This code will always find the one in front based of this description(so it should work fine, given that the reverse lookup is
 	//non ambiguous and actually exitst)
-	public static readonly CoordFour[] whitePawnRLkup = {
+	public static readonly CoordFive[] whitePawnRLkup = {
 			//Pawn Movement
-			new CoordFour(0,1,0,0),
-			new CoordFour(0,0,0,-1),
-			new CoordFour(0,2,0,0),
-			new CoordFour(0,0,0,-2),
+			new CoordFive(0,1,0,0),
+			new CoordFive(0,0,0,-1),
+			new CoordFive(0,2,0,0),
+			new CoordFive(0,0,0,-2),
 			//Pawn Attack
-			new CoordFour(1,1,0,0),
-			new CoordFour(-1,1,0,0),
-			new CoordFour(0,0,1,-1),
-			new CoordFour(0,0,-1,-1)
+			new CoordFive(1,1,0,0),
+			new CoordFive(-1,1,0,0),
+			new CoordFive(0,0,1,-1),
+			new CoordFive(0,0,-1,-1)
 	};
 	
-	public static readonly CoordFour[] blackPawnRLkup = {
+	public static readonly CoordFive[] blackPawnRLkup = {
 			//Pawn Movement
-			new CoordFour(0,-1,0,0),
-			new CoordFour(0,0,0,1),
-			new CoordFour(0,-2,0,0),
-			new CoordFour(0,0,0,2),
+			new CoordFive(0,-1,0,0),
+			new CoordFive(0,0,0,1),
+			new CoordFive(0,-2,0,0),
+			new CoordFive(0,0,0,2),
 			//Pawn Attack
-			new CoordFour(1,-1,0,0),
-			new CoordFour(-1,-1,0,0),
-			new CoordFour(0,0,1,1),
-			new CoordFour(0,0,-1,1)
+			new CoordFive(1,-1,0,0),
+			new CoordFive(-1,-1,0,0),
+			new CoordFive(0,0,1,1),
+			new CoordFive(0,0,-1,1)
 	};
 	
-	public static readonly CoordFour[] whiteBrawnRLkup = {
+	public static readonly CoordFive[] whiteBrawnRLkup = {
 			//Pawn Movement
-			new CoordFour(0,1,0,0),
-			new CoordFour(0,0,0,-1),
-			new CoordFour(0,2,0,0),
-			new CoordFour(0,0,0,-2),
+			new CoordFive(0,1,0,0),
+			new CoordFive(0,0,0,-1),
+			new CoordFive(0,2,0,0),
+			new CoordFive(0,0,0,-2),
 			//Pawn Captures
-			new CoordFour(1,1,0,0),
-			new CoordFour(-1,1,0,0),
-			new CoordFour(0,0,1,-1),
-			new CoordFour(0,0,-1,-1),
+			new CoordFive(1,1,0,0),
+			new CoordFive(-1,1,0,0),
+			new CoordFive(0,0,1,-1),
+			new CoordFive(0,0,-1,-1),
 			//Brawn Specific Captures
-			new CoordFour(0,1,-1,0),
-			new CoordFour(0,1,1,0),
-			new CoordFour(0,1,0,-1),
-			new CoordFour(1,0,0,-1),
-			new CoordFour(-1,0,0,-1),
+			new CoordFive(0,1,-1,0),
+			new CoordFive(0,1,1,0),
+			new CoordFive(0,1,0,-1),
+			new CoordFive(1,0,0,-1),
+			new CoordFive(-1,0,0,-1),
 	};
 	
-	public static readonly CoordFour[] blackBrawnRLkup = {
+	public static readonly CoordFive[] blackBrawnRLkup = {
 			//Pawn Movement
-			new CoordFour(0,-1,0,0),
-			new CoordFour(0,0,0,1),
-			new CoordFour(0,-2,0,0),
-			new CoordFour(0,0,0,2),
+			new CoordFive(0,-1,0,0),
+			new CoordFive(0,0,0,1),
+			new CoordFive(0,-2,0,0),
+			new CoordFive(0,0,0,2),
 			//Pawn Captures
-			new CoordFour(1,-1,0,0),
-			new CoordFour(-1,-1,0,0),
-			new CoordFour(0,0,1,1),
-			new CoordFour(0,0,-1,1),
+			new CoordFive(1,-1,0,0),
+			new CoordFive(-1,-1,0,0),
+			new CoordFive(0,0,1,1),
+			new CoordFive(0,0,-1,1),
 			//Brawn Captures
-			new CoordFour(0,-1,-1,0),
-			new CoordFour(0,-1,1,0),
-			new CoordFour(0,-1,0,1),
-			new CoordFour(1,0,0,1),
-			new CoordFour(-1,0,0,1),
+			new CoordFive(0,-1,-1,0),
+			new CoordFive(0,-1,1,0),
+			new CoordFive(0,-1,0,1),
+			new CoordFive(1,0,0,1),
+			new CoordFive(-1,0,0,1),
 	};
 	
 	
@@ -419,7 +419,7 @@ namespace Engine
 	 * @param piece ordinal integer relating to the piece enum defined in board
 	 * @return an array of vectors, or empty array if nothing is found.
 	 */
-	public static CoordFour[] getMoveVectors(int piece) {
+	public static CoordFive[] getMoveVectors(int piece) {
 		piece = piece < 0 ? piece * -1 : piece;
 		switch(piece) {
 		case 1:

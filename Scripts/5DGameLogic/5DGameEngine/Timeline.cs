@@ -78,7 +78,7 @@ namespace Engine
 		}
 
 		// gets the board on the timeline at time T and color C
-		public Board GetBoard(int t, bool boardColor)
+		public Board GetBoard(int t, bool boardColor) //TODO make this not use boardcolor
 		{
 			if (!TimeExists(t, boardColor))
 			{
@@ -107,7 +107,7 @@ namespace Engine
 			}
 		}
 
-		public int getSquare(CoordFour c, bool color)
+		public int getSquare(CoordFive c, bool color) //TODO make this not use boardcolor
 		{
 			Board b = GetBoard(c.T, color);
 			if (b != null)
@@ -117,7 +117,7 @@ namespace Engine
 			return Board.ERRORSQUARE;
 		}
 
-		public bool AddSpatialMove(Move m, bool moveColor)
+		public bool AddSpatialMove(Move m, bool moveColor) //TODO make this not use boardcolor
 		{
 			if (moveColor != ColorPlayable) // XXX move this validation up the chain.
 				return false;
@@ -135,7 +135,7 @@ namespace Engine
 			}
 			if ((piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN || piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN) && b.EnPassentSquare != null && b.EnPassentSquare.SpatialEquals(m.Dest))
 			{
-				CoordFour pawnSquare = m.Origin.Clone();
+				CoordFive pawnSquare = m.Origin.Clone();
 				pawnSquare.X = m.Dest.X;
 				newBoard.SetSquare(pawnSquare, Board.EMPTYSQUARE);
 			}
@@ -147,9 +147,9 @@ namespace Engine
 			Board b = GetPlayableBoard();
 			Board newBoard = new Board(b);
 			int king = newBoard.GetSquare(m.Origin) * -1;
-			CoordFour direction = CoordFour.Sub(m.Dest, m.Origin);
+			CoordFive direction = CoordFive.Sub(m.Dest, m.Origin);
 			direction.Flatten();
-			CoordFour index = CoordFour.Add(direction, m.Origin);
+			CoordFive index = CoordFive.Add(direction, m.Origin);
 			while (b.GetSquare(index) != (int)Board.Piece.WROOK * -1 && b.GetSquare(index) != (int)Board.Piece.BROOK * -1)
 			{
 				index.Add(direction);
@@ -159,7 +159,7 @@ namespace Engine
 			newBoard.SetSquare(m.Origin, Board.EMPTYSQUARE);
 			newBoard.SetSquare(index, Board.EMPTYSQUARE);
 			newBoard.SetSquare(m.Dest, king);
-			newBoard.SetSquare(CoordFour.Sub(m.Dest, direction), rook);
+			newBoard.SetSquare(CoordFive.Sub(m.Dest, direction), rook);
 			return AddMove(newBoard);
 		}
 
@@ -183,7 +183,7 @@ namespace Engine
 		{
 			if (moveColor != ColorPlayable)
 				return -1;
-			CoordFour origin = m.Origin;
+			CoordFive origin = m.Origin;
 			Board b = GetPlayableBoard();
 			Board newBoard = new Board(b);
 			int piece = newBoard.GetSquare(origin);
@@ -196,7 +196,7 @@ namespace Engine
 
 		// add a move jumping, if the move is branching return the branched board,
 		// otherwise, add the board onto the end of the timeline.
-		public Board AddJumpingMoveDest(CoordFour dest, bool moveColor, int piece)
+		public Board AddJumpingMoveDest(CoordFive dest, bool moveColor, int piece)//TODO make this not use boardcolor
 		{
 			Board b = GetBoard(dest.T, moveColor);
 			Board newBoard = new Board(b);

@@ -4,8 +4,8 @@ namespace Engine
 {
 	public class Move : IComparable<Move>
 	{
-		public CoordFour Origin { get; set; }
-		public CoordFour Dest { get; set; }
+		public CoordFive Origin { get; set; }
+		public CoordFive Dest { get; set; }
 		public int PieceMoved { get; set; }
 		// 1 for spatial, 2 for jumping(unrecognized branching, 3 for branching.
 		public int Type { get; set; }
@@ -22,7 +22,7 @@ namespace Engine
 		// For castling, origin in the king and dest is the rook.
 		public int SpecialType { get; set; }
 
-		public Move(CoordFour coordOrigin, CoordFour coordDest)
+		public Move(CoordFive coordOrigin, CoordFive coordDest)
 		{
 			SpecialType = 0;
 			Origin = coordOrigin;
@@ -38,7 +38,7 @@ namespace Engine
 			PieceMoved = 0;
 		}
 
-		public Move(CoordFour coordOrigin, CoordFour coordDest, int type)
+		public Move(CoordFive coordOrigin, CoordFive coordDest, int type)
 		{
 			SpecialType = type;
 			Origin = coordOrigin;
@@ -54,10 +54,10 @@ namespace Engine
 			PieceMoved = 0;
 		}
 
-		public Move(CoordFour boardOrigin)
+		public Move(CoordFive boardOrigin)
 		{
 			Origin = boardOrigin;
-			Dest = new CoordFour(0, 0, 0, 0);
+			Dest = new CoordFive(0, 0, 0, 0);
 			Type = SPATIALMOVE;
 			SpecialType = NULLMOVE;
 		}
