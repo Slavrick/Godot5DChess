@@ -71,7 +71,7 @@ namespace Engine
 		{
 			string moveStr = "";
 			moveStr += Origin.ToString();
-			moveStr += "-->";
+			moveStr += ">>";
 			moveStr += Dest.ToString();
 			return moveStr;
 		}

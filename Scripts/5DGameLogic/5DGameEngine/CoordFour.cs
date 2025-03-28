@@ -10,32 +10,30 @@ namespace Engine
 		 * X represents file ie. a,b,c... files y represents rank T/L represent their
 		 * raw coordinates as per 5d chess rules
 		 */
-		public int X { get; set; }
-		public int Y { get; set; }
-		public int T { get; set; }
-		public int L { get; set; }
+		public int X;
+		public int Y;
+		public int T;
+		public int L;
+		public bool Color;
 		
-		public CoordFour()
-		{
-			X = 0;
-			Y = 0;
-			T = 0;
-			L = 0;
-		}
-		
-		public CoordFour(int x, int y, int t, int l)
+		public CoordFour(int x, int y, int t, int l, bool c)
 		{
 			X = x;
 			Y = y;
 			T = t;
 			L = l;
+			Color = c;
 		}
-
+		
+		public CoordFour(int x, int y, int t, int l) : this(x,y,t,l,true) { }
+		
 		public CoordFour(int x, int y) : this(x, y, 0, 0) { }
+
+		public CoordFour() : this(0,0,0,0,true) {}
 
 		public CoordFour Clone()
 		{
-			return new CoordFour(X, Y, T, L);
+			return new CoordFour(X, Y, T, L, Color);
 		}
 
 		/// <summary>
@@ -48,7 +46,6 @@ namespace Engine
 			return X == c.X && Y == c.Y && T == c.T && L == c.L;
 		}
 
-
 		public override bool Equals(object o)
 		{
 			if(o == null){
@@ -57,6 +54,7 @@ namespace Engine
 			CoordFour c = o as CoordFour;
 			return X == c.X && Y == c.Y && T == c.T && L == c.L;
 		}
+
 		/// <summary>
 		/// A comparison function to compare this coordinate and another.
 		/// This only checks spatially.
@@ -68,8 +66,13 @@ namespace Engine
 			return X == c.X && Y == c.Y;
 		}
 
+		public bool EqualsFull(CoordFour c)
+		{
+			return X == c.X && Y == c.Y && T == c.T && L == c.L && Color == c.Color;
+		}
+
 		/// <summary>
-		/// 
+		/// Test if the move is only a spatial move.
 		/// </summary>
 		/// <returns>True if the coordinate is pure spatial, and false otherwise.</returns>
 		public bool IsSpatial()
@@ -97,15 +100,6 @@ namespace Engine
 			L -= c.L;
 		}
 
-		// Turns a coord into a vector, or a coord with only 1/0's
-		public void MakeVector()
-		{
-			if (X != 0) X = 1;
-			if (Y != 0) Y = 1;
-			if (T != 0) T = 1;
-			if (L != 0) L = 1;
-		}
-
 		public void Flatten()
 		{
 			int gcd = GCD(GCD(Math.Abs(X), Math.Abs(Y)), GCD(Math.Abs(T), Math.Abs(L)));
@@ -129,6 +123,7 @@ namespace Engine
 
 		public override string ToString()
 		{
+			char colorch = Color ? 'w' : 'b';
 			return $"({L}L.T{T}.{IntToFile(X)}{Y + 1})";
 		}
 
@@ -166,16 +161,26 @@ namespace Engine
 			return num1 + num2;
 		}
 
-		// Sub
+		/// <summary>
+		/// Subtracts the coords. Keeps the color of the first argument.
+		/// </summary>
+		/// <param name="c1">Coord to subtract</param>
+		/// <param name="c2">Coord Subtracting from the first coord</param>
+		/// <returns>Subratction of c1-c2 for all components.</returns>
 		public static CoordFour Sub(CoordFour c1, CoordFour c2)
 		{
-			return new CoordFour(c1.X - c2.X, c1.Y - c2.Y, c1.T - c2.T, c1.L - c2.L);
+			return new CoordFour(c1.X - c2.X, c1.Y - c2.Y, c1.T - c2.T, c1.L - c2.L,c1.Color);
 		}
 
-		// Add
+		/// <summary>
+		/// Add Coords. Keeps the color of the first argument.
+		/// </summary>
+		/// <param name="c1">c1 to sum</param>
+		/// <param name="c2">c2 to sum</param>
+		/// <returns>Coord Sum with all the components added</returns>
 		public static CoordFour Add(CoordFour c1, CoordFour c2)
 		{
-			return new CoordFour(c2.X + c1.X, c2.Y + c1.Y, c2.T + c1.T, c2.L + c1.L);
+			return new CoordFour(c2.X + c1.X, c2.Y + c1.Y, c2.T + c1.T, c2.L + c1.L,c1.Color);
 		}
 
 		/// <summary>
