@@ -1,11 +1,16 @@
 using System;
+using System.Collections.Generic;
 
 namespace Engine
 {
     public class AnnotatedTurn
     {
-        public Turn Turn { get; set; }
-        public string Annotation { get; set; }
+        public Turn Turn;
+        public string Annotation;
+
+        public List<Move> Arrows;
+
+        public List<CoordFive> Highlights;
 
         public AnnotatedTurn(Turn turn, string annotation)
         {

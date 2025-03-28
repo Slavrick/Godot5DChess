@@ -413,12 +413,11 @@ namespace Engine
 	//Perhaps changing this to an if else is something I want to do
 	//However, as long as I strictly add new pieces in a predictable pattern, this is fine
 	//TODO re add the numpieces. (although i dont imagine ever needing to add in more fairy pieces.)
-	/**
-	 * Take a piece and turns it into an array of movement vectors,
-	 * 
-	 * @param piece ordinal integer relating to the piece enum defined in board
-	 * @return an array of vectors, or empty array if nothing is found.
-	 */
+	/// <summary>
+	/// Take a piece and turns it into an array of movement vectors
+	/// </summary>
+	/// <param name="piece">ordinal integer relating to the piece enum defined in board</param>
+	/// <returns>an array of vectors, or empty array if nothing is found.</returns>
 	public static CoordFive[] getMoveVectors(int piece) {
 		piece = piece < 0 ? piece * -1 : piece;
 		switch(piece) {
@@ -496,10 +495,10 @@ namespace Engine
 	/// </summary>
 	/// <param name="piece">piece to check whether not it is considered royal</param>
 	/// <returns>boolean, true if royal false otherwise</returns>
-	public static bool pieceIsRoyal(int piece) {
+	public static bool pieceIsRoyal(int piece) { //TODO replace this with Board.Piece for clarity.
 		piece = piece < 0 ? piece * -1 : piece;
 		switch(piece) {
-		case 7 + 12://King
+		case (int)Board.Piece.WKING + 12://King
 		case 7:
 		case 11 + 12://Royal Queen
 		case 11:

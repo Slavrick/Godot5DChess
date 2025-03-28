@@ -90,7 +90,8 @@ namespace Test
 			Console.WriteLine(" passed.");
 		}
 
-		public static void TestDefaultGame(){
+		public static void TestDefaultGame()
+		{
 			
 		}
 		

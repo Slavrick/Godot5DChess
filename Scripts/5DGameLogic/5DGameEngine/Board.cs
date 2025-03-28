@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using FileIO5D;
 
 namespace Engine
 {
@@ -151,10 +152,16 @@ namespace Engine
 		/// </summary>
 		public override string ToString()
 		{
-			string temp = "";
-			for (int x = 0; x < Width; x++)
+			string temp = "  ";
+			for (int x = 0; x < Height; x++)
 			{
-				for (int y = 0; y < Height; y++)
+				temp += StringUtils.IntToFile(x);
+			}
+			temp += "\n";
+			for (int y = 0; y < Height; y++)
+			{
+				temp += (y + 1).ToString() + " ";
+				for (int x = 0; x < Width; x++)
 				{
 					int piece = GetSquare(x,y);
 					piece = piece < 0 ? piece * -1 : piece;

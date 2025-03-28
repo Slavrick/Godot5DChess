@@ -5,15 +5,15 @@ namespace Engine
 {
     public class Turn
     {
-        public Move[] Moves { get; set; }
-        public int[] TLs { get; set; }
+        public Move[] Moves;
+        public int[] TLs;
         // This is ply, not actual turn num, so 2 would be blacks first turn and 3 would be whites 2nd
-        public int TurnNum { get; set; }
+        public int TurnNum;
 
         // XXX implement or delete these fields
-        public int NumTL { get; set; }
-        public bool Color { get; set; }
-        public int TPresent { get; set; }
+        public int NumTL;
+        public bool Color;
+        public int TPresent;
 
         public static NotationMode Mode { get; set; } = NotationMode.SHAD;
         public static PrefixMode Pre { get; set; } = PrefixMode.TURN;

@@ -4,6 +4,7 @@ namespace Engine
 {
 	public class Move : IComparable<Move>
 	{
+		//TODO Make this make sense more, for example extend this for promotion or caslting?
 		public CoordFive Origin { get; set; }
 		public CoordFive Dest { get; set; }
 		public int PieceMoved { get; set; }
@@ -57,7 +58,7 @@ namespace Engine
 		public Move(CoordFive boardOrigin)
 		{
 			Origin = boardOrigin;
-			Dest = new CoordFive(0, 0, 0, 0);
+			Dest = new CoordFive(0, 0, 0, 0,boardOrigin.Color);//ENSURE this works correctly with color added.
 			Type = SPATIALMOVE;
 			SpecialType = NULLMOVE;
 		}

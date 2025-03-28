@@ -6,121 +6,22 @@ namespace Engine {
 	public static readonly bool WHITE = true;
 	public static readonly bool BLACK = false;
 
-	public List < Timeline > Multiverse {
-	  get;
-	  set;
-	}
-	public bool EvenStart {
-	  get;
-	  set;
-	}
-	public bool Color {
-	  get;
-	  set;
-	}
-	public int StartPresent {
-	  get;
-	  set;
-	}
-	public int Present {
-	  get;
-	  set;
-	}
-	public int Width {
-	  get;
-	  set;
-	}
-	public int Height {
-	  get;
-	  set;
-	}
-	public int MaxTL {
-	  get;
-	  set;
-	}
-	public int MinTL {
-	  get;
-	  set;
-	}
-	public int MinActiveTL {
-	  get;
-	  set;
-	}
-	public int MaxActiveTL {
-	  get;
-	  set;
-	}
+	public List < Timeline > Multiverse;
+	public bool EvenStart;
+	public bool Color;
+	public int StartPresent;
+	public int Present;
+	public int Width;
+	public int Height;
+	public int MaxTL;
+	public int MinTL;
+	public int MinActiveTL;
+	public int MaxActiveTL;
 
-	protected List < Move > TurnMoves {
-	  get;
-	  set;
-	}
-	protected List < int > TurnTLS {
-	  get;
-	  set;
-	}
+	protected List < Move > TurnMoves;
+	protected List < int > TurnTLS;
 
-	public int TLHandicap {
-	  get;
-	  set;
-	}
-
-	public GameState(GameState g) {
-	  this.Multiverse = g.Multiverse;
-	  this.EvenStart = g.EvenStart;
-	  this.Color = g.Color;
-	  this.StartPresent = g.StartPresent;
-	  this.Present = g.Present;
-	  this.Width = g.Width;
-	  this.Height = g.Height;
-	  this.MinTL = g.MinTL;
-	  this.MaxTL = g.MaxTL;
-	  this.MinActiveTL = g.MinActiveTL;
-	  this.MaxActiveTL = g.MaxActiveTL;
-	  this.TurnMoves = g.TurnMoves;
-	  this.TurnTLS = g.TurnTLS;
-	  this.TLHandicap = g.TLHandicap;
-	}
-
-	public GameState(Board start) {
-	  Multiverse = new List < Timeline > ();
-	  Multiverse.Add(new Timeline(start, true, 1, 0));
-	  MinTL = 0;
-	  MaxTL = 0;
-	  EvenStart = false;
-	  TLHandicap = 0;
-	  this.Width = start.Width;
-	  this.Height = start.Height;
-	  InitVals();
-	}
-
-	public GameState(Timeline starter) {
-	  Multiverse = new List < Timeline > ();
-	  Multiverse.Add(starter);
-	  MinTL = 0;
-	  MaxTL = 0;
-	  EvenStart = false;
-	  TLHandicap = 0;
-	  Color = true;
-	  Board b = starter.GetPlayableBoard();
-	  this.Width = b.Width;
-	  this.Height = b.Height;
-	  InitVals();
-	}
-
-	public GameState(Timeline[] starters, int MinTL, int MaxTL) {
-	  Board b = starters[0].GetPlayableBoard();
-	  this.Width = b.Width;
-	  this.Height = b.Height;
-	  Multiverse = new List < Timeline > ();
-	  foreach(Timeline t in starters)
-	  Multiverse.Add(t);
-	  this.MinTL = MinTL;
-	  this.MaxTL = MaxTL;
-	  TLHandicap = 0;
-	  Color = true;
-	  InitVals();
-	}
+	public int TLHandicap;
 
 	public GameState(Timeline[] origins, int width, int height, bool evenStart, bool color, int MinTL) {
 	  Multiverse = new List < Timeline > ();
@@ -523,12 +424,13 @@ namespace Engine {
 	  return Board.ERRORSQUARE;
 	}
 
-	public void PrintMultiverse() {
+	public void PrintMultiverse() 
+	{
 	  Console.WriteLine("Turn: " + Color);
 	  int tl = MinTL;
 	  foreach(Timeline t in Multiverse) {
 		Console.WriteLine("----------------------TL" + tl + "----------------------");
-		t.PrintTimeline();
+		Console.WriteLine(t.ToString());
 		tl++;
 	  }
 	}

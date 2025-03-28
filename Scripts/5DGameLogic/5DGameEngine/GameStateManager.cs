@@ -200,13 +200,13 @@ namespace Engine
 			for(int i = MinActiveTL ; i <= MaxActiveTL; i++){
 				Timeline t = GetTimeline(i); 
 				if(t.ColorPlayable == this.Color && t.TEnd <= Present){
-					return new CoordFive(0,0,i,t.TEnd);
+					return new CoordFive(0,0,i,t.TEnd,t.ColorPlayable);
 				}
 			}
 			//fallback
 			for(int i = MinActiveTL ; i <= MinActiveTL; i++){
 				Timeline t = GetTimeline(getTLIndex(i,MinTL));
-				return new CoordFive(0,0,i,t.TEnd);
+				return new CoordFive(0,0,i,t.TEnd,t.ColorPlayable);
 			}
 			return null;
 		}

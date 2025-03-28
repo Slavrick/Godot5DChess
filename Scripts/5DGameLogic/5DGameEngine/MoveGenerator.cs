@@ -689,7 +689,6 @@ namespace Engine
 		return true;
 	}
 
-	//Slated for removal. this is probalby a c# function
 	public static bool arrContains(CoordFive[] array, CoordFive target) {
 		foreach (CoordFive element in array) {
 			if (element.Equals(target)) {
