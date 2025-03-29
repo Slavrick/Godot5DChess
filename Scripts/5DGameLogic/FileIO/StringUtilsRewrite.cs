@@ -1,9 +1,9 @@
 using Godot;
 using System;
-using Engine;
+using FiveDChess;
 
 namespace FileIO5D {
-	public class StringUtils
+	public class StringUtilsRewrite
 	{
 		/// <summary>
 		/// Returns the corresponding file from the int file sent, 0 indexed so a is 0 b is 1 and so on.
@@ -63,9 +63,9 @@ namespace FileIO5D {
 			string sanOrigin = SANString(m.Origin);
 			string destStr = "(" + m.Dest.L + "T" + m.Dest.T + ")" + SANString(m.Dest);
 			int piece = m.PieceMoved;
-			if (piece > Board.numTypes)
+			if (piece > Board.NUMTYPES)
 			{
-				piece -= Board.numTypes;
+				piece -= Board.NUMTYPES;
 			}
 			move = temporalOrigin;
 			if (m.PieceMoved != Board.EMPTYSQUARE && piece != 1)
@@ -88,9 +88,9 @@ namespace FileIO5D {
 			if (m.SpecialType > Move.CASTLE)
 			{
 				int promoted = m.SpecialType;
-				if (m.SpecialType > Board.numTypes)
+				if (m.SpecialType > Board.NUMTYPES)
 				{
-					promoted -= Board.numTypes;
+					promoted -= Board.NUMTYPES;
 				}
 				move += "=" + Board.PieceChars[promoted];
 			}
@@ -101,9 +101,9 @@ namespace FileIO5D {
 		{
 			string move = "";
 			int piece = m.PieceMoved;
-			if (piece > Board.numTypes)
+			if (piece > Board.NUMTYPES)
 			{
-				piece -= Board.numTypes;
+				piece -= Board.NUMTYPES;
 			}
 			if (m.PieceMoved != Board.EMPTYSQUARE && piece != 1)
 			{

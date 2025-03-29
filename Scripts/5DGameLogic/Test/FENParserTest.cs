@@ -32,6 +32,10 @@ namespace Test
 			if (g.MaxTL != 1) throw new Exception("MaxTL mismatch");
 			if (g.GetTimeline(0).TEnd != 2) throw new Exception("Timeline 0 Tend mismatch");
 			if (g.GetTimeline(1).TEnd != 2) throw new Exception("Timeline 1 Tend mismatch");
+			Console.WriteLine(g.GetTimeline(0).WhiteEnd.ToString());
+			Console.WriteLine(g.GetTimeline(0).BlackEnd.ToString());
+			Console.WriteLine(g.GetTimeline(0).TEnd.ToString());
+			Console.WriteLine(g.GetTimeline(0).ToString());
 			Console.WriteLine(" passed.");
 		}
 
