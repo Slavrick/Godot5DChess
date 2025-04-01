@@ -22,5 +22,6 @@ public partial class Tester : Node
 		FENParserTest.TestShadFEN();
 		FENParserTest.TestAmbiguityInfoParser();
 		MateTest.BenchmarkMates();
+		GameStateTest.TestGameStateMutation();
 	}
 }
