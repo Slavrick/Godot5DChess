@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Engine;
-using Godot;
+using FiveDChess;
 
 namespace Test
 {
@@ -9,17 +8,17 @@ namespace Test
 	{
 		public static void TestTurnEquals()
 		{
-			Move m1 = new Move(new CoordFour(0, 1, 2, 3), new CoordFour(1, 1, 2, 4));
-			Move m2 = new Move(new CoordFour(0, 1, 2, 2), new CoordFour(1, 1, 2, 1));
-			Move m3 = new Move(new CoordFour(0, 0, 0, 0), new CoordFour(0, 0, 0, 0));
+			Move m1 = new Move(new CoordFive(0, 1, 2, 3), new CoordFive(1, 1, 2, 4));
+			Move m2 = new Move(new CoordFive(0, 1, 2, 2), new CoordFive(1, 1, 2, 1));
+			Move m3 = new Move(new CoordFive(0, 0, 0, 0), new CoordFive(0, 0, 0, 0));
 
-			Move m4 = new Move(new CoordFour(0, 1, 2, 3), new CoordFour(1, 1, 2, 4));
-			Move m5 = new Move(new CoordFour(0, 1, 2, 2), new CoordFour(1, 1, 2, 1));
-			Move m6 = new Move(new CoordFour(0, 0, 0, 0), new CoordFour(0, 0, 0, 0));
+			Move m4 = new Move(new CoordFive(0, 1, 2, 3), new CoordFive(1, 1, 2, 4));
+			Move m5 = new Move(new CoordFive(0, 1, 2, 2), new CoordFive(1, 1, 2, 1));
+			Move m6 = new Move(new CoordFive(0, 0, 0, 0), new CoordFive(0, 0, 0, 0));
 
-			Move m7 = new Move(new CoordFour(0, 1, 2, 3), new CoordFour(1, 1, 2, 4));
-			Move m8 = new Move(new CoordFour(0, 1, 2, 2), new CoordFour(1, 1, 2, 1));
-			Move m9 = new Move(new CoordFour(0, 0, 0, 0), new CoordFour(1, 1, 1, 1));
+			Move m7 = new Move(new CoordFive(0, 1, 2, 3), new CoordFive(1, 1, 2, 4));
+			Move m8 = new Move(new CoordFive(0, 1, 2, 2), new CoordFive(1, 1, 2, 1));
+			Move m9 = new Move(new CoordFive(0, 0, 0, 0), new CoordFive(1, 1, 1, 1));
 
 			List<Move> moves1 = new List<Move> { m1, m2, m3 };
 			List<Move> moves2 = new List<Move> { m6, m4, m5 };

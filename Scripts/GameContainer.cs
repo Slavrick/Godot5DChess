@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using Engine;
+using FiveDChess;
 using FileIO5D;
 using System.Collections.Generic;
 
@@ -25,8 +25,8 @@ public partial class GameContainer : Control
 	public delegate void ActiveAreaChangedEventHandler(int present, int minActiveTimeline, int maxActiveTimeline);
 	
 	
-	public GameStateManager gsm;
-	public List<CoordFour> destinations;
+	public GameState gsm;
+	public List<CoordFive> destinations;
 	public CoordFive SelectedSquare;
 	public List<Node> Arrows;
 	public List<Node> TempArrows;
@@ -101,7 +101,7 @@ public partial class GameContainer : Control
 		var arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				int piece = b.GetSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}
@@ -125,8 +125,8 @@ public partial class GameContainer : Control
 	}
 	
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
-		CoordFour clicked = new CoordFour((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X);
-		int piece = gsm.GetSquare(clicked,color);
+		CoordFive clicked = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X,color);
+		int piece = gsm.GetSquare(clicked);
 		if( destinations == null )
 		{
 			if(ValidateClickSquare(new CoordFive(clicked,color)))
@@ -138,7 +138,7 @@ public partial class GameContainer : Control
 		{
 			if(gsm.CoordIsPlayable(SelectedSquare))
 			{
-				piece = gsm.GetSquare(SelectedSquare,color);
+				piece = gsm.GetSquare(SelectedSquare);
 				if(piece < 0){
 					piece = piece * -1;
 				}
@@ -167,7 +167,7 @@ public partial class GameContainer : Control
 			}
 		}
 		else{
-			if(ValidateClickSquare(new CoordFive(clicked,color))){
+			if(ValidateClickSquare(new CoordFive(clicked,color))){//TODO Check This
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
 		}
@@ -177,23 +177,19 @@ public partial class GameContainer : Control
 		//Need to pass the square. From the Square get the piece and coord.
 		CoordFive coord = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X,color);
 		SelectedSquare = coord;
-		Console.WriteLine(coord);
 		int piece = gsm.GetSquare(coord);
 		if(piece == 0){
 			return;
 		}
-		destinations = MoveGenerator.GetMoves(piece,gsm,coord);
+		destinations = gsm.GetPossibleDestinations(coord);
 		Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
-		foreach( CoordFour cd in destinations ){
+		foreach( CoordFive cd in destinations ){
 			DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
 		}
 		if( mvcontainer != null){
 			mvcontainer.Call("clear_highlights");
 			mvcontainer.Call("highlight_squares",DestinationsGodot,color);
 		}
-		
-		//CoordFive coord = new CoordFive(); based on what was passed
-		//MoveGenerator.getMoves(piece,gsm,coord);
 	}
 	
 	public bool ValidateClickSquare(CoordFive cf){
@@ -276,7 +272,7 @@ public partial class GameContainer : Control
 		var arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				int piece = b.GetSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}
@@ -297,7 +293,7 @@ public partial class GameContainer : Control
 		arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				int piece = b.GetSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}
@@ -320,7 +316,7 @@ public partial class GameContainer : Control
 		var arr = new Godot.Collections.Array();
 		for(int x = 0; x < b.Width; x++){
 			for(int y = 0; y < b.Height; y++){
-				int piece = b.getSquare(y,x); // no idea why this is inverted, but o well.
+				int piece = b.GetSquare(y,x); // no idea why this is inverted, but o well.
 				if( piece < 0 ){
 					piece *= -1;
 				}
@@ -358,7 +354,7 @@ public partial class GameContainer : Control
 			child.Call("queue_free");
 		}
 		CheckArrows.Clear();
-		List<Move> moves = MoveGenerator.GetCurrentThreats(gsm,gsm.Color);
+		List<Move> moves = gsm.GetCurrentThreats();
 		foreach(Move m in moves){
 			Node a = CreateArrow(m,!gsm.Color, new Color(1,0,0,(float)0.5));
 			AddChild(a);
@@ -368,7 +364,7 @@ public partial class GameContainer : Control
 	
 	public void CheckActiveArea()
 	{
-		gsm.calcPresent();
+		gsm.CalcPresent();
 		var changed = false;
 		if(gsm.Present != VisualPresent){
 			changed = true;
@@ -388,23 +384,23 @@ public partial class GameContainer : Control
 	}
 	
 	public Vector2 GetPresentTile(){
-		CoordFour cf = gsm.GetPresentCoordinate(0);
+		CoordFive cf = gsm.GetPresentCoordinate(0);
 		return new Vector2(cf.L,cf.T);
 	}
 	
 	public Node CreateArrow(Move m, bool color)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
-		arrow.Set("origin",GameInterface.CoordFourtoCoord5(m.Origin,color));
-		arrow.Set("dest",GameInterface.CoordFourtoCoord5(m.Dest,color));
+		arrow.Set("origin",GameInterface.CoordFivetoCoord5(m.Origin,color));
+		arrow.Set("dest",GameInterface.CoordFivetoCoord5(m.Dest,color));
 		return arrow;
 	}
 	
 	public Node CreateArrow(Move m, bool color, Color c)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
-		arrow.Set("origin",GameInterface.CoordFourtoCoord5(m.Origin,color));
-		arrow.Set("dest",GameInterface.CoordFourtoCoord5(m.Dest,color));
+		arrow.Set("origin",GameInterface.CoordFivetoCoord5(m.Origin,color));
+		arrow.Set("dest",GameInterface.CoordFivetoCoord5(m.Dest,color));
 		arrow.Set("arrow_color",c);
 		return arrow;
 	}
@@ -424,7 +420,7 @@ public partial class GameContainer : Control
 			Arrows.AddRange(TempArrows);
 			TempArrows.Clear();
 		}
-		if( SubmitSuccessful && gsm.isMated()) {;
+		if( SubmitSuccessful && gsm.IsMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
 		destinations = null;
@@ -438,7 +434,7 @@ public partial class GameContainer : Control
 		TempArrows.Clear();
 		CheckActiveArea();
 		CheckForChecks();
-		gsm.undoTempMoves();
+		gsm.UndoTempMoves();
 		UpdateRender();
 	}
 	
@@ -487,7 +483,7 @@ public partial class GameContainer : Control
 		}
 		if(!gsm.Color)
 		{
-			piece += Board.numTypes;
+			piece += Board.NUMTYPES;
 		}
 		PromotionMove.SpecialType = piece;
 		if(MakeMove(PromotionMove,gsm.Color))
