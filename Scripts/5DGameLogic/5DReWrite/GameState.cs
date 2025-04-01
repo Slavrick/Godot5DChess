@@ -432,14 +432,14 @@ namespace FiveDChess
 	{
 		foreach(Move m in moves) 
 		{
-			MakeMove(m,true);
+			MakeMove(m,false);//TDOO make this validate later.
 		}
 		if (!SubmitMoves()) 
 		{
 			UndoTempMoves();
 			return false;
 		}
-		Color = !Color;
+		//Color = !Color; XXX Seems like this does the same thing as SubmitMoves..?
 		return true;
 	}
 

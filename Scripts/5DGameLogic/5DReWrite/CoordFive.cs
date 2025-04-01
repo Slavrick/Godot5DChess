@@ -141,7 +141,7 @@ namespace FiveDChess
 		public override string ToString()
 		{
 			char colorch = Color ? 'w' : 'b';
-			return $"({L}L.T{T}.{IntToFile(X)}{Y + 1})";
+			return $"({colorch}.{L}L.T{T}.{IntToFile(X)}{Y + 1})";
 		}
 
         /// <summary>

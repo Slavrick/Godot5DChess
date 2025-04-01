@@ -105,8 +105,23 @@ namespace FileIO5D {
 	  }
 
 	  foreach(string strturn in turns) {
+		Console.WriteLine("Parsing Turn: " + strturn);
 		//TODO make this back to the GameStateManager Case with turn
-		gsm.MakeTurn(StringToTurn(gsm, strturn, evenStarters).Moves);
+		Move[] parsed = StringToTurn(gsm, strturn, evenStarters).Moves; //XXX Remove after debugging
+		bool turnStatus = gsm.MakeTurn(StringToTurn(gsm, strturn, evenStarters).Moves);
+		Console.WriteLine("Printing Turn: ");
+		foreach(Move m in parsed)
+		{
+			Console.WriteLine("   " + m.ToString());
+		}
+		Console.WriteLine("Parsed mMove Passed?: " + turnStatus.ToString());
+		Console.WriteLine("GameState Color: " + gsm.Color);
+		Console.WriteLine("GameState: \n");
+		Console.WriteLine(gsm.ToString());
+		if(!turnStatus)
+		{
+			throw new Exception("Turn not properly added to gamestate." + strturn);
+		}
 	  }
 
 	  return gsm;
@@ -247,7 +262,8 @@ namespace FileIO5D {
 	}
 
 	public static Move AmbiguousStringToMove(GameState g, string move, bool evenStarters) {
-	  CoordFive dest = new CoordFive(HalfStringToCoord(move, evenStarters), g.Color);
+	  CoordFive dest = HalfStringToCoord(move, evenStarters);
+	  dest.Color = g.Color;
 	  if (dest.T == -1) {
 		dest.T = g.GetTimeline(0).TEnd;
 	  }
@@ -268,10 +284,12 @@ namespace FileIO5D {
 	  int file = ambiguity.X;
 	  int rank = ambiguity.Y;
 	  CoordFive origin = MoveGenerator.ReverseLookup(g, dest, piece, rank, file);
-	  if (origin == null) {
+	  if (origin == null) 
+	  {
 		Console.WriteLine("Could not find ReverseLookup for this move: " + move);
 		return null;
 	  }
+	  Console.WriteLine(origin.ToString() + dest.ToString());
 	  return new Move(origin, dest);
 	}
 
@@ -309,6 +327,12 @@ namespace FileIO5D {
 	  return temp;
 	}
 
+	/// <summary>
+	/// Gets a coord from half of a move. Does not enter the correct color into the coordinate.
+	/// </summary>
+	/// <param name="halfmove">string move to parse</param>
+	/// <param name="evenStarters">boolean whether there are even amounts of starters, ie. +/- 0</param>
+	/// <returns></returns>
 	public static CoordFive HalfStringToCoord(string halfmove, bool evenStarters) {
 	  string sancoord;
 	  if (halfmove[halfmove.Length - 1] == 'x') {

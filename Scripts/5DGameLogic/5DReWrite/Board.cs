@@ -65,7 +65,7 @@ namespace FiveDChess
 		}
 
 		/// <summary>
-		/// Gets a piece code at the coordinate specified. Does bounds checking.
+		/// Gets a piece code at the coordinate specified.
 		/// </summary>
 		/// <param name="file">The 'file' to get. Starts at 0, so a=0, h=7.</param>
 		/// <param name="rank">The 'rank' to get. Starts at 0, so 0 would be the first rank.</param>
@@ -76,13 +76,42 @@ namespace FiveDChess
 		}
 
 		/// <summary>
-		/// Gets the code of the square location. Does bounds checking on the coordinate generated.
+		/// Gets the code of the square location.
 		/// </summary>
 		/// <param name="c">Coordinate to get piece code.</param>
 		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
 		public int GetSquare(CoordFive c)
 		{
-		    return Brd[c.Y * Width + c.X];
+			return Brd[c.Y * Width + c.X];
+		}
+
+		/// <summary>
+		/// Gets the code of the square location. Does bounds checking on the coordinate generated.
+		/// </summary>
+		/// <param name="c">Coordinate to get piece code.</param>
+		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
+		public int GetSquareSafe(CoordFive c)
+		{
+			if(IsInBounds(c))
+			{
+				return Brd[c.Y * Width + c.X];
+			}
+			return ERRORSQUARE;
+		}
+
+		/// <summary>
+		/// Gets a piece code at the coordinate specified. Does bounds checking.
+		/// </summary>
+		/// <param name="file">The 'file' to get. Starts at 0, so a=0, h=7.</param>
+		/// <param name="rank">The 'rank' to get. Starts at 0, so 0 would be the first rank.</param>
+		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
+		public int GetSquareSafe(int file, int rank)
+		{
+			if(IsInBounds(file,rank))
+			{
+				return Brd[rank * Width + file];
+			}
+			return ERRORSQUARE;
 		}
 
 		/// <summary>
@@ -146,7 +175,7 @@ namespace FiveDChess
 				temp += StringUtils.IntToFile(x);
 			}
 			temp += "\n";
-			for (int y = 0; y < Height; y++)
+			for (int y = Height-1; y >= 0; y--)
 			{
 				temp += (y + 1).ToString() + " ";
 				for (int x = 0; x < Width; x++)
@@ -192,4 +221,3 @@ namespace FiveDChess
 		}
 	}
 }
-

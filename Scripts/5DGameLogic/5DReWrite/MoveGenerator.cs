@@ -539,7 +539,7 @@ namespace FiveDChess
                 }
             }
             while (!index.Equals(attack.Dest)) {
-                if (b.GetSquare(index) != EMPTYSQUARE) {
+                if (b.GetSquareSafe(index) != EMPTYSQUARE) {
                     return false;
                 }
                 index.Add(attackVector);
@@ -820,7 +820,7 @@ namespace FiveDChess
 			{
 				for (int y = 0; y < g.Height; y++)
 				{
-					int piece = b.GetSquare(x, y);
+					int piece = b.GetSquareSafe(x, y);
 					if (piece != 0 && Board.GetColorBool(piece) == spatialCoord.Color)
 					{
 						CoordFive currSquare = new CoordFive(x, y, spatialCoord.T, spatialCoord.L, spatialCoord.Color);
@@ -872,7 +872,7 @@ namespace FiveDChess
 				{
 					for (int y = 0; y < g.Height; y++)
 					{
-						int piece = b.GetSquare(x, y);
+						int piece = b.GetSquareSafe(x, y);
 						if (Board.GetColorBool(piece) != defender)
 						{
 							CoordFive srcLocation = new CoordFive(x, y, t.TEnd, i,!defender);
@@ -907,7 +907,7 @@ namespace FiveDChess
 			{
 				for (int y = 0; y < g.Height; y++)
 				{
-					int piece = b.GetSquare(x, y);
+					int piece = b.GetSquareSafe(x, y);
 					if (Board.GetColorBool(piece) == boardCoord.Color)
 					{
 						CoordFive srcLocation = new CoordFive(x, y, boardCoord.T, boardCoord.L ,boardCoord.Color);
@@ -995,7 +995,7 @@ namespace FiveDChess
 			CoordFive currSquare = CoordFive.Add(source, movementVec);
 			while (true)
 			{
-				int currPiece = b.GetSquare(currSquare);
+				int currPiece = b.GetSquareSafe(currSquare);
 				if (currPiece == Board.ERRORSQUARE)
 				{
 					return null;
@@ -1133,11 +1133,11 @@ namespace FiveDChess
                 // Check For Clearance.
                 CoordFive left = new CoordFive(1, 0, 0, 0);
                 CoordFive index = CoordFive.Add(kingSquare, left);
-                while (b.GetSquare(index) == EMPTYSQUARE) 
+                while (b.GetSquareSafe(index) == EMPTYSQUARE) 
                 {
                     index.Add(left);
                 }
-                int firstNonEmpty = b.GetSquare(index);
+                int firstNonEmpty = b.GetSquareSafe(index);
                 if (firstNonEmpty != unmvdRk) 
                 {
                     return null;
@@ -1165,11 +1165,11 @@ namespace FiveDChess
                 // Check For Clearance.
                 CoordFive right = new CoordFive(-1, 0, 0, 0);
                 CoordFive index = CoordFive.Add(kingSquare, right);
-                while (b.GetSquare(index) == EMPTYSQUARE) 
+                while (b.GetSquareSafe(index) == EMPTYSQUARE) 
                 {
                     index.Add(right);
                 }
-                int firstNonEmpty = b.GetSquare(index);
+                int firstNonEmpty = b.GetSquareSafe(index);
                 if (firstNonEmpty != unmvdRk) 
                 {
                     return null;
@@ -1238,7 +1238,7 @@ namespace FiveDChess
                         while(true) 
                         {
                             result = CoordFive.Sub(result, vector);
-                            int square = b.GetSquare(result);
+                            int square = b.GetSquareSafe(result);
                             square = square < 0 ? square * -1 : square;
                             if(square == EMPTYSQUARE) 
                             {
@@ -1282,7 +1282,7 @@ namespace FiveDChess
                     if(vector.IsSpatial()) 
                     {
                         CoordFive result = CoordFive.Sub(destSquare, vector);
-                        if(b.GetSquare(result) == pieceType || b.GetSquare(result) * -1 == pieceType) 
+                        if(b.GetSquareSafe(result) == pieceType || b.GetSquareSafe(result) * -1 == pieceType) 
                         {
                             if( (file == -1 || result.X == file) && (rank == -1 || result.Y == rank)) 
                             {
@@ -1302,7 +1302,7 @@ namespace FiveDChess
                 foreach(CoordFive vector in CastleLkup) 
                 {
                     CoordFive result = CoordFive.Sub(destSquare, vector);
-                    if(b.GetSquare(result) == pieceType || b.GetSquare(result) * -1 == pieceType) 
+                    if(b.GetSquareSafe(result) == pieceType || b.GetSquareSafe(result) * -1 == pieceType) 
                     {
                         if( (file == -1 || result.X == file) && (rank == -1 || result.Y == rank)) 
                         {
