@@ -92,8 +92,10 @@ initial_position = 1
 size = Vector2i(500, 500)
 ok_button_text = "Open"
 file_mode = 0
-filters = PackedStringArray("*.txt", "*.PGN", "*.PGN5", "*.PGN5.txt")
+access = 2
+filters = PackedStringArray("*.txt", "*.PGN", "*.PGN5", "*.PGN5.txt", "*.5dpgn")
 show_hidden_files = true
+use_native_dialog = true
 
 [node name="SaveDialog" type="FileDialog" parent="."]
 auto_translate_mode = 1
