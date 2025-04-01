@@ -1,14 +1,14 @@
 using System;
-using Godot;
 using System.Collections.Generic;
 
-namespace Engine
+namespace FiveDChess
 {
 	public class CoordFive : IEquatable<CoordFive>
 	{
 		/*
 		 * X represents file ie. a,b,c... files y represents rank T/L represent their
 		 * raw coordinates as per 5d chess rules
+         * Color represents white or black board.
 		 */
 		public int X;
 		public int Y;
@@ -68,6 +68,11 @@ namespace Engine
 			return X == c.X && Y == c.Y;
 		}
 
+        /// <summary>
+        /// Does an Equals, including color.
+        /// </summary>
+		/// <param name="c">Coordinate to compare to.</param>
+		/// <returns>True if the two coordinates are the same includes color.</returns>
 		public bool EqualsFull(CoordFive c)
 		{
 			return X == c.X && Y == c.Y && T == c.T && L == c.L && Color == c.Color;
@@ -94,6 +99,10 @@ namespace Engine
 			L += c.L;
 		}
 
+        /// <summary>
+        /// Function takes a coordfive and subtracts it from the current coordfive
+        /// </summary>
+        /// <param name="c">coord5 to subtract</param>
 		public void Sub(CoordFive c)
 		{
 			X -= c.X;
@@ -102,6 +111,9 @@ namespace Engine
 			L -= c.L;
 		}
 
+        /// <summary>
+        /// Flattens the current Coord. For example,  (2,2,4,4) = (1,1,2,2)
+        /// </summary>
 		public void Flatten()
 		{
 			int gcd = GCD(GCD(Math.Abs(X), Math.Abs(Y)), GCD(Math.Abs(T), Math.Abs(L)));
@@ -112,7 +124,10 @@ namespace Engine
 			L /= gcd;
 		}
 
-		// Gets the n-diagonal that a vector is
+		/// <summary>
+        /// Gets Nagonal of the CoordFive. rook for example moves on Nagonal of 1
+        /// </summary>
+        /// <returns>Nagonal 0-4</returns>
 		public int GetNagonal()
 		{
 			int nagonal = 0;
@@ -126,27 +141,15 @@ namespace Engine
 		public override string ToString()
 		{
 			char colorch = Color ? 'w' : 'b';
-			return $"({L}L.T{T}.{IntToFile(X)}{Y + 1})";
+			return $"({colorch}({L}T{T}){IntToFile(X)}{Y + 1})";
 		}
 
-		/// <summary>
-		/// Gets a string raw representation of this.
-		/// </summary>
-		/// <returns>Raw coord string.</returns>
-		public string RawCoordString()
-		{
-			return $"({X},{Y},{T},{L})";
-		}
-
-		/// <summary>
-		/// Get a SAN 2D coord of the given object such as a1 e4 ....
-		/// </summary>
-		/// <returns>String SAN representation.</returns>
-		public string SANString()
-		{
-			return $"{IntToFile(X)}{Y + 1}";
-		}
-
+        /// <summary>
+        /// Greatest common denominator. From Stackoverflow.
+        /// </summary>
+        /// <param name="num1"></param>
+        /// <param name="num2"></param>
+        /// <returns>GCD of num 1 and num 2</returns>
 		public static int GCD(int num1, int num2)
 		{
 			while (num1 > 0 && num2 > 0)

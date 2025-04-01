@@ -1,40 +1,39 @@
 using System;
 using System.Collections.Generic;
+using FileIO5D;
 
-namespace Engine
+namespace FiveDChess
 {
     public class Turn
     {
+        //Moves to make
         public Move[] Moves;
+        //Timelines Moved
         public int[] TLs;
         // This is ply, not actual turn num, so 2 would be blacks first turn and 3 would be whites 2nd
         public int TurnNum;
 
-        // XXX implement or delete these fields
-        public int NumTL;
-        public bool Color;
-        public int TPresent;
+        public bool Undoable = false;
 
-        public static NotationMode Mode { get; set; } = NotationMode.SHAD;
-        public static PrefixMode Pre { get; set; } = PrefixMode.TURN;
-
-        public enum PrefixMode
+        public Turn(List<Move> turnMoves, List<int> tlEffected, int turnNum)
         {
-            NONE, TURN, TURNANDPRESENT
-        }
-
-        public enum NotationMode
-        {
-            COORDINATE, SHAD, SHADRAW
-        }
-
-        // This will do no validation as of yet.
-        public Turn(List<Move> turnMoves, List<int> tlEffected)
-        {
+            TurnNum = turnNum;
             this.Moves = turnMoves.ToArray();
             this.TLs = tlEffected.ToArray();
+            if(tlEffected != null)
+            {
+                Undoable = true;
+            }
         }
 
+        public Turn(List<Move> turnMoves, List<int> tlEffected) : this(turnMoves,tlEffected,0) { }
+
+        public Turn() : this(null,null,0) { }
+
+        /// <summary>
+        /// This renders this non-undoable since we aren't adding in the timelines that are branching
+        /// </summary>
+        /// <param name="tmoves"></param>
         public Turn(Move[] tmoves)
         {
             List<Move> removedNull = new List<Move>();
@@ -56,20 +55,11 @@ namespace Engine
                 }
             }
             this.TLs = tlList.ToArray();
-            Mode = NotationMode.SHAD;
-            Pre = PrefixMode.TURN;
         }
 
-        public Turn()
+        public override int GetHashCode()
         {
-            Moves = null;
-            TLs = null;
-            TurnNum = 0;
-        }
-
-        public Move[] GetMoves()
-        {
-            return this.Moves;
+            return base.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -78,7 +68,6 @@ namespace Engine
             {
                 return false;
             }
-
             Turn t = (Turn)obj;
             if (this.Moves == null && t.Moves == null)
             {
@@ -111,11 +100,6 @@ namespace Engine
             return true;
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override string ToString()
         {
             if (Moves == null)
@@ -123,56 +107,18 @@ namespace Engine
                 return "";
             }
             string temp = "";
-            switch (Pre)
+            temp += ((TurnNum + 1) / 2) + "" + (TurnNum % 2 == 1 ? 'w' : 'b') + ".";
+            foreach (Move m in Moves)
             {
-                case PrefixMode.TURN:
-                    temp += ((TurnNum + 1) / 2) + "" + (TurnNum % 2 == 1 ? 'w' : 'b') + ".";
-                    break;
-                case PrefixMode.NONE:
-                default:
-                    break;
-            }
-            switch (Mode)
-            {
-                case NotationMode.SHAD:
-                    foreach (Move m in Moves)
-                    {
-                        temp += m.ToShadString();
-                        temp += " ";
-                    }
-                    break;
-                case NotationMode.SHADRAW:
-                    foreach (Move m in Moves)
-                    {
-                        temp += m.ToRawShadString();
-                        temp += " ";
-                    }
-                    break;
-                case NotationMode.COORDINATE:
-                default:
-                    foreach (Move m in Moves)
-                    {
-                        temp += m.RawMoveNotation();
-                        temp += "; ";
-                    }
-                    break;
+                temp += StringUtils.ToShadString(m);
+                temp += " ";
             }
             return temp;
         }
 
-        private static class ShadNotation
-        {
-            public static string MovesToString(Turn t)
-            {
-                string temp = "";
-                foreach (Move m in t.GetMoves())
-                {
-                    // TODO: Implement the method body
-                }
-                return temp;
-            }
-        }
-
+        /// <summary>
+        /// Compares based on comparator. 1 for greater than, 0 for equal, -1 for less than
+        /// </summary>
         private class TLMoveComparator : IComparer<Move>
         {
             public int Compare(Move o1, Move o2)

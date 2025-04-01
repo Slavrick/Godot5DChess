@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Engine;
-using Godot;
+using FiveDChess;
 
 namespace Test
 {

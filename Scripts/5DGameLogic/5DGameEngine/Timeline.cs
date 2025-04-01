@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Engine
+namespace FiveDChess
 {
 	public class Timeline : IComparable<Timeline>
 	{
@@ -54,6 +54,10 @@ namespace Engine
 			TEnd = startTime;
 		}
 
+        public bool IsInBounds(CoordFive c)
+        {
+            return TimeExists(c) && GetBoard(c).IsInBounds(c);
+        }
 
 		/// <summary>
 		/// Determines if a time exists. 
@@ -61,13 +65,13 @@ namespace Engine
 		/// <param name="t">time to check</param>
 		/// <param name="boardColor">Color to check</param>
 		/// <returns>true if board exists, and false if it is out of bounds.</returns>
-		public bool TimeExists(int t, bool boardColor)
+		public bool TimeExists(CoordFive c)
 		{
-			if ((boardColor == GameState.WHITE && (t < WhiteStart || t > WhiteEnd)))
+			if ((c.Color == true && (c.T < WhiteStart || c.T > WhiteEnd)))
 			{
 				return false;
 			}
-			else if ((boardColor == GameState.BLACK && (t < BlackStart || t > BlackEnd)))
+			else if ((c.Color == false && (c.T < BlackStart || c.T > BlackEnd)))
 			{
 				return false;
 			}
@@ -91,19 +95,15 @@ namespace Engine
 		/// <param name="t">time to get</param>
 		/// <param name="boardColor">color of board to get</param>
 		/// <returns></returns>
-		public Board GetBoard(int t, bool boardColor)
+		public Board GetBoard(CoordFive c)
 		{
-			if (!TimeExists(t, boardColor))
+			if (c.Color == true)
 			{
-				return null;
-			}
-			if (boardColor == GameState.WHITE)
-			{
-				return WBoards[t - WhiteStart];
+				return WBoards[c.T - WhiteStart];
 			}
 			else
 			{
-				return BBoards[t - BlackStart];
+				return BBoards[c.T - BlackStart];
 			}
 		}
 
@@ -123,16 +123,6 @@ namespace Engine
 			}
 		}
 
-		public int getSquare(CoordFive c, bool color) //TODO make this not use boardcolor XXX remove this when no longer needed.
-		{
-			Board b = GetBoard(c.T, color);
-			if (b != null)
-			{
-				return b.GetSquare(c);
-			}
-			return Board.ERRORSQUARE;
-		}
-
 		/// <summary>
 		/// Gets a square in the timeline. does not validate layer
 		/// </summary>
@@ -140,37 +130,7 @@ namespace Engine
 		/// <returns>square integer, or errorsquare if not found</returns>
 		public int GetSquare(CoordFive c)
 		{
-			Board b = GetBoard(c.T,c.Color);
-			if (b != null)
-			{
-				return b.GetSquare(c);
-			}
-			return Board.ERRORSQUARE;
-		}
-
-		public bool AddSpatialMove(Move m, bool moveColor) //TODO make this not use boardcolor XXX Remove this when no longer needed.
-		{
-			if (moveColor != ColorPlayable) // XXX move this validation up the chain.
-				return false;
-			Board b = GetPlayableBoard();
-			Board newBoard = new Board(b);
-			int piece = newBoard.GetSquare(m.Origin);
-			piece = piece < 0 ? piece * -1 : piece;
-			m.PieceMoved = piece;
-			newBoard.SetSquare(m.Origin, (int)Board.Piece.EMPTY);
-			newBoard.SetSquare(m.Dest, piece);
-			if ((piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN || piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN) && Math.Abs(m.Dest.Y - m.Origin.Y) == 2)
-			{
-				newBoard.EnPassentSquare = m.Dest.Clone();
-				newBoard.EnPassentSquare.Y = (m.Dest.Y + m.Origin.Y) / 2;
-			}
-			if ((piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN || piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN) && b.EnPassentSquare != null && b.EnPassentSquare.SpatialEquals(m.Dest))
-			{
-				CoordFive pawnSquare = m.Origin.Clone();
-				pawnSquare.X = m.Dest.X;
-				newBoard.SetSquare(pawnSquare, Board.EMPTYSQUARE);
-			}
-			return AddMove(newBoard);
+			return GetBoard(c).GetSquare(c);
 		}
 
 		/// <summary>
@@ -180,8 +140,6 @@ namespace Engine
 		/// <returns>true if the move worked, false if it failed</returns>
 		public bool AddSpatialMove(Move m) 
 		{
-			if (m.Origin.Color != ColorPlayable) // XXX move this validation up the chain.
-				return false;
 			Board b = GetPlayableBoard();
 			Board newBoard = new Board(b);
 			int piece = newBoard.GetSquare(m.Origin);
@@ -189,11 +147,13 @@ namespace Engine
 			m.PieceMoved = piece;
 			newBoard.SetSquare(m.Origin, (int)Board.Piece.EMPTY);
 			newBoard.SetSquare(m.Dest, piece);
+            //Case of adding enpassentsquare
 			if ((piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN || piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN) && Math.Abs(m.Dest.Y - m.Origin.Y) == 2)
 			{
 				newBoard.EnPassentSquare = m.Dest.Clone();
 				newBoard.EnPassentSquare.Y = (m.Dest.Y + m.Origin.Y) / 2;
 			}
+            //case that enpassent was used as a move.
 			if ((piece == (int)Board.Piece.WPAWN || piece == (int)Board.Piece.BPAWN || piece == (int)Board.Piece.WBRAWN || piece == (int)Board.Piece.BBRAWN) && b.EnPassentSquare != null && b.EnPassentSquare.SpatialEquals(m.Dest))
 			{
 				CoordFive pawnSquare = m.Origin.Clone();
@@ -217,6 +177,7 @@ namespace Engine
 			CoordFive direction = CoordFive.Sub(m.Dest, m.Origin);
 			direction.Flatten();
 			CoordFive index = CoordFive.Add(direction, m.Origin);
+            //search for rook
 			while (b.GetSquare(index) != (int)Board.Piece.WROOK * -1 && b.GetSquare(index) != (int)Board.Piece.BROOK * -1)
 			{
 				index.Add(direction);
@@ -244,28 +205,6 @@ namespace Engine
 			return AddMove(newBoard);
 		}
 
-
-		/// <summary>
-		/// adds jumping origin move, basically just removes that piece from the board.
-		/// </summary>
-		/// <param name="m">move to be made.</param>
-		/// <param name="moveColor">Color of the player moving.</param> 
-		/// <returns>piece that moved. for example if a white knight jumps will return 2</returns>
-		public int AddJumpingMove(Move m, bool moveColor)//TODO make this not need color XXX Remove this when no longer needed
-		{
-			if (moveColor != ColorPlayable)
-				return -1;
-			CoordFive origin = m.Origin;
-			Board b = GetPlayableBoard();
-			Board newBoard = new Board(b);
-			int piece = newBoard.GetSquare(origin);
-			piece = piece < 0 ? piece * -1 : piece;
-			m.PieceMoved = piece;
-			newBoard.SetSquare(origin, (int)Board.Piece.EMPTY);
-			AddMove(newBoard);
-			return piece;
-		}
-
 		/// <summary>
 		/// adds jumping origin move, basically just removes that piece from the board.
 		/// </summary>
@@ -273,8 +212,6 @@ namespace Engine
 		/// <returns>piece that moved. for example if a white knight jumps will return 2</returns>
 		public int AddJumpingMove(Move m)
 		{
-			if (m.Origin.Color != ColorPlayable)
-				return -1;
 			CoordFive origin = m.Origin;
 			Board b = GetPlayableBoard();
 			Board newBoard = new Board(b);
@@ -284,21 +221,6 @@ namespace Engine
 			newBoard.SetSquare(origin, (int)Board.Piece.EMPTY);
 			AddMove(newBoard);
 			return piece;
-		}
-
-		// add a move jumping, if the move is branching return the branched board,
-		// otherwise, add the board onto the end of the timeline. 
-		public Board AddJumpingMoveDest(CoordFive dest, bool moveColor, int piece)//TODO make this not use boardcolor XXX Remove this when no longer needed.
-		{
-			Board b = GetBoard(dest.T, moveColor);
-			Board newBoard = new Board(b);
-			newBoard.SetSquare(dest, piece);
-			if (dest.T != TEnd || moveColor != ColorPlayable)
-			{
-				return newBoard;
-			}
-			AddMove(newBoard);
-			return null;
 		}
 
 
@@ -310,7 +232,7 @@ namespace Engine
 		/// <returns></returns>
 		public Board AddJumpingMoveDest(CoordFive dest, int piece)
 		{
-			Board b = GetBoard(dest.T, dest.Color);
+			Board b = GetBoard(dest);
 			Board newBoard = new Board(b);
 			newBoard.SetSquare(dest, piece);
 			if (dest.T != TEnd || dest.Color != ColorPlayable)

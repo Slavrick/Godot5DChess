@@ -1,12 +1,9 @@
 using System;
-using Godot;
 using FileIO5D;
 
-namespace Engine
+namespace FiveDChess
 {
-	public class Board
-	{
-		// TODO possibly make this hold the position of pieces.
+	public class Board{
 		/// <summary>
 		/// Board Array of integers held in the position. Each piece has a value, going from 0-24. 0 is empty and -63 is ERROR.
 		/// Negative values are unmoved pieces(kings, pawns). 1-12 is white 13-24 are black pieces.
@@ -14,13 +11,12 @@ namespace Engine
 		private int[] Brd;
 		public int Height;
 		public int Width;
-		//TODO possibly make this a 2d coordinate instead.
 		/// <summary>
 		/// Square that holds the en passent. is not copied over on a clone.
 		/// </summary>
 		public CoordFive EnPassentSquare;
 
-		public static readonly int numTypes = 12;
+		public static readonly int NUMTYPES = 12;
 		public static readonly int ERRORSQUARE = -63;
 		public static readonly int EMPTYSQUARE = 0;
 
@@ -69,18 +65,24 @@ namespace Engine
 		}
 
 		/// <summary>
-		/// Gets a piece code at the coordinate specified. Does bounds checking.
+		/// Gets a piece code at the coordinate specified.
 		/// </summary>
 		/// <param name="file">The 'file' to get. Starts at 0, so a=0, h=7.</param>
 		/// <param name="rank">The 'rank' to get. Starts at 0, so 0 would be the first rank.</param>
 		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
 		public int GetSquare(int file, int rank)
 		{
-			if (IsInBounds(file, rank))
-			{
-				return Brd[rank * Width + file];
-			}
-			return ERRORSQUARE;
+			return Brd[rank * Width + file];
+		}
+
+		/// <summary>
+		/// Gets the code of the square location.
+		/// </summary>
+		/// <param name="c">Coordinate to get piece code.</param>
+		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
+		public int GetSquare(CoordFive c)
+		{
+			return Brd[c.Y * Width + c.X];
 		}
 
 		/// <summary>
@@ -88,11 +90,26 @@ namespace Engine
 		/// </summary>
 		/// <param name="c">Coordinate to get piece code.</param>
 		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
-		public int GetSquare(CoordFive c)
+		public int GetSquareSafe(CoordFive c)
 		{
-			if (IsInBounds(c))
+			if(IsInBounds(c))
 			{
 				return Brd[c.Y * Width + c.X];
+			}
+			return ERRORSQUARE;
+		}
+
+		/// <summary>
+		/// Gets a piece code at the coordinate specified. Does bounds checking.
+		/// </summary>
+		/// <param name="file">The 'file' to get. Starts at 0, so a=0, h=7.</param>
+		/// <param name="rank">The 'rank' to get. Starts at 0, so 0 would be the first rank.</param>
+		/// <returns>An integer piece defined in the enum above, or ErrorSquare if the coordinate is out of bounds.</returns>
+		public int GetSquareSafe(int file, int rank)
+		{
+			if(IsInBounds(file,rank))
+			{
+				return Brd[rank * Width + file];
 			}
 			return ERRORSQUARE;
 		}
@@ -155,10 +172,10 @@ namespace Engine
 			string temp = "  ";
 			for (int x = 0; x < Height; x++)
 			{
-				temp += StringUtils.IntToFile(x);
+				temp += StringUtils. IntToFile(x);
 			}
 			temp += "\n";
-			for (int y = 0; y < Height; y++)
+			for (int y = Height-1; y >= 0; y--)
 			{
 				temp += (y + 1).ToString() + " ";
 				for (int x = 0; x < Width; x++)
@@ -181,9 +198,13 @@ namespace Engine
 		{
 			pieceCode = pieceCode < 0 ? pieceCode * -1 : pieceCode;
 			if (pieceCode == (int)Piece.EMPTY)
+			{
 				return false;
+			}
 			if (pieceCode >= (int)Piece.BPAWN)
+			{
 				return false;//GameState.BLACK;
+			}
 			return true;//GameState.WHITE; TODO Add this global back in.
 		}
 

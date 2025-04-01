@@ -1,5 +1,5 @@
 using System;
-using Engine;
+using FiveDChess;
 using FileIO5D;
 
 namespace Test
@@ -12,11 +12,11 @@ namespace Test
 		public static void TestMoveParser()
 		{
 			Console.Write("    Testing Move Parser: ");
-			CoordFive x = FENParser.StringToCoord("(0,0,0,0)");
+			CoordFive x = FENParser.ParseRawCoordinate("(0,0,0,0)");
 			if (!new CoordFive(0, 0, 0, 0).Equals(x)) throw new Exception(x.ToString());
-			x = FENParser.StringToCoord("(10,5,10,5)");
+			x = FENParser.ParseRawCoordinate("(10,5,10,5)");
 			if (!new CoordFive(10, 5, 10, 5).Equals(x)) throw new Exception(x.ToString());
-			x = FENParser.StringToCoord("(-10,-5,-2,-1)");
+			x = FENParser.ParseRawCoordinate("(-10,-5,-2,-1)");
 			if (!new CoordFive(-10, -5, -2, -1).Equals(x)) throw new Exception(x.ToString());
 			Console.WriteLine("passed.");
 		}
@@ -24,7 +24,7 @@ namespace Test
 		public static void TestFENFileParser()
 		{
 			Console.Write("    Testing Parsing Rookie.FEN.txt:");
-			string filePath = "res://PGN/Puzzles/RookTactics4.PGN5.txt";
+			string filePath = "C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\Puzzles\\RookTactics4.PGN5.txt";
 			GameState g = FENParser.ShadSTDGSM(filePath);
 			if (g == null) throw new Exception("GameState is null");
 			if (g.Color != false) throw new Exception("Color mismatch");
@@ -32,10 +32,6 @@ namespace Test
 			if (g.MaxTL != 1) throw new Exception("MaxTL mismatch");
 			if (g.GetTimeline(0).TEnd != 2) throw new Exception("Timeline 0 Tend mismatch");
 			if (g.GetTimeline(1).TEnd != 2) throw new Exception("Timeline 1 Tend mismatch");
-			Console.WriteLine(g.GetTimeline(0).WhiteEnd.ToString());
-			Console.WriteLine(g.GetTimeline(0).BlackEnd.ToString());
-			Console.WriteLine(g.GetTimeline(0).TEnd.ToString());
-			Console.WriteLine(g.GetTimeline(0).ToString());
 			Console.WriteLine(" passed.");
 		}
 
@@ -46,11 +42,11 @@ namespace Test
 			string san2 = "h8";
 			string san3 = "e4";
 			string san4 = "m42";
-			CoordFive c1 = FENParser.SANToCoord(san1);
+            CoordFive c1 = FENParser.SANToCoord(san1);
 			CoordFive c2 = FENParser.SANToCoord(san2);
 			CoordFive c3 = FENParser.SANToCoord(san3);
 			CoordFive c4 = FENParser.SANToCoord(san4);
-			CoordTester.TestCoord(c1, 0, 0, 0, 0);
+            CoordTester.TestCoord(c1, 0, 0, 0, 0);
 			CoordTester.TestCoord(c2, 7, 7, 0, 0);
 			CoordTester.TestCoord(c3, 4, 3, 0, 0);
 			CoordTester.TestCoord(c4, 12, 41, 0, 0);
@@ -67,7 +63,8 @@ namespace Test
 			CoordFive h6 = FENParser.HalfStringToCoord("(+0T3)Nh7", true);
 			CoordFive h7 = FENParser.HalfStringToCoord("(2T3)Nh7", true);
 			CoordFive h8 = FENParser.HalfStringToCoord("(-1T3)Nh7", true);
-			CoordTester.TestCoord(h1, 0, 0, 0, 0);
+			CoordFive h9 = FENParser.HalfStringToCoord("(-1T12)Bxf6+", false);
+            CoordTester.TestCoord(h1, 0, 0, 0, 0);
 			CoordTester.TestCoord(h2, 0, 0, 0, 0);
 			CoordTester.TestCoord(h3, 4, 2, 1, 0);
 			CoordTester.TestCoord(h4, 7, 6, 3, -1);
@@ -75,7 +72,8 @@ namespace Test
 			CoordTester.TestCoord(h6, 7, 6, 3, 1);
 			CoordTester.TestCoord(h7, 7, 6, 3, 3);
 			CoordTester.TestCoord(h8, 7, 6, 3, -1);
-			Move f1 = FENParser.FullStringToCoord("(0T1)Ng1(0T1)f3", false);
+            CoordTester.TestCoord(h9, 5, 5, 12, -1);
+            Move f1 = FENParser.FullStringToCoord("(0T1)Ng1(0T1)f3", false);
 			Move f2 = FENParser.FullStringToCoord("(0T3)Ng1>(0T2)g3", false);
 			Move f3 = FENParser.FullStringToCoord("(0T5)Qc3>>(0T1)f7", false);
 			CoordTester.TestCoord(f1.Origin, 6, 0, 1, 0);
@@ -89,8 +87,8 @@ namespace Test
 		public static void TestShadFEN()
 		{
 			Console.Write("    Testing Whole Fen Parser.");
-			FENParser.ShadSTDGSM("res://PGN/Puzzles/Brawn Tactics 1.5DPGN.txt");
-			FENParser.ShadSTDGSM("res://PGN/testPGNs/AmbiguityCheck.txt");
+			FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\Puzzles\\Brawn Tactics 1.5DPGN.txt");
+			FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\testPGNs\\AmbiguityCheck.txt");
 			Console.WriteLine(" passed.");
 		}
 

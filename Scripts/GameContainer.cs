@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using Engine;
+using FiveDChess;
 using FileIO5D;
 using System.Collections.Generic;
 
@@ -25,7 +25,7 @@ public partial class GameContainer : Control
 	public delegate void ActiveAreaChangedEventHandler(int present, int minActiveTimeline, int maxActiveTimeline);
 	
 	
-	public GameStateManager gsm;
+	public GameState gsm;
 	public List<CoordFive> destinations;
 	public CoordFive SelectedSquare;
 	public List<Node> Arrows;
@@ -125,12 +125,15 @@ public partial class GameContainer : Control
 	}
 	
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
-		CoordFive clicked = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X);
-		int piece = gsm.GetSquare(clicked,color);
+		CoordFive clicked = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X,color);
+		int piece = gsm.GetSquare(clicked);
+		Console.WriteLine(clicked.ToString());
 		if( destinations == null )
 		{
+			Console.WriteLine("Dest Null");
 			if(ValidateClickSquare(new CoordFive(clicked,color)))
 			{
+				Console.WriteLine("Valid Click");
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
 		}
@@ -138,7 +141,7 @@ public partial class GameContainer : Control
 		{
 			if(gsm.CoordIsPlayable(SelectedSquare))
 			{
-				piece = gsm.GetSquare(SelectedSquare,color);
+				piece = gsm.GetSquare(SelectedSquare);
 				if(piece < 0){
 					piece = piece * -1;
 				}
@@ -167,7 +170,7 @@ public partial class GameContainer : Control
 			}
 		}
 		else{
-			if(ValidateClickSquare(new CoordFive(clicked,color))){
+			if(ValidateClickSquare(new CoordFive(clicked,color))){//TODO Check This
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
 		}
@@ -182,7 +185,7 @@ public partial class GameContainer : Control
 		if(piece == 0){
 			return;
 		}
-		destinations = MoveGenerator.GetMoves(piece,gsm,coord);
+		destinations = gsm.GetPossibleDestinations(coord);
 		Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
 		foreach( CoordFive cd in destinations ){
 			DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
@@ -191,9 +194,6 @@ public partial class GameContainer : Control
 			mvcontainer.Call("clear_highlights");
 			mvcontainer.Call("highlight_squares",DestinationsGodot,color);
 		}
-		
-		//CoordFive coord = new CoordFive(); based on what was passed
-		//MoveGenerator.getMoves(piece,gsm,coord);
 	}
 	
 	public bool ValidateClickSquare(CoordFive cf){
@@ -204,6 +204,7 @@ public partial class GameContainer : Control
 			return false;
 		}
 		int piece = gsm.GetSquare(cf);
+		Console.WriteLine(cf.ToString() + "Gets piece: " + piece.ToString());
 		if(piece == 0){
 			return false;
 		}
@@ -358,7 +359,7 @@ public partial class GameContainer : Control
 			child.Call("queue_free");
 		}
 		CheckArrows.Clear();
-		List<Move> moves = MoveGenerator.GetCurrentThreats(gsm,gsm.Color);
+		List<Move> moves = gsm.GetCurrentThreats();
 		foreach(Move m in moves){
 			Node a = CreateArrow(m,!gsm.Color, new Color(1,0,0,(float)0.5));
 			AddChild(a);
@@ -368,7 +369,7 @@ public partial class GameContainer : Control
 	
 	public void CheckActiveArea()
 	{
-		gsm.calcPresent();
+		gsm.CalcPresent();
 		var changed = false;
 		if(gsm.Present != VisualPresent){
 			changed = true;
@@ -424,7 +425,7 @@ public partial class GameContainer : Control
 			Arrows.AddRange(TempArrows);
 			TempArrows.Clear();
 		}
-		if( SubmitSuccessful && gsm.isMated()) {;
+		if( SubmitSuccessful && gsm.IsMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
 		destinations = null;
@@ -438,7 +439,7 @@ public partial class GameContainer : Control
 		TempArrows.Clear();
 		CheckActiveArea();
 		CheckForChecks();
-		gsm.undoTempMoves();
+		gsm.UndoTempMoves();
 		UpdateRender();
 	}
 	
@@ -487,7 +488,7 @@ public partial class GameContainer : Control
 		}
 		if(!gsm.Color)
 		{
-			piece += Board.numTypes;
+			piece += Board.NUMTYPES;
 		}
 		PromotionMove.SpecialType = piece;
 		if(MakeMove(PromotionMove,gsm.Color))
