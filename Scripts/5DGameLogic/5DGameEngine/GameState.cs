@@ -122,10 +122,8 @@ namespace FiveDChess
 		{
 			if (IsInBounds(c))
 			{
-Console.WriteLine(c.ToString() +" is in bounds");
 				return GetTimeline(c.L).GetSquare(c);
 			}
-Console.WriteLine(c.ToString() +" is not in bounds");
 			return Board.ERRORSQUARE;
 		}
 

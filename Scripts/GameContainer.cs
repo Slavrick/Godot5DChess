@@ -127,13 +127,10 @@ public partial class GameContainer : Control
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
 		CoordFive clicked = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X,color);
 		int piece = gsm.GetSquare(clicked);
-		Console.WriteLine(clicked.ToString());
 		if( destinations == null )
 		{
-			Console.WriteLine("Dest Null");
 			if(ValidateClickSquare(new CoordFive(clicked,color)))
 			{
-				Console.WriteLine("Valid Click");
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
 		}
@@ -180,7 +177,6 @@ public partial class GameContainer : Control
 		//Need to pass the square. From the Square get the piece and coord.
 		CoordFive coord = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X,color);
 		SelectedSquare = coord;
-		Console.WriteLine(coord);
 		int piece = gsm.GetSquare(coord);
 		if(piece == 0){
 			return;
@@ -204,7 +200,6 @@ public partial class GameContainer : Control
 			return false;
 		}
 		int piece = gsm.GetSquare(cf);
-		Console.WriteLine(cf.ToString() + "Gets piece: " + piece.ToString());
 		if(piece == 0){
 			return false;
 		}
