@@ -86,10 +86,16 @@ namespace Test
 
 		public static void TestShadFEN()
 		{
+			//TODO make this read all files from the test directory.
 			Console.Write("    Testing Whole Fen Parser.");
 			FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\Puzzles\\Brawn Tactics 1.5DPGN.txt");
 			FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\testPGNs\\AmbiguityCheck.txt");
-			Console.WriteLine(" passed.");
+            FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\testPGNs\\CastleTest.txt");
+            FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\testPGNs\\CastleTest2.txt");
+            FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\testPGNs\\CastleTest3.txt");
+            FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\testPGNs\\CastleTest4.txt");
+            FENParser.ShadSTDGSM("C:\\Users\\mavmi\\Documents\\5DRewrite\\5DChess\\5DChess\\PGN\\testPGNs\\PromotionTest.PGN5.txt");
+            Console.WriteLine(" passed.");
 		}
 
 		public static void TestDefaultGame()

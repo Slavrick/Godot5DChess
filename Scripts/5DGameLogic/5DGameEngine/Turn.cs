@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using FileIO5D;
 
 namespace FiveDChess
@@ -12,12 +14,15 @@ namespace FiveDChess
         public int[] TLs;
         // This is ply, not actual turn num, so 2 would be blacks first turn and 3 would be whites 2nd
         public int TurnNum;
-
+        //whether or not this can be undoable. does nothing so far.
         public bool Undoable = false;
 
         public Turn(List<Move> turnMoves, List<int> tlEffected, int turnNum)
         {
             TurnNum = turnNum;
+            if( turnMoves == null ) { turnMoves = new List<Move>(); }
+            if( tlEffected == null) { tlEffected = new List<int>(); }
+
             this.Moves = turnMoves.ToArray();
             this.TLs = tlEffected.ToArray();
             if(tlEffected != null)
@@ -28,7 +33,7 @@ namespace FiveDChess
 
         public Turn(List<Move> turnMoves, List<int> tlEffected) : this(turnMoves,tlEffected,0) { }
 
-        public Turn() : this(null,null,0) { }
+        public Turn() : this(null ,null,0) { }//TODO this will 
 
         /// <summary>
         /// This renders this non-undoable since we aren't adding in the timelines that are branching

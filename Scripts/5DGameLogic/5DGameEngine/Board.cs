@@ -198,13 +198,9 @@ namespace FiveDChess
 		{
 			pieceCode = pieceCode < 0 ? pieceCode * -1 : pieceCode;
 			if (pieceCode == (int)Piece.EMPTY)
-			{
 				return false;
-			}
 			if (pieceCode >= (int)Piece.BPAWN)
-			{
 				return false;//GameState.BLACK;
-			}
 			return true;//GameState.WHITE; TODO Add this global back in.
 		}
 

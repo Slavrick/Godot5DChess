@@ -16,10 +16,11 @@ namespace FiveDChess
 		public static readonly int NORMALMOVE = 0;
 		public static readonly int CASTLE = 1;
 		public static readonly int PROMOTION = 2;
+
 		public static readonly int SPATIALMOVE = 1;
 		public static readonly int JUMPINGMOVE = 2;
 		public static readonly int BRANCHINGMOVE = 3;
-		public static readonly Move NULL = new Move(new CoordFive(0,0,0,0,true),new CoordFive(0,0,0,0,true));
+		public static readonly Move NULL = new Move(new CoordFive(0,0,0,0,true),new CoordFive(0,0,0,0,true),1,-1);
 		// 0 is normal, 1 is castling, and 2+ is promotion with the type being promoted.
 		// For castling, origin in the king and dest is the rook.
 
@@ -39,7 +40,7 @@ namespace FiveDChess
 			PieceMoved = 0;
 		}
 
-		public Move(CoordFive coordOrigin, CoordFive coordDest, int type)
+		public Move(CoordFive coordOrigin, CoordFive coordDest, int type, int specialType = 0)
 		{
 			SpecialType = type;
 			Origin = coordOrigin;
@@ -53,9 +54,10 @@ namespace FiveDChess
 				Type = JUMPINGMOVE;
 			}
 			PieceMoved = 0;
+			SpecialType = specialType;
 		}
 
-		public Move(CoordFive boardOrigin)
+        public Move(CoordFive boardOrigin)
 		{
 			Origin = boardOrigin;
 			Dest = new CoordFive(0, 0, 0, 0,boardOrigin.Color);
