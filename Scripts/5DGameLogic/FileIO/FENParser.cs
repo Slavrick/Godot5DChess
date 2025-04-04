@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Reflection.Metadata.Ecma335;
 using Godot;
 
-//TODO fix style for this.
+//TODO fix style for this. (Pascal Case for everthing)
 namespace FileIO5D
 {
 	public enum TokenType

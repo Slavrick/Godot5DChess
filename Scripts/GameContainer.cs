@@ -26,12 +26,17 @@ public partial class GameContainer : Control
 	
 	
 	public GameState gsm;
-	public List<CoordFive> destinations;
+
+	public List<CoordFive> Destinations;
+	public List<CoordFive> HoveredDestinations;
+	public CoordFive HoveredSquare;
 	public CoordFive SelectedSquare;
+	public Move PromotionMove;
+
 	public List<Node> Arrows;
 	public List<Node> TempArrows;
 	public List<Node> CheckArrows;
-	public Move PromotionMove;
+
 	public int VisualPresent = 1;
 	public int VisualMinL = 0;
 	public int VisualMaxL = 0;
@@ -71,6 +76,7 @@ public partial class GameContainer : Control
 			multiverse.AddChild(TimeLineToGodotNodes(gsm.Multiverse[i],gsm.MinTL+i));
 		}
 		multiverse.Connect("square_clicked", new Callable(this,nameof(HandleClick)));
+		multiverse.Connect("square_hovered", new Callable(this,nameof(OnSquareHovered)));
 		mvcontainer = multiverse;
 		multiverse.Set("game_container",this);
 		AddChild(multiverse);
@@ -127,14 +133,14 @@ public partial class GameContainer : Control
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
 		CoordFive clicked = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X,color);
 		int piece = gsm.GetSquare(clicked);
-		if( destinations == null )
+		if( Destinations == null )
 		{
 			if(ValidateClickSquare(new CoordFive(clicked,color)))
 			{
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
 		}
-		else if(destinations.Contains(clicked))
+		else if(Destinations.Contains(clicked))
 		{
 			if(gsm.CoordIsPlayable(SelectedSquare))
 			{
@@ -181,9 +187,9 @@ public partial class GameContainer : Control
 		if(piece == 0){
 			return;
 		}
-		destinations = gsm.GetPossibleDestinations(coord);
+		Destinations = gsm.GetPossibleDestinations(coord);
 		Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
-		foreach( CoordFive cd in destinations ){
+		foreach( CoordFive cd in Destinations ){
 			DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
 		}
 		if( mvcontainer != null){
@@ -249,13 +255,12 @@ public partial class GameContainer : Control
 				AddChild(a);
 				EmitSignal(SignalName.MoveMade, tile, !color);
 				AddBoardToRender(m,color);
-				CheckForChecks();
-				return moveStatus;
 			}
-			CheckForChecks();
-			//UpdateRender();//TODO change this from being here, might need to put elsewhere
-			//need to add cleanup
+			//TODO this function can maybe be shorter
 		}
+		CheckForChecks();
+		SelectedSquare = null;
+		Destinations = null;
 		return moveStatus;
 	}
 	
@@ -391,16 +396,16 @@ public partial class GameContainer : Control
 	public Node CreateArrow(Move m, bool color)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
-		arrow.Set("origin",GameInterface.CoordFivetoCoord5(m.Origin,color));
-		arrow.Set("dest",GameInterface.CoordFivetoCoord5(m.Dest,color));
+		arrow.Set("origin",GameInterface.CoordFivetoGD(m.Origin));
+		arrow.Set("dest",GameInterface.CoordFivetoGD(m.Dest));
 		return arrow;
 	}
 	
 	public Node CreateArrow(Move m, bool color, Color c)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
-		arrow.Set("origin",GameInterface.CoordFivetoCoord5(m.Origin,color));
-		arrow.Set("dest",GameInterface.CoordFivetoCoord5(m.Dest,color));
+		arrow.Set("origin",GameInterface.CoordFivetoGD(m.Origin));
+		arrow.Set("dest",GameInterface.CoordFivetoGD(m.Dest));
 		arrow.Set("arrow_color",c);
 		return arrow;
 	}
@@ -423,7 +428,7 @@ public partial class GameContainer : Control
 		if( SubmitSuccessful && gsm.IsMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
-		destinations = null;
+		Destinations = null;
 		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
 	}
 	
@@ -493,6 +498,32 @@ public partial class GameContainer : Control
 		}
 	}
 	
+	public void OnSquareHovered(Coord5 c)
+	{
+		if(SelectedSquare != null){
+			return;
+		}
+		CoordFive hover = GameInterface.C5toCoordFive(c);
+		if( HoveredSquare == null || !hover.Equals(HoveredSquare)){
+			HoveredSquare = hover;
+			//TODO possibly make it so that you can only hover your own pieces.
+			int piece = gsm.GetSquare(HoveredSquare);
+			if(piece == Board.ERRORSQUARE || piece == Board.EMPTYSQUARE){
+				mvcontainer.Call("clear_highlights");
+				return;
+			}
+			HoveredDestinations = MoveGenerator.GetMoves(piece,gsm,HoveredSquare);
+			Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
+			foreach( CoordFive cd in HoveredDestinations ){
+				DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
+			}
+			if( mvcontainer != null){
+				mvcontainer.Call("clear_highlights");
+				mvcontainer.Call("highlight_squares",DestinationsGodot,HoveredSquare.Color);
+			}
+		}
+	}
+
 	public override void _Input(InputEvent @event)
 	{
 		if (@event.IsActionPressed("SubmitTurn"))

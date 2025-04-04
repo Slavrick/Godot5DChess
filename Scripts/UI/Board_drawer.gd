@@ -1,8 +1,8 @@
 extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
-signal square_right_clicked( square : Vector2, time : int, color : bool, pressed : bool)
-signal square_hovered(square : Vector2, time : int, color : bool) #TODO Change this to coord class?
+signal square_right_clicked( square : Vector2, time : int, color : bool, pressed : bool) #TODO change this to coord5 global class.
+signal square_hovered(square : Coord5)
 signal check_pressed
 signal undo_pressed
 
@@ -60,9 +60,7 @@ var highlighted_squares : Array
 var packed_piece = load("res://Scenes/UI/piece.tscn")
 var mouse_hovering = false
 var mouse_square : HighLightedSquare
-#
-#@onready var pawntres = load("res://Resources/Pieces/Pawn.tres")
-#@onready var piecestext = load("res://Resources/res/Pieces-hirez.png")
+
 @onready var piecestext = load("res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/pieces.png")
 #Translates from what the array uses in my game manager to the positions of this.
 const translation_dict = {
@@ -123,66 +121,6 @@ const piecedict = {
 	23: Vector2(2560,1536), #BDragon
 }
 
-#const translation_dict = {
-	#0:0,
-	#1:1,
-	#2:2,
-	#3:3,
-	#4:4,
-	#5:5,
-	#6:6,
-	#7:7,
-	#8:8,
-	#9:9,
-	#10:11,
-	#11:12,
-	#12:13,
-	#13:14,
-	#14:15,
-	#15:16,
-	#16:17,
-	#17:18,
-	#18:19,
-	#19:20,
-	#20:22,
-	#21:23,
-	#22:24,
-	#23:25,
-	#24:26,
-	#25:25,
-	#26:26,
-	#27:27
-#}
-#const piecedict = {
-	#0: Vector2(0,0), # Empty
-	#1: Vector2(128,0), #WPawn
-	#2: Vector2(256,0), #WKnight
-	#3: Vector2(384,0), 
-	#4: Vector2(512,0),
-	#5: Vector2(640,0),
-	#6: Vector2(768,0),
-	#7: Vector2(896,0),
-	#8: Vector2(1024,0),
-	#9: Vector2(1152,0),
-	#10: Vector2(1280,0),
-	#11: Vector2(0,128), #WBrawn
-	#12: Vector2(128,128),
-	#13: Vector2(256,128),
-	#14: Vector2(384,128),
-	#15: Vector2(512,128),
-	#16: Vector2(640,128),
-	#17: Vector2(768,128),
-	#18: Vector2(896,128),
-	#19: Vector2(1024,128),
-	#20: Vector2(1152,128),
-	#21: Vector2(1280,128),
-	#22: Vector2(0,256), #BUnicorn
-	#23: Vector2(128,256), #BDragon
-	#24: Vector2(256,256),
-	#25: Vector2(384,256),
-	#26: Vector2(512,256),
-#}
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -215,15 +153,22 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if mouse_hovering:
-		mouse_square.square = local_position_to_square(get_local_mouse_position())
-		queue_redraw()
+		var currHover = local_position_to_square(get_local_mouse_position())
+		currHover.x = clamp(currHover.x,0,board_width-1)
+		currHover.y = clamp(currHover.y,0,board_height-1)
+		#We only care if the hovered square changed.
+		if(!currHover.is_equal_approx(mouse_square.square)):
+			mouse_square.square = currHover
+			var hover = Coord5.Create(Vector4(mouse_square.square.x,mouse_square.square.y,multiverse_position.x,multiverse_position.y),color)
+			square_hovered.emit(hover)
+			queue_redraw()
 
 
-func piece_local_position_white(rank, file):
+func piece_local_position_white(rank : int, file : int) -> Vector2:
 	return Vector2(margin + SQUARE_WIDTH * file, margin + SQUARE_WIDTH * (board_height - rank - 1))
 
 
-func piece_local_position_black(rank, file):
+func piece_local_position_black(rank : int, file : int) -> Vector2:
 	return Vector2(margin + SQUARE_WIDTH * (board_width - file - 1), margin + SQUARE_WIDTH * rank)
 
 
@@ -237,32 +182,6 @@ func local_position_to_square( local_pos ) -> Vector2:
 		file = board_width - floor((local_pos.x - margin) / SQUARE_WIDTH)  - 1
 		rank = floor((local_pos.y - margin) / SQUARE_WIDTH)
 	return Vector2(file,rank)
-
-
-#XXX Slated for removal
-#func place_children():
-	#return
-	#for child in get_children():
-		#if board_perspective :
-			#child.position = piece_local_position_white(child.rank,child.file)
-		#else:
-			#child.position = piece_local_position_black(child.rank,child.file)
-
-
-#func load_board_array(): XXX slated for removal, 
-	#for i in range(board.size()):
-		#if board[i] == 0:
-			#continue
-		#var file = i % board_width
-		#var rank = floor(i / board_width)
-		#var piece = packed_piece.instantiate()
-		#piece.piece_type = board[i]
-		#piece.rank = rank
-		#piece.file = file
-		#piece.pressed.connect(button_clicked.bind(Vector2(file,rank)))
-		#piece.piece_right_clicked.connect(highlight_square.bind(Vector2(file,rank),Color.INDIAN_RED))
-		#add_child(piece)
-	#place_children()
 
 
 func _draw() -> void:
@@ -363,4 +282,5 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	mouse_hovering = false
+	mouse_square.square = Vector2(-2,-2)
 	queue_redraw() #so that the square no longer shows.
