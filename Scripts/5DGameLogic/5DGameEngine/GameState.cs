@@ -23,7 +23,7 @@ namespace FiveDChess
         public int MaxActiveTL;
 
         protected List<Move> TurnMoves;
-        protected List<int> TurnTLS;
+        public List<int> TurnTLS;
 
         public int TLHandicap;
 

@@ -138,6 +138,8 @@ func add_board(board_array : Array, multiverse_position : Vector2, new_board_col
 func pop_board_off():
 	if(get_child_count() == 1):
 		queue_free()
+	#Removal is needed because queue free triggers after redraw, which messes with the graphics.
+	remove_child(present_board) 
 	present_board.queue_free()
 	set_present_board()
 	queue_redraw()

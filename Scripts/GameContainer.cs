@@ -437,10 +437,17 @@ public partial class GameContainer : Control
 			n.Call("queue_free");
 		}
 		TempArrows.Clear();
+		Godot.Collections.Array<int> arr = new Godot.Collections.Array<int>();
+		int[] turnTLS = gsm.TurnTLS.ToArray();
+		foreach( int i in turnTLS )
+		{
+			arr.Add(i);
+		}
+		mvcontainer.Call("undo_moves",arr);
+		gsm.UndoTempMoves();
 		CheckActiveArea();
 		CheckForChecks();
-		gsm.UndoTempMoves();
-		UpdateRender();
+		//UpdateRender();
 	}
 	
 	//TODO clear check arrows.
