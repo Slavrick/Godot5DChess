@@ -1,7 +1,7 @@
 extends Panel
 
 signal square_clicked( square : Vector2, time : int, color : bool)
-signal square_right_clicked( square : Vector2, time : int, color : bool, pressed : bool) #TODO change this to coord5 global class.
+signal square_right_clicked( square : Coord5, pressed : bool)
 signal square_hovered(square : Coord5)
 signal check_pressed
 signal undo_pressed
@@ -53,15 +53,18 @@ enum TYPE {
 			$UndoButton.show()
 		else:
 			$UndoButton.hide()
+
+var multiverse_position = Vector2.ZERO
+var color := false
 var board : Array
-@export var multiverse_position = Vector2.ZERO
-@export var color := false
-var highlighted_squares : Array
+
 var packed_piece = load("res://Scenes/UI/piece.tscn")
 var mouse_hovering = false
+var highlighted_squares : Array
+var annotation_highlights : Array
 var mouse_square : HighLightedSquare
 
-@onready var piecestext = load("res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/pieces.png")
+@onready var piecestext = load("res://Sprites/CrazyPenguins-5D-Chess-Set-0.1.0/pieces-Modified.png")
 #Translates from what the array uses in my game manager to the positions of this.
 const translation_dict = {
 	0:-1,
@@ -248,10 +251,28 @@ func highlight_square(square : Vector2, color : Color):
 	highlighted_squares.append(new_highlight)
 	queue_redraw()
 
+
+func annotate_square(square : Vector2, color : Color):
+	color.a = .5
+	var new_highlight = HighLightedSquare.new()
+	new_highlight.square = square
+	new_highlight.highlight_color = color
+	highlighted_squares.append(new_highlight)
+	queue_redraw()
+
+
 func unhighlight_square(square):
 	for i in range(highlighted_squares.size()):
 		if highlighted_squares[i].square == square:
 			highlighted_squares.remove_at(i)
+			return
+	queue_redraw()
+
+
+func unannotate_square(square):
+	for i in range(annotation_highlights.size()):
+		if annotation_highlights[i].square == square:
+			annotation_highlights.remove_at(i)
 			return
 	queue_redraw()
 
@@ -261,15 +282,23 @@ func clear_highlights():
 	queue_redraw()
 
 
+func clear_annotated_highlights():
+	annotation_highlights.clear()
+	queue_redraw()
+
+
 func button_clicked( pos : Vector2 ):
 	square_clicked.emit(pos,multiverse_position.y,color)
 
 
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
 			var mouse_pos = get_local_mouse_position()
-			highlight_square(local_position_to_square(mouse_pos),Color.GOLD)
+			var right_click_square = local_position_to_square(mouse_pos)
+			var c = Coord5.Create(Vector4(right_click_square.x,right_click_square.y,multiverse_position.x,multiverse_position.y),color)
+			square_right_clicked.emit(c,event.pressed)
+			print_debug(self.name)
 			queue_redraw()
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var mouse_pos = get_local_mouse_position()

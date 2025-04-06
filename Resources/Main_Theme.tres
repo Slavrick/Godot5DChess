@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://cbyooiahpjpb2"]
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://cbyooiahpjpb2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8m2oe"]
 bg_color = Color(0.122252, 0.122252, 0.122252, 1)
@@ -51,6 +51,49 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0a83x"]
+bg_color = Color(0.509804, 0.396078, 0.223529, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dxwny"]
+bg_color = Color(0.51, 0.39576, 0.2244, 0.733333)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.792157, 0.666667, 0.47451, 1)
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_veot6"]
+bg_color = Color(0.51, 0.39576, 0.2244, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.418854, 0.332639, 0.197198, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_igpe7"]
+bg_color = Color(0.7, 0.616, 0.49, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.418854, 0.332639, 0.197198, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5qr71"]
+bg_color = Color(0.702253, 0.558701, 0.346145, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.418854, 0.332639, 0.197198, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
 [resource]
 Button/colors/font_color = Color(1, 1, 1, 1)
 Button/constants/outline_size = 6
@@ -61,3 +104,10 @@ Button/styles/normal = SubResource("StyleBoxFlat_0i4ap")
 Button/styles/pressed = SubResource("StyleBoxFlat_8ylly")
 ColorPickerButton/styles/hover = SubResource("StyleBoxFlat_bm2dy")
 OptionButton/styles/hover = SubResource("StyleBoxFlat_oeya2")
+Panel/styles/panel = SubResource("StyleBoxFlat_0a83x")
+TabContainer/styles/panel = SubResource("StyleBoxFlat_dxwny")
+TabContainer/styles/tab_disabled = SubResource("StyleBoxFlat_veot6")
+TabContainer/styles/tab_focus = SubResource("StyleBoxFlat_veot6")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_igpe7")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_5qr71")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_veot6")

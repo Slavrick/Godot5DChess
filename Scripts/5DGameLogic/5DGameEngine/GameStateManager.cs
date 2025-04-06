@@ -10,7 +10,7 @@ namespace FiveDChess
         public Timeline[] OriginsTL;
         public int StartMinTL;
         public List<Turn> Turns;
-        public TurnTree TurnTree;
+        public TurnTree TT;
         public TurnTree.Node Index;
         public int CurrTurn;
 
@@ -21,8 +21,8 @@ namespace FiveDChess
             OriginsTL = origins;
             this.Turns = new List<Turn>();
             CurrTurn = 1;
-            TurnTree = new TurnTree(new Turn());
-            Index = TurnTree.Root;
+            TT = new TurnTree(new Turn());
+            Index = TT.Root;
         }
 
         public bool SubmitMoves()
@@ -98,13 +98,13 @@ namespace FiveDChess
             }
             if (indexClicked == 0)
             {
-                while (Index != TurnTree.Root)
+                while (Index != TT.Root)
                 {
                     UndoTree();
                 }
                 return true;
             }
-            List<TurnTree.Node> nodeList = TurnTree.GetNodesLinear();
+            List<TurnTree.Node> nodeList = TT.GetNodesLinear();
             TurnTree.Node target = nodeList[indexClicked];
             while (!TurnTree.Contains(Index, target.NodeID))
             {

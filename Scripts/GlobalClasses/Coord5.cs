@@ -29,4 +29,9 @@ public partial class Coord5 : Resource
 			&& compare.v[3] == v[3]
 			&& compare.color == this.color;
 	}
+	
+	public string ToString()
+	{
+		return $"({v[2]}T{v[3]}){v[0]}.{v[1]}";
+	}
 }

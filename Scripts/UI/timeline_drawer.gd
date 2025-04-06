@@ -5,6 +5,7 @@ extends Node2D
 #TODO change this so that not nessesary to push it back, simplifying the draw calls.
 #TODO Start with the multiverse container place timelines function.
 signal square_clicked(square : Vector2, temporal_position : Vector2, color : bool)
+signal square_right_clicked(square : Coord5, pressed : bool)
 signal square_hovered(square : Coord5)
 
 enum DRAWMODE {
@@ -36,6 +37,7 @@ func _ready() -> void:
 func connect_children():
 	for child in get_children():
 		child.square_clicked.connect(board_square_clicked)
+		child.square_right_clicked.connect(board_square_right_clicked)
 		child.square_hovered.connect(board_square_hovered)
 
 
@@ -129,6 +131,7 @@ func add_board(board_array : Array, multiverse_position : Vector2, new_board_col
 	present_board.board_type = 0
 	new_board.square_clicked.connect(board_square_clicked)
 	new_board.square_hovered.connect(board_square_hovered)
+	new_board.square_right_clicked.connect(board_square_right_clicked)
 	place_child(new_board)
 	add_child(new_board)
 	queue_redraw()
@@ -170,7 +173,7 @@ func _draw():
 		VisualSettings.FULL_VIEW:
 			var width = horizontal_stickout * 2
 			for child in get_children():
-						width += VisualSettings.multiverse_tile_width / 2
+				width += VisualSettings.multiverse_tile_width / 2
 			var tl_draw_position
 			if color_start:
 				tl_draw_position = Vector2(VisualSettings.multiverse_tile_width - horizontal_stickout,VisualSettings.game_board_dimensions.y * 128 / 2)
@@ -227,9 +230,15 @@ func board_square_clicked(square ,time, color):
 	square_clicked.emit(square,Vector2(layer,time),color)
 
 
+func board_square_right_clicked(c : Coord5, pressed : bool):
+	c.v.z = layer
+	square_right_clicked.emit(c,pressed)
+
+
 func board_square_hovered( c : Coord5 ):
 	c.v.z = layer
 	square_hovered.emit(c)
+
 
 func highlight_square(square : Vector4, color : bool ):
 	get_board(square.w, color).highlight_square(Vector2(square.x,square.y),Color.MEDIUM_SLATE_BLUE)
@@ -238,6 +247,15 @@ func highlight_square(square : Vector4, color : bool ):
 func clear_highlights():
 	for child in get_children():
 		child.clear_highlights()
+
+
+func annotate_sqaure(square : Vector4, color : bool ):
+	get_board(square.w, color).highlight_square(Vector2(square.x,square.y),Color.MEDIUM_SLATE_BLUE)
+
+
+func clear_annotattions():
+	for child in get_children():
+		child.clear_annotations()
 
 
 func get_board( time : int , color : bool ) -> Node:

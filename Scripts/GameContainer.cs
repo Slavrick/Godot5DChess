@@ -25,17 +25,19 @@ public partial class GameContainer : Control
 	public delegate void ActiveAreaChangedEventHandler(int present, int minActiveTimeline, int maxActiveTimeline);
 	
 	
-	public GameState gsm;
+	public GameStateManager gsm;
 
 	public List<CoordFive> Destinations;
 	public List<CoordFive> HoveredDestinations;
 	public CoordFive HoveredSquare;
 	public CoordFive SelectedSquare;
+	public Coord5 RightClickStart;
 	public Move PromotionMove;
 
 	public List<Node> Arrows;
 	public List<Node> TempArrows;
 	public List<Node> CheckArrows;
+	public List<Node> AnnotationArrows;
 
 	public int VisualPresent = 1;
 	public int VisualMinL = 0;
@@ -48,9 +50,10 @@ public partial class GameContainer : Control
 	
 	public override void _Ready()
 	{
-		CheckArrows = new List<Node>();
 		Arrows = new List<Node>();
 		TempArrows = new List<Node>();
+		CheckArrows = new List<Node>();
+		AnnotationArrows = new List<Node>();
 		GetNode("/root/VisualSettings").Connect("view_changed", new Callable(this, nameof(OnViewChanged)));
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
 		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
@@ -77,6 +80,7 @@ public partial class GameContainer : Control
 		}
 		multiverse.Connect("square_clicked", new Callable(this,nameof(HandleClick)));
 		multiverse.Connect("square_hovered", new Callable(this,nameof(OnSquareHovered)));
+		multiverse.Connect("square_right_clicked", new Callable(this,nameof(HandleRightClick)));
 		mvcontainer = multiverse;
 		multiverse.Set("game_container",this);
 		AddChild(multiverse);
@@ -263,6 +267,47 @@ public partial class GameContainer : Control
 		Destinations = null;
 		return moveStatus;
 	}
+
+	public void HandleRightClick(Coord5 square, bool pressed)
+	{
+		if(pressed)
+		{
+			RightClickStart = square;
+			return;
+		}else{
+			if(RightClickStart.Equals(square))
+			{
+				//Hightlihgt square.
+			}
+			else
+			{
+				Node a = CreateArrowCoord5(RightClickStart, square, new Color(0,0,1,(float).5));
+				for(int i = 0 ; i < AnnotationArrows.Count; i++)
+				{
+					if((bool)a.Call("equals",AnnotationArrows[i]))
+					{
+						AnnotationArrows[i].Call("queue_free");
+						AnnotationArrows.RemoveAt(i);
+						return;
+					}
+				}
+				if(Input.IsActionPressed("ThreatAnnotation"))
+				{
+					a.Set("arrow_color",new Color(1,0,0,(float).5));
+				}
+				if(Input.IsActionPressed("CautionAnnotation"))
+				{
+					a.Set("arrow_color",new Color(1,(float).5,0,(float).5));
+				}
+				if(Input.IsActionPressed("BrilliantAnnotation"))
+				{
+					a.Set("arrow_color",new Color(0,(float).4,(float).4,(float).5));
+				}
+				AnnotationArrows.Add(a);
+				AddChild(a);
+			}
+		}
+	}
 	
 	//this adds a board instead of nuking everything.
 	public void AddBoardToRender(Move m, bool color)
@@ -400,6 +445,15 @@ public partial class GameContainer : Control
 		arrow.Set("dest",GameInterface.CoordFivetoGD(m.Dest));
 		return arrow;
 	}
+
+	public Node CreateArrowCoord5(Coord5 origin, Coord5 dest, Color c)
+	{
+		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
+		arrow.Set("origin",origin);
+		arrow.Set("dest",dest);
+		arrow.Set("arrow_color",c);
+		return arrow;
+	}
 	
 	public Node CreateArrow(Move m, bool color, Color c)
 	{
@@ -424,10 +478,17 @@ public partial class GameContainer : Control
 			EmitSignal(SignalName.TurnChanged, gsm.Color, gsm.Present);
 			Arrows.AddRange(TempArrows);
 			TempArrows.Clear();
+			//Handle Annotation TODO
+			foreach(Node n in AnnotationArrows)
+			{
+				n.Call("queue_free");
+			}
+			AnnotationArrows.Clear();
 		}
 		if( SubmitSuccessful && gsm.IsMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
+		GameStateManager.PrintTree(gsm.TT);
 		Destinations = null;
 		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
 	}

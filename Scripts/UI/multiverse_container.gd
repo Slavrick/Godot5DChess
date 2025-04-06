@@ -1,7 +1,9 @@
 extends Control
 
 signal square_clicked(square : Vector2, temporal_position : Vector2, color : bool)
+signal square_right_clicked( square : Coord5,pressed : bool)
 signal square_hovered( c : Coord5 )
+
 
 var highlighted_squares = []
 var chessboard_dimensions : Vector2
@@ -19,10 +21,6 @@ func _ready() -> void:
 		game_container.ActiveAreaChanged.connect(update_active_area)
 
 
-func _process(delta: float) -> void:
-	pass
-
-
 func add_board(board_array : Array, multiverse_position : Vector2, new_board_color):
 	var tl = get_timeline_layer(multiverse_position.x)
 	tl.add_board(board_array, multiverse_position,new_board_color)
@@ -31,6 +29,7 @@ func add_board(board_array : Array, multiverse_position : Vector2, new_board_col
 func add_timeline(new_timeline : Node2D):
 	var centering_offset = (VisualSettings.multiverse_tile_height / 2.0) - ((chessboard_dimensions.y * 128) / 2.0)
 	new_timeline.square_clicked.connect(timeline_square_clicked)
+	new_timeline.square_right_clicked.connect(timeline_square_right_clicked)
 	new_timeline.square_hovered.connect(timeline_square_hovered)
 	var layer = new_timeline.layer
 	if layer > min_active_tl or layer < min_active_tl:
@@ -44,6 +43,7 @@ func add_timeline(new_timeline : Node2D):
 		new_timeline.position.y =  (-new_timeline.layer) * VisualSettings.multiverse_tile_height + centering_offset
 		new_timeline.position.x = (new_timeline.TStart - 2) * VisualSettings.multiverse_tile_width
 	add_child(new_timeline)
+
 
 func highlight_squares(squares : Array, color : bool):
 	for square in squares:
@@ -59,7 +59,9 @@ func clear_highlights():
 func connect_signals():
 	for child in get_children():
 		child.square_clicked.connect(timeline_square_clicked)
+		child.square_right_clicked.connect(timeline_square_right_clicked)
 		child.square_hovered.connect(timeline_square_hovered)
+
 
 func place_timelines():
 	var centering_offset = (VisualSettings.multiverse_tile_height / 2.0) - ((chessboard_dimensions.y * 128) / 2.0)
@@ -95,6 +97,10 @@ func timeline_square_clicked(square : Vector2 , temporal_position : Vector2, col
 	square_clicked.emit(square,temporal_position,color)
 
 
+func timeline_square_right_clicked(c : Coord5, pressed : bool):
+	square_right_clicked.emit(c,pressed)
+	print_debug(c.ToString())
+
 func set_perspective( new_perspective ):
 	perspective = new_perspective
 	place_timelines()
@@ -117,7 +123,6 @@ func timeline_square_hovered( c : Coord5):
 
 
 func undo_moves( turntimelines : Array ):
-	print_debug(turntimelines)
 	for layer in turntimelines: #this is so dumb, idk if there is a better way. Maybe if we know the array is sorted.
 		var timeline = get_timeline_layer(layer)
 		if timeline == null:

@@ -3,9 +3,8 @@ extends Control
 signal load_game
 signal load_analysis_game(file_path : String)
 
+
 func _ready() -> void:
-	$MultiVerseDraw.SQUARE_LENGTH = 100
-	$MultiVerseDraw.SQUARE_HEIGHT = 100 # Overwrite last game widths and height.
 	$"Main/MenuVbox/Play Game".pressed.connect(play_game)
 	$Main/MenuVbox/Settings.pressed.connect(show_settings)
 	$Main/MenuVbox/Exit.pressed.connect(exit_program)
@@ -14,6 +13,7 @@ func _ready() -> void:
 	$Main/MenuVbox/Analysis.pressed.connect(analysis_pressed)
 	$Main/MenuVbox/Attribution.pressed.connect(on_attribution_pressed)
 	$Attribution.close_attribution.connect(close_attribution)
+
 
 func play_game():
 	$Main.hide()

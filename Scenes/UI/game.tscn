@@ -106,6 +106,7 @@ access = 2
 filters = PackedStringArray("*.txt", "*.PGN", "*.PGN5", "*.PGN5.txt")
 show_hidden_files = true
 
+[connection signal="GameLoaded" from="." to="SubViewport/Mated" method="_on_game_game_loaded"]
 [connection signal="IsMated" from="." to="SubViewport/Mated" method="_on_game_is_mated"]
 [connection signal="TurnChanged" from="." to="SubViewport/Panel" method="_on_game_turn_changed"]
 [connection signal="goto_present" from="SubViewport/Menus" to="Camera2D" method="_on_menus_goto_present"]
