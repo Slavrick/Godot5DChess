@@ -38,6 +38,7 @@ public partial class GameContainer : Control
 	public List<Node> TempArrows;
 	public List<Node> CheckArrows;
 	public List<Node> AnnotationArrows;
+	public List<Coord5> AnnotationSquares;
 
 	public int VisualPresent = 1;
 	public int VisualMinL = 0;
@@ -54,6 +55,7 @@ public partial class GameContainer : Control
 		TempArrows = new List<Node>();
 		CheckArrows = new List<Node>();
 		AnnotationArrows = new List<Node>();
+		AnnotationSquares = new List<Coord5>();
 		GetNode("/root/VisualSettings").Connect("view_changed", new Callable(this, nameof(OnViewChanged)));
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
 		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
@@ -64,11 +66,6 @@ public partial class GameContainer : Control
 			GetNode("SubViewport/Menus").Call("set_analysis_mode");
 		}
 		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
-	}
-
-	public override void _Process(double delta)
-	{
-		
 	}
 	
 	public void GameStateToGodotNodes()
@@ -277,7 +274,30 @@ public partial class GameContainer : Control
 		}else{
 			if(RightClickStart.Equals(square))
 			{
-				//Hightlihgt square.
+				for(int i = 0; i < AnnotationSquares.Count ; i++)
+				{
+					if(square.Equals(AnnotationSquares[i]))
+					{
+						AnnotationSquares.RemoveAt(i);
+						mvcontainer.Call("annotate_unhighlight_square",square);
+						return;
+					}
+				}
+				Color highlight_color = new Color(0,0,1,(float).5);
+				if(Input.IsActionPressed("ThreatAnnotation"))
+				{
+					highlight_color = new Color(1,0,0,(float).5);
+				}
+				else if(Input.IsActionPressed("CautionAnnotation"))
+				{
+					highlight_color = new Color(1,(float).5,0,(float).5);
+				}
+				else if(Input.IsActionPressed("BrilliantAnnotation"))
+				{
+					highlight_color = new Color(0,(float).4,(float).4,(float).5);
+				}
+				AnnotationSquares.Add(square);
+				mvcontainer.Call("annotate_highlight_square",square,highlight_color);
 			}
 			else
 			{

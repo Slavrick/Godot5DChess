@@ -51,6 +51,14 @@ func highlight_squares(squares : Array, color : bool):
 		get_timeline_layer(square.z).highlight_square(square,color)
 
 
+func annotate_highlight_square( square : Coord5, annotation_color : Color):
+	get_timeline_layer(square.v.z).annotate_highlight_square(square,annotation_color)
+
+
+func annotate_unhighlight_square(square : Coord5):
+	get_timeline_layer(square.v.z).annotate_unhighlight_square(square)
+
+
 func clear_highlights():
 	for child in get_children():
 		child.clear_highlights()
@@ -99,7 +107,7 @@ func timeline_square_clicked(square : Vector2 , temporal_position : Vector2, col
 
 func timeline_square_right_clicked(c : Coord5, pressed : bool):
 	square_right_clicked.emit(c,pressed)
-	print_debug(c.ToString())
+
 
 func set_perspective( new_perspective ):
 	perspective = new_perspective

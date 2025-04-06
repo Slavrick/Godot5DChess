@@ -189,6 +189,7 @@ func local_position_to_square( local_pos ) -> Vector2:
 
 func _draw() -> void:
 	#TODO can potentially just draw a big initial square and fill in the dark spots to optimize.
+	#Draw Checker
 	for y in range(board_height):
 		for x in range(board_width):
 			var rect = Rect2(margin + x * SQUARE_WIDTH, margin + y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
@@ -196,6 +197,7 @@ func _draw() -> void:
 				draw_rect(rect,light_color,true)
 			else:
 				draw_rect(rect,dark_color,true)
+	#Draw Pieces
 	if board_perspective:
 		for i in range(board.size()):
 			if(board[i] == -1):
@@ -210,7 +212,15 @@ func _draw() -> void:
 			var file = i % board_width
 			var rank = floor(i / board_width)
 			draw_texture_rect_region(piecestext,Rect2(piece_local_position_black(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(500,500)))
+	#Draw Highlights.
 	for highlight in highlighted_squares:
+		if board_perspective:
+			var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + (board_height - highlight.square.y - 1) * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
+			draw_rect(rect,highlight.highlight_color,true)
+		else:
+			var rect = Rect2(margin + (board_width - highlight.square.x - 1) * SQUARE_WIDTH, margin + highlight.square.y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
+			draw_rect(rect,highlight.highlight_color,true)
+	for highlight in annotation_highlights:
 		if board_perspective:
 			var rect = Rect2(margin + highlight.square.x * SQUARE_WIDTH, margin + (board_height - highlight.square.y - 1) * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
 			draw_rect(rect,highlight.highlight_color,true)
@@ -257,7 +267,7 @@ func annotate_square(square : Vector2, color : Color):
 	var new_highlight = HighLightedSquare.new()
 	new_highlight.square = square
 	new_highlight.highlight_color = color
-	highlighted_squares.append(new_highlight)
+	annotation_highlights.append(new_highlight)
 	queue_redraw()
 
 
@@ -298,7 +308,6 @@ func _on_gui_input(event: InputEvent) -> void:
 			var right_click_square = local_position_to_square(mouse_pos)
 			var c = Coord5.Create(Vector4(right_click_square.x,right_click_square.y,multiverse_position.x,multiverse_position.y),color)
 			square_right_clicked.emit(c,event.pressed)
-			print_debug(self.name)
 			queue_redraw()
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var mouse_pos = get_local_mouse_position()
