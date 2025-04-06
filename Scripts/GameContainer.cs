@@ -24,9 +24,8 @@ public partial class GameContainer : Control
 	[Signal]
 	public delegate void ActiveAreaChangedEventHandler(int present, int minActiveTimeline, int maxActiveTimeline);
 	
-	
 	public GameStateManager gsm;
-
+	
 	public List<CoordFive> Destinations;
 	public List<CoordFive> HoveredDestinations;
 	public CoordFive HoveredSquare;
@@ -60,12 +59,14 @@ public partial class GameContainer : Control
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
 		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
 		GetNode("SubViewport/Menus").Connect("undo_turn", new Callable(this,nameof(UndoTurn)));
-		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
 		GetNode("SubViewport/Menus").Connect("promotion_chosen", new Callable(this,nameof(FinishPromotionMove)));
 		if(AnalysisMode){
 			GetNode("SubViewport/Menus").Call("set_analysis_mode");
+			GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
+			GetNode("SubViewport/Menus").Connect("save_game", new Callable(this,nameof(OpenSaveDialog)));
+			GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
+			GetNode("SaveDialog").Connect("file_selected", new Callable(this, nameof(SaveGame)));
 		}
-		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 	}
 	
 	public void GameStateToGodotNodes()
@@ -543,11 +544,20 @@ public partial class GameContainer : Control
 		EmitSignal(SignalName.GameLoaded);
 		EmitSignal(SignalName.ActiveAreaChanged, VisualPresent,VisualMinL,VisualMaxL);
 	}
+
+	public void SaveGame(String filepath){
+		Console.WriteLine("Save Path: " + filepath);
+		FENExporter.ExportGameState(gsm, filepath);
+	}
 	
 	public void OpenFileDialog(){
 		GetNode("FileDialog").Call("show");
 	}
 	
+	public void OpenSaveDialog(){
+		GetNode("SaveDialog").Call("show");
+	}
+
 	public void ExitGamePressed(){
 		EmitSignal(SignalName.ExitGame);
 	}
@@ -636,6 +646,4 @@ public partial class GameContainer : Control
 			}
 		}
 	}
-	
-
 }

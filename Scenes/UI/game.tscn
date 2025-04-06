@@ -105,6 +105,7 @@ ok_button_text = "Save"
 access = 2
 filters = PackedStringArray("*.txt", "*.PGN", "*.PGN5", "*.PGN5.txt")
 show_hidden_files = true
+use_native_dialog = true
 
 [connection signal="GameLoaded" from="." to="SubViewport/Mated" method="_on_game_game_loaded"]
 [connection signal="IsMated" from="." to="SubViewport/Mated" method="_on_game_is_mated"]

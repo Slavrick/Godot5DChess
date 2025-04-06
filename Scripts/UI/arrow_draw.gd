@@ -33,12 +33,16 @@ func get_coordinate():
 func calc_inout():
 	var pos1 = curve.get_point_position(0)
 	var pos2 = curve.get_point_position(1)
-	#var d = min((pos2 - pos1).length(),10000.0)
-	#d = d / 10000.0
-	#var rot = rotation_curve.sample(d)
+	var d = min((pos2 - pos1).length(),10000.0)
+	d = d / 10000.0
+	var rot = rotation_curve.sample(d)
 	#print_debug(rot)
-	var out = (pos2 - pos1) / 2
-	curve.set_point_out(0,out.rotated(.3))
+	var out = ((pos2 - pos1) / 3).rotated(rot)
+	var in_ =  ((pos1 - pos2) / 3).rotated(-rot)
+	#in_ = Vector2(-1 * out.x,-1 * out.y)
+	curve.set_point_out(0,out)
+	curve.set_point_in(1,in_)
+	print_debug("out: " + str(out) + "; in: " + str(in_))
 
 
 func on_view_changed(perspective,view):

@@ -46,6 +46,11 @@ namespace FileIO5D {
 
 		public static string ToRawShadString(Move m)
 		{
+			if(m.SpecialType == Move.NULLMOVE)
+			{
+				return $"({m.Origin.L}T{m.Origin.T})0000";
+
+			}
 			if (m.SpecialType == Move.CASTLE)
 			{
 				if (m.Dest.X > m.Origin.X)
@@ -159,5 +164,20 @@ namespace FileIO5D {
             }
             return temp;
 		}
-	}
+
+        public static string TurnExportString(Turn t, int type = 0)
+        {
+            if (t.Moves == null)
+            {
+                return "";
+            }
+            string temp = "";
+			foreach (Move m in t.Moves)
+			{
+				temp += ToRawShadString(m);
+				temp += " ";
+			}
+            return temp;
+        }
+    }
 }

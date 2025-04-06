@@ -19,12 +19,10 @@ script = ExtResource("1_ici0s")
 visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.117
-offset_left = 58.0
-offset_top = 30.0
-offset_right = -43.0
-offset_bottom = 10.184
+offset_left = 34.0
+offset_top = 15.0
+offset_right = 267.0
+offset_bottom = 71.0
 
 [node name="Load Game" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -34,9 +32,7 @@ text = "Load Game"
 [node name="Save Game" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-disabled = true
 text = "Save Game
-(coming in future Update)
 "
 
 [node name="TurnTree" type="ScrollContainer" parent="."]
