@@ -197,21 +197,6 @@ func _draw() -> void:
 				draw_rect(rect,light_color,true)
 			else:
 				draw_rect(rect,dark_color,true)
-	#Draw Pieces
-	if board_perspective:
-		for i in range(board.size()):
-			if(board[i] == -1):
-				continue
-			var file = i % board_width
-			var rank = floor(i / board_width)
-			draw_texture_rect_region(piecestext,Rect2(piece_local_position_white(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(500,500)))
-	else:
-		for i in range(board.size()):
-			if(board[i] == -1):
-				continue
-			var file = i % board_width
-			var rank = floor(i / board_width)
-			draw_texture_rect_region(piecestext,Rect2(piece_local_position_black(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(500,500)))
 	#Draw Highlights.
 	for highlight in highlighted_squares:
 		if board_perspective:
@@ -238,6 +223,21 @@ func _draw() -> void:
 		else:
 			var rect = Rect2(margin + (board_width - mouse_square.square.x - 1) * SQUARE_WIDTH, margin + mouse_square.square.y * SQUARE_WIDTH,SQUARE_WIDTH,SQUARE_WIDTH)
 			draw_rect(rect,mouse_square.highlight_color,true)
+	#Draw Pieces
+	if board_perspective:
+		for i in range(board.size()):
+			if(board[i] == -1):
+				continue
+			var file = i % board_width
+			var rank = floor(i / board_width)
+			draw_texture_rect_region(piecestext,Rect2(piece_local_position_white(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(500,500)))
+	else:
+		for i in range(board.size()):
+			if(board[i] == -1):
+				continue
+			var file = i % board_width
+			var rank = floor(i / board_width)
+			draw_texture_rect_region(piecestext,Rect2(piece_local_position_black(rank,file),Vector2(128,128)),Rect2(piecedict[board[i]],Vector2(500,500)))
 
 
 func logicalBoardToUIBoard():

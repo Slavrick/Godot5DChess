@@ -3,7 +3,7 @@ extends Control
 signal square_clicked(square : Vector2, temporal_position : Vector2, color : bool)
 signal square_right_clicked( square : Coord5,pressed : bool)
 signal square_hovered( c : Coord5 )
-
+signal undo_timeline( layer : int)
 
 var highlighted_squares = []
 var chessboard_dimensions : Vector2
@@ -31,6 +31,7 @@ func add_timeline(new_timeline : Node2D):
 	new_timeline.square_clicked.connect(timeline_square_clicked)
 	new_timeline.square_right_clicked.connect(timeline_square_right_clicked)
 	new_timeline.square_hovered.connect(timeline_square_hovered)
+	new_timeline.undo_timeline.connect(timeline_undo_pressed)
 	var layer = new_timeline.layer
 	if layer > min_active_tl or layer < min_active_tl:
 		new_timeline.active = false
@@ -69,6 +70,7 @@ func connect_signals():
 		child.square_clicked.connect(timeline_square_clicked)
 		child.square_right_clicked.connect(timeline_square_right_clicked)
 		child.square_hovered.connect(timeline_square_hovered)
+		child.undo_timeline.connect(timeline_undo_pressed)
 
 
 func place_timelines():
@@ -107,6 +109,11 @@ func timeline_square_clicked(square : Vector2 , temporal_position : Vector2, col
 
 func timeline_square_right_clicked(c : Coord5, pressed : bool):
 	square_right_clicked.emit(c,pressed)
+
+
+func timeline_undo_pressed(layer : int):
+	undo_timeline.emit(layer)
+	print_debug(layer)
 
 
 func set_perspective( new_perspective ):

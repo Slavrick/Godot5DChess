@@ -7,6 +7,8 @@ extends Node2D
 signal square_clicked(square : Vector2, temporal_position : Vector2, color : bool)
 signal square_right_clicked(square : Coord5, pressed : bool)
 signal square_hovered(square : Coord5)
+signal undo_timeline(layer : int)
+signal show_check(layer : int)
 
 enum DRAWMODE {
 	FULL,
@@ -39,6 +41,8 @@ func connect_children():
 		child.square_clicked.connect(board_square_clicked)
 		child.square_right_clicked.connect(board_square_right_clicked)
 		child.square_hovered.connect(board_square_hovered)
+		child.undo_pressed.connect(board_undo_pressed)
+		child.check_pressed.connect(board_check_pressed)
 
 
 func place_children():
@@ -132,6 +136,8 @@ func add_board(board_array : Array, multiverse_position : Vector2, new_board_col
 	new_board.square_clicked.connect(board_square_clicked)
 	new_board.square_hovered.connect(board_square_hovered)
 	new_board.square_right_clicked.connect(board_square_right_clicked)
+	new_board.undo_pressed.connect(board_undo_pressed)
+	new_board.check_pressed.connect(board_check_pressed)
 	place_child(new_board)
 	add_child(new_board)
 	queue_redraw()
@@ -233,6 +239,14 @@ func board_square_clicked(square ,time, color):
 func board_square_right_clicked(c : Coord5, pressed : bool):
 	c.v.z = layer
 	square_right_clicked.emit(c,pressed)
+
+
+func board_undo_pressed():
+	undo_timeline.emit(layer)
+
+
+func board_check_pressed():
+	show_check.emit(layer)
 
 
 func board_square_hovered( c : Coord5 ):

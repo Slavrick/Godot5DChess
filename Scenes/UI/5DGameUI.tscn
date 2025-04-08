@@ -48,10 +48,6 @@ offset_right = 0.303955
 [node name="ItemList" type="ItemList" parent="TurnTree"]
 custom_minimum_size = Vector2(400, 10000)
 layout_mode = 2
-item_count = 3
-item_0/text = "sdfs"
-item_1/text = "s"
-item_2/text = "dasd"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
 layout_mode = 1

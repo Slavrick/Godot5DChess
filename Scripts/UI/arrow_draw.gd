@@ -42,7 +42,6 @@ func calc_inout():
 	#in_ = Vector2(-1 * out.x,-1 * out.y)
 	curve.set_point_out(0,out)
 	curve.set_point_in(1,in_)
-	print_debug("out: " + str(out) + "; in: " + str(in_))
 
 
 func on_view_changed(perspective,view):

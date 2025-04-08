@@ -66,6 +66,7 @@ public partial class GameContainer : Control
 			GetNode("SubViewport/Menus").Connect("save_game", new Callable(this,nameof(OpenSaveDialog)));
 			GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 			GetNode("SaveDialog").Connect("file_selected", new Callable(this, nameof(SaveGame)));
+			GetNode("SubViewport/Menus").Connect("turntree_item_selected", new Callable(this,nameof(OnTurnTreeSelected)));
 		}
 	}
 	
@@ -459,6 +460,12 @@ public partial class GameContainer : Control
 		return new Vector2(cf.L,cf.T);
 	}
 	
+	public Godot.Collections.Array<String> GetLinearLabels()
+	{
+		List<String> labels = gsm.TT.GetLabels();
+		return new Godot.Collections.Array<String>(labels);
+	}
+
 	public Node CreateArrow(Move m, bool color)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
@@ -620,6 +627,12 @@ public partial class GameContainer : Control
 				mvcontainer.Call("highlight_squares",DestinationsGodot,HoveredSquare.Color);
 			}
 		}
+	}
+
+	public void OnTurnTreeSelected(int index)
+	{
+		gsm.NavigateToTurn(index);
+		UpdateRender();
 	}
 
 	public override void _Input(InputEvent @event)

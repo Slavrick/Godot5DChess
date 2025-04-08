@@ -8,8 +8,9 @@ signal undo_turn
 signal flip_perspective
 signal change_view(view_type)
 signal promotion_chosen(piece : int)
+signal turntree_item_selected(index : int)
 
-var game : Node
+@export var game : Node
 
 func _ready() -> void:
 	$HBoxContainer2/Submit.pressed.connect(submit_pressed)
@@ -21,8 +22,10 @@ func _ready() -> void:
 	$"HBoxContainer/Save Game".pressed.connect(save_game_pressed)
 	$HBoxContainer2/Perspective.button_pressed = VisualSettings.perspective
 	$PromotionPanel.promotion_chose.connect(on_promotion_chose)
-	if game != null:
-		pass
+	$TurnTree/ItemList.item_selected.connect(on_turntree_item_selected)
+	if game != null and game.AnalysisMode:
+		game.TurnChanged.connect(get_turn_tree)
+		game.GameLoaded.connect(on_game_loaded)
 
 
 func show_promotion():
@@ -75,3 +78,18 @@ func view_changed(index : int):
 func on_promotion_chose( piece : int):
 	$PromotionPanel.hide()
 	promotion_chosen.emit(piece)
+
+
+func get_turn_tree(player : bool, present : int):
+	var labels = game.GetLinearLabels()
+	$TurnTree/ItemList.clear()
+	for label in labels :
+		$TurnTree/ItemList.add_item(label)
+
+
+func on_game_loaded():
+	get_turn_tree(false,0)
+
+
+func on_turntree_item_selected( index : int):
+	turntree_item_selected.emit(index)
