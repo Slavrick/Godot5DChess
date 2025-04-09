@@ -240,7 +240,7 @@ public partial class GameContainer : Control
 				{
 					tile.Y += 1;
 				}
-				Node a = CreateArrow(m,color);
+				Node a = CreateArrow(m);
 				TempArrows.Add(a);
 				AddChild(a);
 				EmitSignal(SignalName.MoveMade, tile,!color);
@@ -253,7 +253,7 @@ public partial class GameContainer : Control
 				{
 					tile.Y += 1;
 				}
-				Node a = CreateArrow(m,color);
+				Node a = CreateArrow(m);
 				TempArrows.Add(a);
 				AddChild(a);
 				EmitSignal(SignalName.MoveMade, tile, !color);
@@ -466,7 +466,7 @@ public partial class GameContainer : Control
 		return new Godot.Collections.Array<String>(labels);
 	}
 
-	public Node CreateArrow(Move m, bool color)
+	public Node CreateArrow(Move m)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
 		arrow.Set("origin",GameInterface.CoordFivetoGD(m.Origin));
@@ -492,6 +492,21 @@ public partial class GameContainer : Control
 		return arrow;
 	}
 	
+	public void RefreshMoveArrows()
+	{
+		ClearTurnArrows();
+		for(int i = 0 ; i < gsm.CurrTurn - 1 && i < gsm.Turns.Count; i++)
+		{
+			foreach(Move m in gsm.Turns[i].Moves)
+			{
+				Node arrow = CreateArrow(m);
+				Arrows.Add(arrow);
+				AddChild(arrow);
+			}
+		}
+	}
+
+
 	public void ClearTurnArrows()
 	{
 		foreach(Node child in Arrows){
@@ -546,7 +561,7 @@ public partial class GameContainer : Control
 		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
 		GetNode("/root/VisualSettings").Call("change_game");
 		UpdateRender();
-		ClearTurnArrows();
+		RefreshMoveArrows();
 		CheckActiveArea();
 		EmitSignal(SignalName.GameLoaded);
 		EmitSignal(SignalName.ActiveAreaChanged, VisualPresent,VisualMinL,VisualMaxL);
@@ -633,6 +648,8 @@ public partial class GameContainer : Control
 	{
 		gsm.NavigateToTurn(index);
 		UpdateRender();
+		RefreshMoveArrows();
+		CheckActiveArea();
 	}
 
 	public override void _Input(InputEvent @event)

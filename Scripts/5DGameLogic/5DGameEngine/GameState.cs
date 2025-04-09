@@ -22,7 +22,7 @@ namespace FiveDChess
         public int MinActiveTL;
         public int MaxActiveTL;
 
-        protected List<Move> TurnMoves;
+        public List<Move> TurnMoves;
         public List<int> TurnTLS;
 
         public int TLHandicap;
@@ -473,110 +473,30 @@ namespace FiveDChess
             TurnMoves.Clear();
         }
 
-        public bool UndoSingleTempMove(int timeLine)
-        {
-            //find move
-            bool startcolor = this.Color;
-            Move moveFound = null;
-            int indexFound = -1;
-            for(int i = 0; i < TurnMoves.Count; i++)
-            {
-                if(TurnMoves[i].Origin.L == timeLine || (TurnMoves[i].Dest.L == timeLine && TurnMoves[i].Type != Move.BRANCHINGMOVE) )
-                {
-                    moveFound = TurnMoves[i];
-                    indexFound = i;
-                    break;
-                }
-            }
-            if(indexFound == -1)
-            {
-                //check if its a branching move.
-                if((Color && timeLine == MaxTL) || (!Color && timeLine == MinTL))
-                {
-                    for(int i = TurnMoves.Count - 1; i <= 0 ; i--)
-                    {
-                        if(TurnMoves[i].Type == Move.BRANCHINGMOVE)
-                        {
-                            moveFound = TurnMoves[i];
-                            indexFound = i;
-                            break;
-                        }
-                    }       
-                }
-                if(indexFound == -1)
-                {
-                    return false;
-                }
-            }
-            //Determine if any moves are dependant on the move being removed.
-            for(int i = indexFound + 1; i < TurnMoves.Count; i++)
-            {
-                if(moveFound.Type == Move.BRANCHINGMOVE && TurnMoves[i].Type == Move.BRANCHINGMOVE)
-                {
-                    return false;
-                }
-                if(TurnMoves[i].Dest.L == moveFound.Origin.L && TurnMoves[i].Dest.T == moveFound.Origin.T )
-                {
-                    return false;
-                }
-            }
-            //do the undo
-            if(moveFound.Type == Move.SPATIALMOVE)
-            {
-                int[] undo = new int[1];
-                undo[0] = timeLine;
-                UndoTurn(undo);
-                TurnTLS.Remove(timeLine);  
-            }
-            else if(moveFound.Type == Move.JUMPINGMOVE)
-            {
-                int[] undo = new int[2];
-                undo[0] = moveFound.Origin.L;
-                undo[1] = moveFound.Dest.L;
-                UndoTurn(undo);
-                TurnTLS.Remove(undo[0]);
-                TurnTLS.Remove(undo[1]);
-            }
-            else if(moveFound.Type == Move.BRANCHINGMOVE)
-            {
-                int[] undo = new int[2];
-                undo[0] = moveFound.Origin.L;
-                if(this.Color)
-                {
-                    undo[1] = MaxTL;
-                }
-                else
-                {
-                    undo[1] = MinTL;
-                }
-                UndoTurn(undo);
-                TurnTLS.Remove(undo[0]);
-                TurnTLS.Remove(undo[1]);
-            }
-            TurnMoves.RemoveAt(indexFound);
-            this.Color = startcolor;
-            return true;
-        }
-
         public bool UndoTurn(int[] tlmoved)
         {
             if (tlmoved.Length == 0)
             {
                 return false;
             }
+            //This needs to be in reverse... In case you branch multiple times in a turn, will not be able to index properly
             for (int index = tlmoved.Length - 1; index >= 0; index--)
             {
                 if (GetTimeline(tlmoved[index]).UndoMove())
                 {
                     // this means that the timeline had only one board.
                     Multiverse.RemoveAt(GetTimelineIndex(tlmoved[index]));
-                    if (this.Color)
+                    if (tlmoved[index] == MaxTL)
                     {
                         MaxTL--;
                     }
-                    else
+                    else if(tlmoved[index] == MinTL)
                     {
                         MinTL++;
+                    }
+                    else
+                    {
+                        throw new Exception("Non Outer Timeline Removed: " + tlmoved[index].ToString());
                     }
                 }
             }
