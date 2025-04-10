@@ -429,7 +429,6 @@ public partial class GameContainer : Control
 		CheckArrows.Clear();
 		List<Move> moves = gsm.GetCurrentThreats();
 		Godot.Collections.Array<int> indicators = new Godot.Collections.Array<int>();
-		Console.WriteLine("[{0}]", string.Join(", ", moves));
 		foreach(Move m in moves)
 		{
 			if(gsm.IsInBounds(m.Origin) && gsm.IsInBounds(m.Dest))

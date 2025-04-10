@@ -23,6 +23,14 @@ VisualSettings="*res://Scenes/visual_settings.tscn"
 
 project/assembly_name="5dChess"
 
+[file_customization]
+
+folder_colors={
+"res://PGN/": "red",
+"res://Scenes/": "yellow",
+"res://Scripts/": "yellow"
+}
+
 [input]
 
 SubmitTurn={

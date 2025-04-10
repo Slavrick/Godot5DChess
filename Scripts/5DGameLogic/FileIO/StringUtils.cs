@@ -136,11 +136,12 @@ namespace FileIO5D {
 			}
 			if(m.SpecialType > Move.CASTLE)
 			{
-				if (piece > Board.NUMTYPES)
+				int promotionpiece = m.SpecialType;
+				if (promotionpiece > Board.NUMTYPES)
 				{
-					piece -= Board.NUMTYPES;
+					promotionpiece -= Board.NUMTYPES;
 				}
-				move += "=" + Board.PieceChars[piece];
+				move += "=" + Board.PieceChars[promotionpiece];
 			}
 			return move;
 		}

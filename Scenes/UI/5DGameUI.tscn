@@ -54,7 +54,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_7ykjc")
 
 [node name="TurnTree" type="ScrollContainer" parent="HSplitContainer"]
 visible = false
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(150, 100)
 layout_mode = 2
 
 [node name="ItemList" type="ItemList" parent="HSplitContainer/TurnTree"]

@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8wa801n3kele"]
+[gd_scene load_steps=4 format=3 uid="uid://c8wa801n3kele"]
 
 [ext_resource type="Script" path="res://Scripts/UI/variant_selection_menu.gd" id="1_becik"]
+[ext_resource type="Theme" uid="uid://cbyooiahpjpb2" path="res://Resources/Main_Theme.tres" id="2_0no5f"]
+[ext_resource type="PackedScene" uid="uid://cfe4iku2l5k0s" path="res://Scenes/UI/VariantSelector.tscn" id="2_fipoi"]
 
 [node name="VariantSelectionMenu" type="MarginContainer"]
 anchors_preset = -1
@@ -16,9 +18,10 @@ script = ExtResource("1_becik")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Standard" type="ScrollContainer" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -26,20 +29,8 @@ metadata/_tab_index = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Standard" type="HBoxContainer" parent="TabContainer/Standard/VBoxContainer"]
+[node name="Standard" parent="TabContainer/Standard/VBoxContainer" instance=ExtResource("2_fipoi")]
 layout_mode = 2
-
-[node name="Button" type="Button" parent="TabContainer/Standard/VBoxContainer/Standard"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.25
-text = "Standard"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Standard/VBoxContainer/Standard"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "The Standard Chess Position"
-fit_content = true
 
 [node name="StandardT0" type="HBoxContainer" parent="TabContainer/Standard/VBoxContainer"]
 layout_mode = 2
@@ -87,29 +78,12 @@ text = "The Standard Chess Position, However The queenis replaced with the weake
 fit_content = true
 
 [node name="Checkmate Practice" type="ScrollContainer" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Checkmate Practice"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="Knight" type="HBoxContainer" parent="TabContainer/Checkmate Practice/VBoxContainer"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="TabContainer/Checkmate Practice/VBoxContainer/Knight"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.25
-disabled = true
-text = "Knight"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Checkmate Practice/VBoxContainer/Knight"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Checkmate practice for knight users (TBD)"
-fit_content = true
 
 [node name="Focused-Single Piece" type="ScrollContainer" parent="TabContainer"]
 visible = false
@@ -185,4 +159,5 @@ offset_top = -38.112
 offset_right = 216.0
 offset_bottom = -4.0
 grow_vertical = 2
-text = "<===== Back(Placeholder)"
+theme = ExtResource("2_0no5f")
+text = "Back To Main Menu"

@@ -85,6 +85,7 @@ func get_turn_tree(player : bool, present : int):
 	$HSplitContainer/TurnTree/ItemList.clear()
 	for label in labels :
 		$HSplitContainer/TurnTree/ItemList.add_item(label)
+	$HSplitContainer/TurnTree/ItemList.set_item_text(0,"Starting Position")
 
 
 func on_game_loaded():

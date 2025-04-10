@@ -155,7 +155,6 @@ func undo_moves( turntimelines : Array ):
 
 
 func set_check_indicators( timelines : Array ):
-	print_debug(timelines)
 	if(timelines.size() == 0):
 		return
 	for child in get_children():
