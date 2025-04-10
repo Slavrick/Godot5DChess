@@ -58,8 +58,10 @@ custom_minimum_size = Vector2(150, 100)
 layout_mode = 2
 
 [node name="ItemList" type="ItemList" parent="HSplitContainer/TurnTree"]
-custom_minimum_size = Vector2(400, 10000)
+custom_minimum_size = Vector2(400, 500)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
 layout_mode = 1

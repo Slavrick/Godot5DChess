@@ -167,8 +167,8 @@ func set_present_board():
 			max_time = time
 	for child in get_children():
 		child.board_type = 1
-		child.in_check = false
-		child.temp_board = false
+		#child.in_check = false
+		#child.temp_board = false
 	if present_board != null:
 		present_board.board_type = 0
 

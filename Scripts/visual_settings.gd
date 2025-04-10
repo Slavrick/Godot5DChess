@@ -164,7 +164,7 @@ func position_of_coordinate(coord : Coord5):
 		position_ += Vector2(square_width/2,-square_width/2)
 		position_.y += board_padding + (VisualSettings.multiverse_tile_height / 2.0) - ((game_board_dimensions.y * 128) / 2.0)
 	else:
-		position_ += Vector2(game_board_dimensions.x - coord.v.x, coord.v.y) * square_width
+		position_ += Vector2(game_board_dimensions.x - coord.v.x - 1, coord.v.y) * square_width
 		position_ += Vector2(square_width/2,square_width/2)
 		position_.y += board_padding + (VisualSettings.multiverse_tile_height / 2.0) - ((game_board_dimensions.y * 128) / 2.0)
 	match multiverse_view:
