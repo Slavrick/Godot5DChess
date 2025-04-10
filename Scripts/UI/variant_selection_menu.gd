@@ -2,7 +2,7 @@ extends MarginContainer
 
 
 signal variant_selected(variant_filepath : String)
-
+signal back_pressed
 
 func _ready() -> void:
 	$TabContainer/Standard/VBoxContainer/Standard/Button.pressed.connect(on_variant_selected.bind("Standard"))
@@ -12,6 +12,9 @@ func _ready() -> void:
 	$"TabContainer/Focused-Single Piece/VBoxContainer/Only Brawns/Button".pressed.connect(on_variant_selected.bind("OnlyBrawns"))
 	$"TabContainer/Focused-Single Piece/VBoxContainer/Only Unicorns/Button".pressed.connect(on_variant_selected.bind("OnlyUnicorns"))
 	$"TabContainer/Misc Variants/VBoxContainer/TimelineStrategos/Button".pressed.connect(on_variant_selected.bind("Strategos"))
+	$Node/Back.pressed.connect(func():
+		back_pressed.emit()
+	)
 
 func on_variant_selected( variant : String ):
 	match variant:

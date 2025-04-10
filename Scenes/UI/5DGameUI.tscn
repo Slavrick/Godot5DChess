@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bnlsmbn1boyhm"]
+[gd_scene load_steps=5 format=3 uid="uid://bnlsmbn1boyhm"]
 
 [ext_resource type="Script" path="res://Scripts/UI/menus.gd" id="1_ici0s"]
 [ext_resource type="Theme" uid="uid://cbyooiahpjpb2" path="res://Resources/Main_Theme.tres" id="1_iw4iw"]
 [ext_resource type="PackedScene" uid="uid://eys3f7xu1pge" path="res://Scenes/UI/PromotionPanel.tscn" id="3_1gxem"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ykjc"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="Menus" type="Control"]
 layout_mode = 3
@@ -35,17 +38,26 @@ size_flags_horizontal = 4
 text = "Save Game
 "
 
-[node name="TurnTree" type="ScrollContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.841
-anchor_right = 0.998
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 2
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.167969
-offset_right = 0.303955
+offset_right = -1.0
+offset_bottom = -1.0
+mouse_filter = 2
 
-[node name="ItemList" type="ItemList" parent="TurnTree"]
+[node name="Panel" type="Panel" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7ykjc")
+
+[node name="TurnTree" type="ScrollContainer" parent="HSplitContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="ItemList" type="ItemList" parent="HSplitContainer/TurnTree"]
 custom_minimum_size = Vector2(400, 10000)
 layout_mode = 2
 

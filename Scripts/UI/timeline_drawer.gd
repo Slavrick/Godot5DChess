@@ -8,7 +8,7 @@ signal square_clicked(square : Vector2, temporal_position : Vector2, color : boo
 signal square_right_clicked(square : Coord5, pressed : bool)
 signal square_hovered(square : Coord5)
 signal undo_timeline(layer : int)
-signal show_check(layer : int)
+signal show_board_check(layer : int)
 
 enum DRAWMODE {
 	FULL,
@@ -130,6 +130,8 @@ func add_board(board_array : Array, multiverse_position : Vector2, new_board_col
 	if present_board != null:
 		present_board.board_type = 1
 		present_board.z_index = 0
+		present_board.in_check = false
+		present_board.temp_board = false
 	present_board = new_board
 	present_board.z_index = 1
 	present_board.board_type = 0
@@ -165,8 +167,18 @@ func set_present_board():
 			max_time = time
 	for child in get_children():
 		child.board_type = 1
+		child.in_check = false
+		child.temp_board = false
 	if present_board != null:
 		present_board.board_type = 0
+
+
+func set_check_indicator():
+	present_board.in_check = true
+
+
+func clear_check_indicator():
+	present_board.in_check = false
 
 
 func _draw():
@@ -246,7 +258,7 @@ func board_undo_pressed():
 
 
 func board_check_pressed():
-	show_check.emit(layer)
+	show_board_check.emit(layer)
 
 
 func board_square_hovered( c : Coord5 ):

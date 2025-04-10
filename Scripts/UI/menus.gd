@@ -22,8 +22,8 @@ func _ready() -> void:
 	$"HBoxContainer/Save Game".pressed.connect(save_game_pressed)
 	$HBoxContainer2/Perspective.button_pressed = VisualSettings.perspective
 	$PromotionPanel.promotion_chose.connect(on_promotion_chose)
-	$TurnTree/ItemList.item_selected.connect(on_turntree_item_selected)
-	if game != null and game.AnalysisMode:
+	$HSplitContainer/TurnTree/ItemList.item_selected.connect(on_turntree_item_selected)
+	if game != null:
 		game.TurnChanged.connect(get_turn_tree)
 		game.GameLoaded.connect(on_game_loaded)
 
@@ -33,7 +33,7 @@ func show_promotion():
 
 func set_analysis_mode():
 	$HBoxContainer.show()
-	$TurnTree.show()
+	$HSplitContainer/TurnTree.show()
 
 func submit_pressed():
 	submit_turn.emit()
@@ -81,14 +81,15 @@ func on_promotion_chose( piece : int):
 
 
 func get_turn_tree(player : bool, present : int):
-	var labels = game.GetLinearLabels()
-	$TurnTree/ItemList.clear()
+	var labels = game.GetLinearLabels()#probably bad, o well.
+	$HSplitContainer/TurnTree/ItemList.clear()
 	for label in labels :
-		$TurnTree/ItemList.add_item(label)
+		$HSplitContainer/TurnTree/ItemList.add_item(label)
 
 
 func on_game_loaded():
 	get_turn_tree(false,0)
+	$HSplitContainer/TurnTree.scroll_vertical = 0
 
 
 func on_turntree_item_selected( index : int):

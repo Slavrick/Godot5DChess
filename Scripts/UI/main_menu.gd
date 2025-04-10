@@ -13,7 +13,7 @@ func _ready() -> void:
 	$Main/MenuVbox/Analysis.pressed.connect(analysis_pressed)
 	$Main/MenuVbox/Attribution.pressed.connect(on_attribution_pressed)
 	$Attribution.close_attribution.connect(close_attribution)
-
+	$VariantSelectionMenu.back_pressed.connect(on_variant_back_pressed)
 
 func play_game():
 	$Main.hide()
@@ -50,3 +50,8 @@ func on_attribution_pressed():
 func close_attribution():
 	$Attribution.hide()
 	$Main.show()
+
+
+func on_variant_back_pressed():
+	$Main.show()
+	$VariantSelectionMenu.hide()

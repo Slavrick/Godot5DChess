@@ -105,6 +105,14 @@ namespace FileIO5D {
 		{
 			string move = "";
 			int piece = m.PieceMoved;
+			if(m.SpecialType == Move.NULLMOVE)
+			{
+				return $"({m.Origin.L}T{m.Origin.T})0000";
+			}
+			if(m.SpecialType == Move.CASTLE)
+			{
+				return $"({m.Origin.L}T{m.Origin.T})O-O";
+			}
 			if (piece > Board.NUMTYPES)
 			{
 				piece -= Board.NUMTYPES;
@@ -125,6 +133,14 @@ namespace FileIO5D {
 			else if (m.Type == Move.BRANCHINGMOVE)
 			{
 				move += ">>(" + m.Dest.L + "T" + m.Dest.T + ")" + SANString(m.Dest);
+			}
+			if(m.SpecialType > Move.CASTLE)
+			{
+				if (piece > Board.NUMTYPES)
+				{
+					piece -= Board.NUMTYPES;
+				}
+				move += "=" + Board.PieceChars[piece];
 			}
 			return move;
 		}

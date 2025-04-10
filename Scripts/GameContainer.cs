@@ -80,6 +80,7 @@ public partial class GameContainer : Control
 		multiverse.Connect("square_clicked", new Callable(this,nameof(HandleClick)));
 		multiverse.Connect("square_hovered", new Callable(this,nameof(OnSquareHovered)));
 		multiverse.Connect("square_right_clicked", new Callable(this,nameof(HandleRightClick)));
+		multiverse.Connect("show_timeline_check", new Callable(this,nameof(ShowCheck)));
 		mvcontainer = multiverse;
 		multiverse.Set("game_container",this);
 		AddChild(multiverse);
@@ -332,7 +333,7 @@ public partial class GameContainer : Control
 	}
 	
 	//this adds a board instead of nuking everything.
-	public void AddBoardToRender(Move m, bool color)
+	public void AddBoardToRender(Move m, bool color)//TODO need to make this so it doesn't need to be passed color.
 	{
 		Vector2 newBoardPosition = new Vector2(m.Dest.L,m.Dest.T);
 		CoordFive cfBoardPosition = new CoordFive(m.Dest,!color);
@@ -375,7 +376,7 @@ public partial class GameContainer : Control
 		mvcontainer.Call("add_board",arr,newBoardPosition,cfBoardPosition.Color);
 	}
 	
-	public void AddTimelineToRender(Move m, bool color)
+	public void AddTimelineToRender(Move m, bool color)//TODO need to make this so it doesn't need to be passed color.
 	{
 		//Origin Board.
 		Vector2 newBoardPosition = new Vector2(m.Origin.L,m.Origin.T);
@@ -411,7 +412,6 @@ public partial class GameContainer : Control
 	}
 	
 	public void UpdateRender(){
-		Console.WriteLine("nuking nodes");
 		if(mvcontainer != null){
 			mvcontainer.Call("queue_free");
 		}if(gsm != null){
@@ -422,16 +422,33 @@ public partial class GameContainer : Control
 	
 	public void CheckForChecks()
 	{
-		foreach(Node child in CheckArrows){
+		foreach(Node child in CheckArrows)
+		{
 			child.Call("queue_free");
 		}
 		CheckArrows.Clear();
 		List<Move> moves = gsm.GetCurrentThreats();
-		foreach(Move m in moves){
-			Node a = CreateArrow(m,!gsm.Color, new Color(1,0,0,(float)0.5));
-			AddChild(a);
-			CheckArrows.Add(a);
+		Godot.Collections.Array<int> indicators = new Godot.Collections.Array<int>();
+		Console.WriteLine("[{0}]", string.Join(", ", moves));
+		foreach(Move m in moves)
+		{
+			if(gsm.IsInBounds(m.Origin) && gsm.IsInBounds(m.Dest))
+			{
+				Node a = CreateArrow(m,!gsm.Color, new Color(1,0,0,(float)0.5));
+				AddChild(a);
+				CheckArrows.Add(a);
+				continue;
+			}
+			if(!gsm.IsInBounds(m.Origin))
+			{
+				indicators.Add(m.Origin.L);
+			}
+			if(!gsm.IsInBounds(m.Dest))
+			{
+				indicators.Add(m.Dest.L);
+			}
 		}
+		mvcontainer.Call("set_check_indicators",indicators);
 	}
 	
 	public void CheckActiveArea()
@@ -531,8 +548,8 @@ public partial class GameContainer : Control
 		if( SubmitSuccessful && gsm.IsMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
-		GameStateManager.PrintTree(gsm.TT);
 		Destinations = null;
+		CheckForChecks();
 		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
 	}
 	
@@ -556,19 +573,20 @@ public partial class GameContainer : Control
 	
 	//TODO clear check arrows.
 	public void LoadGame(String filepath){
-		Console.WriteLine("chose Path: " + filepath);
+		//Console.WriteLine("chose Path: " + filepath);
 		gsm = FENParser.ShadSTDGSM(filepath);
 		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
 		GetNode("/root/VisualSettings").Call("change_game");
 		UpdateRender();
 		RefreshMoveArrows();
 		CheckActiveArea();
+		CheckForChecks();
 		EmitSignal(SignalName.GameLoaded);
 		EmitSignal(SignalName.ActiveAreaChanged, VisualPresent,VisualMinL,VisualMaxL);
 	}
 
 	public void SaveGame(String filepath){
-		Console.WriteLine("Save Path: " + filepath);
+		//Console.WriteLine("Save Path: " + filepath);
 		FENExporter.ExportGameState(gsm, filepath);
 	}
 	
@@ -595,6 +613,16 @@ public partial class GameContainer : Control
 			//arrow.Call("get_coordinate");
 		//}
 	}
+
+	public void ShowCheck(int layer)
+	{
+		Move nullMove = gsm.MakePassingMove(layer);
+		if(nullMove == null) return;
+		AddBoardToRender(nullMove, nullMove.Origin.Color);
+		CheckForChecks();
+		//TODO make a variable that marks if the layer is made a passing move.
+	}
+
 	
 	public void FinishPromotionMove( int piece )
 	{
@@ -650,6 +678,7 @@ public partial class GameContainer : Control
 		UpdateRender();
 		RefreshMoveArrows();
 		CheckActiveArea();
+		CheckForChecks();
 	}
 
 	public override void _Input(InputEvent @event)

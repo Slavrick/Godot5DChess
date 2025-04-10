@@ -4,6 +4,8 @@ signal square_clicked(square : Vector2, temporal_position : Vector2, color : boo
 signal square_right_clicked( square : Coord5,pressed : bool)
 signal square_hovered( c : Coord5 )
 signal undo_timeline( layer : int)
+signal show_timeline_check( layer : int)
+
 
 var highlighted_squares = []
 var chessboard_dimensions : Vector2
@@ -32,6 +34,7 @@ func add_timeline(new_timeline : Node2D):
 	new_timeline.square_right_clicked.connect(timeline_square_right_clicked)
 	new_timeline.square_hovered.connect(timeline_square_hovered)
 	new_timeline.undo_timeline.connect(timeline_undo_pressed)
+	new_timeline.show_board_check.connect(on_show_check)
 	var layer = new_timeline.layer
 	if layer > min_active_tl or layer < min_active_tl:
 		new_timeline.active = false
@@ -71,6 +74,7 @@ func connect_signals():
 		child.square_right_clicked.connect(timeline_square_right_clicked)
 		child.square_hovered.connect(timeline_square_hovered)
 		child.undo_timeline.connect(timeline_undo_pressed)
+		child.show_board_check.connect(on_show_check)
 
 
 func place_timelines():
@@ -133,8 +137,12 @@ func on_view_changed( perspective : bool , view ):
 	set_perspective(VisualSettings.perspective)
 
 
-func timeline_square_hovered( c : Coord5):
+func timeline_square_hovered( c : Coord5) -> void:
 	square_hovered.emit(c)
+
+
+func on_show_check(layer : int) -> void:
+	show_timeline_check.emit(layer)
 
 
 func undo_moves( turntimelines : Array ):
@@ -144,3 +152,14 @@ func undo_moves( turntimelines : Array ):
 			print_debug(str(turntimelines) + "TL nill exists")
 			return
 		timeline.pop_board_off()
+
+
+func set_check_indicators( timelines : Array ):
+	print_debug(timelines)
+	if(timelines.size() == 0):
+		return
+	for child in get_children():
+		if timelines.has(child.layer) :
+			child.set_check_indicator()
+		else:
+			child.clear_check_indicator()

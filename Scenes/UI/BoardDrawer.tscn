@@ -61,6 +61,7 @@ white_present_style_box = SubResource("StyleBoxFlat_eqylc")
 black_present_style_box = SubResource("StyleBoxFlat_8vcol")
 
 [node name="UndoButton" type="TextureButton" parent="."]
+visible = false
 texture_filter = 1
 layout_mode = 0
 offset_left = -100.0

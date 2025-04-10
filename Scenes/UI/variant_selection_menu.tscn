@@ -173,3 +173,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Small Variant (this is pretty much solved for white)"
 fit_content = true
+
+[node name="Node" type="Node2D" parent="."]
+
+[node name="Back" type="Button" parent="Node"]
+anchors_preset = -1
+anchor_top = 0.994
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -38.112
+offset_right = 216.0
+offset_bottom = -4.0
+grow_vertical = 2
+text = "<===== Back(Placeholder)"

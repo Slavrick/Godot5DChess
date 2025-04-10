@@ -512,6 +512,28 @@ namespace FiveDChess
             return UndoTurn(tlmoved.ToArray());
         }
 
+        public Move MakePassingMove(int layer)
+        {
+            if(!LayerExists(layer))
+            {
+                return null;
+            }
+            Timeline t = GetTimeline(layer);
+            if(t.ColorPlayable != this.Color)
+            {
+                return null;
+            }
+            Move nullMove = Move.NULL.Clone();
+            nullMove.Origin.L = layer;
+            nullMove.Origin.T = t.TEnd;
+            nullMove.Origin.Color = this.Color;
+            nullMove.Dest = nullMove.Origin;
+            TurnTLS.Add(layer);
+            TurnMoves.Add(nullMove);
+            t.AddNullMove();
+            return nullMove;
+        }
+
         protected bool IsInCheck()
         {
             List<int> nullmoves = new List<int>();
