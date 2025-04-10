@@ -1,7 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://7rjl1oreg7t2"]
+[gd_scene load_steps=3 format=3 uid="uid://7rjl1oreg7t2"]
 
 [ext_resource type="Script" path="res://Scripts/UI/arrow_draw.gd" id="1_etorc"]
+
+[sub_resource type="Curve" id="Curve_7ca0s"]
+max_value = 0.5
+_data = [Vector2(0, 0.296875), 0.0, 0.0, 0, 0, Vector2(0.118881, 0.292259), 0.0, 0.0, 0, 0, Vector2(0.192308, 0.112216), -0.364224, -0.364224, 0, 0, Vector2(1, 0.0305399), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [node name="ArrowDraw" type="Path2D"]
 z_index = 2
 script = ExtResource("1_etorc")
+rotation_curve = SubResource("Curve_7ca0s")

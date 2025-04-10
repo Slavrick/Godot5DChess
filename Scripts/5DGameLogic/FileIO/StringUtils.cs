@@ -46,6 +46,11 @@ namespace FileIO5D {
 
 		public static string ToRawShadString(Move m)
 		{
+			if(m.SpecialType == Move.NULLMOVE)
+			{
+				return $"({m.Origin.L}T{m.Origin.T})0000";
+
+			}
 			if (m.SpecialType == Move.CASTLE)
 			{
 				if (m.Dest.X > m.Origin.X)
@@ -100,6 +105,14 @@ namespace FileIO5D {
 		{
 			string move = "";
 			int piece = m.PieceMoved;
+			if(m.SpecialType == Move.NULLMOVE)
+			{
+				return $"({m.Origin.L}T{m.Origin.T})0000";
+			}
+			if(m.SpecialType == Move.CASTLE)
+			{
+				return $"({m.Origin.L}T{m.Origin.T})O-O";
+			}
 			if (piece > Board.NUMTYPES)
 			{
 				piece -= Board.NUMTYPES;
@@ -120,6 +133,15 @@ namespace FileIO5D {
 			else if (m.Type == Move.BRANCHINGMOVE)
 			{
 				move += ">>(" + m.Dest.L + "T" + m.Dest.T + ")" + SANString(m.Dest);
+			}
+			if(m.SpecialType > Move.CASTLE)
+			{
+				int promotionpiece = m.SpecialType;
+				if (promotionpiece > Board.NUMTYPES)
+				{
+					promotionpiece -= Board.NUMTYPES;
+				}
+				move += "=" + Board.PieceChars[promotionpiece];
 			}
 			return move;
 		}
@@ -159,5 +181,20 @@ namespace FileIO5D {
             }
             return temp;
 		}
-	}
+
+        public static string TurnExportString(Turn t, int type = 0)
+        {
+            if (t.Moves == null)
+            {
+                return "";
+            }
+            string temp = "";
+			foreach (Move m in t.Moves)
+			{
+				temp += ToRawShadString(m);
+				temp += " ";
+			}
+            return temp;
+        }
+    }
 }

@@ -130,8 +130,8 @@ namespace FiveDChess
 		/// <returns>square integer, or errorsquare if not found</returns>
 		public int GetSquare(CoordFive c)
 		{
-			return GetBoard(c).GetSquare(c);
-		}
+            return GetBoard(c).GetSquare(c);
+        }
 
 		/// <summary>
 		///  adds a spatial move to the timeline.

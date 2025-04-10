@@ -24,14 +24,21 @@ public partial class GameContainer : Control
 	[Signal]
 	public delegate void ActiveAreaChangedEventHandler(int present, int minActiveTimeline, int maxActiveTimeline);
 	
+	public GameStateManager gsm;
 	
-	public GameState gsm;
-	public List<CoordFive> destinations;
+	public List<CoordFive> Destinations;
+	public List<CoordFive> HoveredDestinations;
+	public CoordFive HoveredSquare;
 	public CoordFive SelectedSquare;
+	public Coord5 RightClickStart;
+	public Move PromotionMove;
+
 	public List<Node> Arrows;
 	public List<Node> TempArrows;
 	public List<Node> CheckArrows;
-	public Move PromotionMove;
+	public List<Node> AnnotationArrows;
+	public List<Coord5> AnnotationSquares;
+
 	public int VisualPresent = 1;
 	public int VisualMinL = 0;
 	public int VisualMaxL = 0;
@@ -43,24 +50,24 @@ public partial class GameContainer : Control
 	
 	public override void _Ready()
 	{
-		CheckArrows = new List<Node>();
 		Arrows = new List<Node>();
 		TempArrows = new List<Node>();
+		CheckArrows = new List<Node>();
+		AnnotationArrows = new List<Node>();
+		AnnotationSquares = new List<Coord5>();
 		GetNode("/root/VisualSettings").Connect("view_changed", new Callable(this, nameof(OnViewChanged)));
 		GetNode("SubViewport/GameEscapeMenu/Button").Connect("pressed", new Callable(this, nameof(ExitGamePressed)));
 		GetNode("SubViewport/Menus").Connect("submit_turn", new Callable(this,nameof(SubmitTurn)));
 		GetNode("SubViewport/Menus").Connect("undo_turn", new Callable(this,nameof(UndoTurn)));
-		GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
 		GetNode("SubViewport/Menus").Connect("promotion_chosen", new Callable(this,nameof(FinishPromotionMove)));
 		if(AnalysisMode){
 			GetNode("SubViewport/Menus").Call("set_analysis_mode");
+			GetNode("SubViewport/Menus").Connect("load_game", new Callable(this,nameof(OpenFileDialog)));
+			GetNode("SubViewport/Menus").Connect("save_game", new Callable(this,nameof(OpenSaveDialog)));
+			GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
+			GetNode("SaveDialog").Connect("file_selected", new Callable(this, nameof(SaveGame)));
+			GetNode("SubViewport/Menus").Connect("turntree_item_selected", new Callable(this,nameof(OnTurnTreeSelected)));
 		}
-		GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
-	}
-
-	public override void _Process(double delta)
-	{
-		
 	}
 	
 	public void GameStateToGodotNodes()
@@ -71,6 +78,9 @@ public partial class GameContainer : Control
 			multiverse.AddChild(TimeLineToGodotNodes(gsm.Multiverse[i],gsm.MinTL+i));
 		}
 		multiverse.Connect("square_clicked", new Callable(this,nameof(HandleClick)));
+		multiverse.Connect("square_hovered", new Callable(this,nameof(OnSquareHovered)));
+		multiverse.Connect("square_right_clicked", new Callable(this,nameof(HandleRightClick)));
+		multiverse.Connect("show_timeline_check", new Callable(this,nameof(ShowCheck)));
 		mvcontainer = multiverse;
 		multiverse.Set("game_container",this);
 		AddChild(multiverse);
@@ -127,14 +137,14 @@ public partial class GameContainer : Control
 	public void HandleClick(Vector2 square, Vector2 Temporalposition, bool color){
 		CoordFive clicked = new CoordFive((int)square.X,(int)square.Y,(int)Temporalposition.Y,(int)Temporalposition.X,color);
 		int piece = gsm.GetSquare(clicked);
-		if( destinations == null )
+		if( Destinations == null )
 		{
 			if(ValidateClickSquare(new CoordFive(clicked,color)))
 			{
 				GetDestinationsFromClick(square,Temporalposition,color);
 			}
 		}
-		else if(destinations.Contains(clicked))
+		else if(Destinations.Contains(clicked))
 		{
 			if(gsm.CoordIsPlayable(SelectedSquare))
 			{
@@ -181,9 +191,9 @@ public partial class GameContainer : Control
 		if(piece == 0){
 			return;
 		}
-		destinations = gsm.GetPossibleDestinations(coord);
+		Destinations = gsm.GetPossibleDestinations(coord);
 		Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
-		foreach( CoordFive cd in destinations ){
+		foreach( CoordFive cd in Destinations ){
 			DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
 		}
 		if( mvcontainer != null){
@@ -231,7 +241,7 @@ public partial class GameContainer : Control
 				{
 					tile.Y += 1;
 				}
-				Node a = CreateArrow(m,color);
+				Node a = CreateArrow(m);
 				TempArrows.Add(a);
 				AddChild(a);
 				EmitSignal(SignalName.MoveMade, tile,!color);
@@ -244,23 +254,86 @@ public partial class GameContainer : Control
 				{
 					tile.Y += 1;
 				}
-				Node a = CreateArrow(m,color);
+				Node a = CreateArrow(m);
 				TempArrows.Add(a);
 				AddChild(a);
 				EmitSignal(SignalName.MoveMade, tile, !color);
 				AddBoardToRender(m,color);
-				CheckForChecks();
-				return moveStatus;
 			}
-			CheckForChecks();
-			//UpdateRender();//TODO change this from being here, might need to put elsewhere
-			//need to add cleanup
+			//TODO this function can maybe be shorter
 		}
+		CheckForChecks();
+		SelectedSquare = null;
+		Destinations = null;
 		return moveStatus;
+	}
+
+	public void HandleRightClick(Coord5 square, bool pressed)
+	{
+		if(pressed)
+		{
+			RightClickStart = square;
+			return;
+		}else{
+			if(RightClickStart.Equals(square))
+			{
+				for(int i = 0; i < AnnotationSquares.Count ; i++)
+				{
+					if(square.Equals(AnnotationSquares[i]))
+					{
+						AnnotationSquares.RemoveAt(i);
+						mvcontainer.Call("annotate_unhighlight_square",square);
+						return;
+					}
+				}
+				Color highlight_color = new Color(0,0,1,(float).5);
+				if(Input.IsActionPressed("ThreatAnnotation"))
+				{
+					highlight_color = new Color(1,0,0,(float).5);
+				}
+				else if(Input.IsActionPressed("CautionAnnotation"))
+				{
+					highlight_color = new Color(1,(float).5,0,(float).5);
+				}
+				else if(Input.IsActionPressed("BrilliantAnnotation"))
+				{
+					highlight_color = new Color(0,(float).4,(float).4,(float).5);
+				}
+				AnnotationSquares.Add(square);
+				mvcontainer.Call("annotate_highlight_square",square,highlight_color);
+			}
+			else
+			{
+				Node a = CreateArrowCoord5(RightClickStart, square, new Color(0,0,1,(float).5));
+				for(int i = 0 ; i < AnnotationArrows.Count; i++)
+				{
+					if((bool)a.Call("equals",AnnotationArrows[i]))
+					{
+						AnnotationArrows[i].Call("queue_free");
+						AnnotationArrows.RemoveAt(i);
+						return;
+					}
+				}
+				if(Input.IsActionPressed("ThreatAnnotation"))
+				{
+					a.Set("arrow_color",new Color(1,0,0,(float).5));
+				}
+				if(Input.IsActionPressed("CautionAnnotation"))
+				{
+					a.Set("arrow_color",new Color(1,(float).5,0,(float).5));
+				}
+				if(Input.IsActionPressed("BrilliantAnnotation"))
+				{
+					a.Set("arrow_color",new Color(0,(float).4,(float).4,(float).5));
+				}
+				AnnotationArrows.Add(a);
+				AddChild(a);
+			}
+		}
 	}
 	
 	//this adds a board instead of nuking everything.
-	public void AddBoardToRender(Move m, bool color)
+	public void AddBoardToRender(Move m, bool color)//TODO need to make this so it doesn't need to be passed color.
 	{
 		Vector2 newBoardPosition = new Vector2(m.Dest.L,m.Dest.T);
 		CoordFive cfBoardPosition = new CoordFive(m.Dest,!color);
@@ -303,7 +376,7 @@ public partial class GameContainer : Control
 		mvcontainer.Call("add_board",arr,newBoardPosition,cfBoardPosition.Color);
 	}
 	
-	public void AddTimelineToRender(Move m, bool color)
+	public void AddTimelineToRender(Move m, bool color)//TODO need to make this so it doesn't need to be passed color.
 	{
 		//Origin Board.
 		Vector2 newBoardPosition = new Vector2(m.Origin.L,m.Origin.T);
@@ -339,7 +412,6 @@ public partial class GameContainer : Control
 	}
 	
 	public void UpdateRender(){
-		Console.WriteLine("nuking nodes");
 		if(mvcontainer != null){
 			mvcontainer.Call("queue_free");
 		}if(gsm != null){
@@ -350,16 +422,32 @@ public partial class GameContainer : Control
 	
 	public void CheckForChecks()
 	{
-		foreach(Node child in CheckArrows){
+		foreach(Node child in CheckArrows)
+		{
 			child.Call("queue_free");
 		}
 		CheckArrows.Clear();
 		List<Move> moves = gsm.GetCurrentThreats();
-		foreach(Move m in moves){
-			Node a = CreateArrow(m,!gsm.Color, new Color(1,0,0,(float)0.5));
-			AddChild(a);
-			CheckArrows.Add(a);
+		Godot.Collections.Array<int> indicators = new Godot.Collections.Array<int>();
+		foreach(Move m in moves)
+		{
+			if(gsm.IsInBounds(m.Origin) && gsm.IsInBounds(m.Dest))
+			{
+				Node a = CreateArrow(m,!gsm.Color, new Color(1,0,0,(float)0.5));
+				AddChild(a);
+				CheckArrows.Add(a);
+				continue;
+			}
+			if(!gsm.IsInBounds(m.Origin))
+			{
+				indicators.Add(m.Origin.L);
+			}
+			if(!gsm.IsInBounds(m.Dest))
+			{
+				indicators.Add(m.Dest.L);
+			}
 		}
+		mvcontainer.Call("set_check_indicators",indicators);
 	}
 	
 	public void CheckActiveArea()
@@ -388,23 +476,53 @@ public partial class GameContainer : Control
 		return new Vector2(cf.L,cf.T);
 	}
 	
-	public Node CreateArrow(Move m, bool color)
+	public Godot.Collections.Array<String> GetLinearLabels()
+	{
+		List<String> labels = gsm.TT.GetLabels();
+		return new Godot.Collections.Array<String>(labels);
+	}
+
+	public Node CreateArrow(Move m)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
-		arrow.Set("origin",GameInterface.CoordFivetoCoord5(m.Origin,color));
-		arrow.Set("dest",GameInterface.CoordFivetoCoord5(m.Dest,color));
+		arrow.Set("origin",GameInterface.CoordFivetoGD(m.Origin));
+		arrow.Set("dest",GameInterface.CoordFivetoGD(m.Dest));
+		return arrow;
+	}
+
+	public Node CreateArrowCoord5(Coord5 origin, Coord5 dest, Color c)
+	{
+		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
+		arrow.Set("origin",origin);
+		arrow.Set("dest",dest);
+		arrow.Set("arrow_color",c);
 		return arrow;
 	}
 	
 	public Node CreateArrow(Move m, bool color, Color c)
 	{
 		var arrow = ResourceLoader.Load<PackedScene>("res://Scenes/UI/arrow_draw.tscn").Instantiate();
-		arrow.Set("origin",GameInterface.CoordFivetoCoord5(m.Origin,color));
-		arrow.Set("dest",GameInterface.CoordFivetoCoord5(m.Dest,color));
+		arrow.Set("origin",GameInterface.CoordFivetoGD(m.Origin));
+		arrow.Set("dest",GameInterface.CoordFivetoGD(m.Dest));
 		arrow.Set("arrow_color",c);
 		return arrow;
 	}
 	
+	public void RefreshMoveArrows()
+	{
+		ClearTurnArrows();
+		for(int i = 0 ; i < gsm.CurrTurn - 1 && i < gsm.Turns.Count; i++)
+		{
+			foreach(Move m in gsm.Turns[i].Moves)
+			{
+				Node arrow = CreateArrow(m);
+				Arrows.Add(arrow);
+				AddChild(arrow);
+			}
+		}
+	}
+
+
 	public void ClearTurnArrows()
 	{
 		foreach(Node child in Arrows){
@@ -419,11 +537,18 @@ public partial class GameContainer : Control
 			EmitSignal(SignalName.TurnChanged, gsm.Color, gsm.Present);
 			Arrows.AddRange(TempArrows);
 			TempArrows.Clear();
+			//Handle Annotation TODO
+			foreach(Node n in AnnotationArrows)
+			{
+				n.Call("queue_free");
+			}
+			AnnotationArrows.Clear();
 		}
 		if( SubmitSuccessful && gsm.IsMated()) {;
 			EmitSignal(SignalName.IsMated, gsm.Color);
 		}
-		destinations = null;
+		Destinations = null;
+		CheckForChecks();
 		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
 	}
 	
@@ -432,29 +557,46 @@ public partial class GameContainer : Control
 			n.Call("queue_free");
 		}
 		TempArrows.Clear();
+		Godot.Collections.Array<int> arr = new Godot.Collections.Array<int>();
+		int[] turnTLS = gsm.TurnTLS.ToArray();
+		foreach( int i in turnTLS )
+		{
+			arr.Add(i);
+		}
+		mvcontainer.Call("undo_moves",arr);
+		gsm.UndoTempMoves();
 		CheckActiveArea();
 		CheckForChecks();
-		gsm.UndoTempMoves();
-		UpdateRender();
+		//UpdateRender();
 	}
 	
 	//TODO clear check arrows.
 	public void LoadGame(String filepath){
-		Console.WriteLine("chose Path: " + filepath);
+		//Console.WriteLine("chose Path: " + filepath);
 		gsm = FENParser.ShadSTDGSM(filepath);
 		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
 		GetNode("/root/VisualSettings").Call("change_game");
 		UpdateRender();
-		ClearTurnArrows();
+		RefreshMoveArrows();
 		CheckActiveArea();
+		CheckForChecks();
 		EmitSignal(SignalName.GameLoaded);
 		EmitSignal(SignalName.ActiveAreaChanged, VisualPresent,VisualMinL,VisualMaxL);
+	}
+
+	public void SaveGame(String filepath){
+		//Console.WriteLine("Save Path: " + filepath);
+		FENExporter.ExportGameState(gsm, filepath);
 	}
 	
 	public void OpenFileDialog(){
 		GetNode("FileDialog").Call("show");
 	}
 	
+	public void OpenSaveDialog(){
+		GetNode("SaveDialog").Call("show");
+	}
+
 	public void ExitGamePressed(){
 		EmitSignal(SignalName.ExitGame);
 	}
@@ -470,6 +612,16 @@ public partial class GameContainer : Control
 			//arrow.Call("get_coordinate");
 		//}
 	}
+
+	public void ShowCheck(int layer)
+	{
+		Move nullMove = gsm.MakePassingMove(layer);
+		if(nullMove == null) return;
+		AddBoardToRender(nullMove, nullMove.Origin.Color);
+		CheckForChecks();
+		//TODO make a variable that marks if the layer is made a passing move.
+	}
+
 	
 	public void FinishPromotionMove( int piece )
 	{
@@ -493,6 +645,41 @@ public partial class GameContainer : Control
 		}
 	}
 	
+	public void OnSquareHovered(Coord5 c)
+	{
+		if(SelectedSquare != null){
+			return;
+		}
+		CoordFive hover = GameInterface.C5toCoordFive(c);
+		if( HoveredSquare == null || !hover.Equals(HoveredSquare)){
+			HoveredSquare = hover;
+			//TODO possibly make it so that you can only hover your own pieces.
+			int piece = gsm.GetSquare(HoveredSquare);
+			if(piece == Board.ERRORSQUARE || piece == Board.EMPTYSQUARE){
+				mvcontainer.Call("clear_highlights");
+				return;
+			}
+			HoveredDestinations = MoveGenerator.GetMoves(piece,gsm,HoveredSquare);
+			Godot.Collections.Array DestinationsGodot = new Godot.Collections.Array();
+			foreach( CoordFive cd in HoveredDestinations ){
+				DestinationsGodot.Add(new Vector4(cd.X,cd.Y,cd.L,cd.T));
+			}
+			if( mvcontainer != null){
+				mvcontainer.Call("clear_highlights");
+				mvcontainer.Call("highlight_squares",DestinationsGodot,HoveredSquare.Color);
+			}
+		}
+	}
+
+	public void OnTurnTreeSelected(int index)
+	{
+		gsm.NavigateToTurn(index);
+		UpdateRender();
+		RefreshMoveArrows();
+		CheckActiveArea();
+		CheckForChecks();
+	}
+
 	public override void _Input(InputEvent @event)
 	{
 		if (@event.IsActionPressed("SubmitTurn"))
@@ -517,6 +704,4 @@ public partial class GameContainer : Control
 			}
 		}
 	}
-	
-
 }

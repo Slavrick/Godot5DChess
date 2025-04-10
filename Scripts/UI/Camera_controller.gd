@@ -44,25 +44,7 @@ func _process(delta: float) -> void:
 	
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.is_pressed():
-			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				desired_zoom *= Vector2(1.5,1.5)
-				if desired_zoom.x > MAX_ZOOM.x:
-					desired_zoom = MAX_ZOOM
-				if zoomtweener and zoomtweener.is_running():
-					zoomtweener.kill()
-				zoomtweener = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
-				zoomtweener.tween_property(self,"zoom",desired_zoom,.5).set_trans(Tween.TRANS_CUBIC)
-			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				desired_zoom *= Vector2(.66,.66)
-				if desired_zoom.x < MIN_ZOOM.x:
-					desired_zoom = MIN_ZOOM
-				if zoomtweener and zoomtweener.is_running():
-					zoomtweener.kill()
-				zoomtweener = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
-				zoomtweener.tween_property(self,"zoom",desired_zoom,.5).set_trans(Tween.TRANS_CUBIC)
-
+	pass
 
 func force_pan(pan_position : Vector2, duration : float) -> void:
 	camera_locked = true
@@ -93,6 +75,24 @@ func _unhandled_input(event: InputEvent):
 		get_viewport().set_input_as_handled();
 		position += (_previousPosition - event.position) * (1/zoom.x);
 		_previousPosition = event.position;
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				desired_zoom *= Vector2(1.5,1.5)
+				if desired_zoom.x > MAX_ZOOM.x:
+					desired_zoom = MAX_ZOOM
+				if zoomtweener and zoomtweener.is_running():
+					zoomtweener.kill()
+				zoomtweener = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+				zoomtweener.tween_property(self,"zoom",desired_zoom,.5).set_trans(Tween.TRANS_CUBIC)
+			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				desired_zoom *= Vector2(.66,.66)
+				if desired_zoom.x < MIN_ZOOM.x:
+					desired_zoom = MIN_ZOOM
+				if zoomtweener and zoomtweener.is_running():
+					zoomtweener.kill()
+				zoomtweener = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+				zoomtweener.tween_property(self,"zoom",desired_zoom,.5).set_trans(Tween.TRANS_CUBIC)
 
 
 func get_multiverse_position():

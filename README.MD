@@ -8,8 +8,6 @@ I plan to expand on my previous 5D project by making it more portable, so more p
 
 
 
-
-
 I used GitHub Copilot to initially port the code over, Im a little nervous about bugs and performance but CSharp and Java should be similar enough that hopefully there is no issues. So far the project has not had any bugs from the porting itself as far as i can tell. I plan to do a partial rewrite to consolidate some of the code, improve checkmate detection, and the data structures i was using.
 
 ### GitHub Copilot BugTraker :( & naughty list
@@ -19,10 +17,8 @@ I used GitHub Copilot to initially port the code over, Im a little nervous about
 * In general Acted Like a menace and only translated ~500 lines before making me do the rest.
 
 * Horrible Indentation/White Space.
-  
-  
-  
-  
+
+* Translated my code: *TurnTree turnTree* to *TurnTree TurnTree* (My old code naming was bad already but under this, static functions and non static functions were impossible to find)
 
 ![Main Menu](https://img.itch.zone/aW1nLzIwMzk5NTU0LnBuZw==/315x250%23c/mehjaE.png)
 ![T0](https://img.itch.zone/aW1hZ2UvMzM5OTYxNS8yMDM5OTU1Ny5wbmc=/original/uDAuUA.png)
@@ -36,20 +32,16 @@ I used GitHub Copilot to initially port the code over, Im a little nervous about
 * GUI For 5d Chess
 * All Rules and pieces of the base game implemented
 * Ability to load games through PGN/FEN files
+* Ability to save games to a PGN/FEN files
 * White/Black only views
 
 ## Proposed Features (in order of when i might implement)
 
-* Ability to save games to a PGN/FEN files(*Need to port from old project)
 * Analysis tools such as sidelines, rewinding and jumping to positions(this is present in other implementations such as chessin5d but not in the base game) (*Need to port from old project)
 * Study System (Loading, creating, saving)
 * Ability to interface with 5d Engines in a UCI like protocol
 * Human V. Bot and Bot V. Bot Matches.
 * Variant Creator menu(Shad already made one of these, not sure i will get to this.)
-
-## Limitations
-
-Godot has several issues with FileIO. First the Filedialog node is bugged so you cannot load anything outside of the base res:// Directory. additonally the Godot FileIO is sandboxed to only open files within the res:// directory. In the future this project will port to use CSharp File IO. If you would like to load your own games into the GUI, please clone the repository and add the game locally in your file system under the project files.
 
 ## Notation
 
@@ -131,8 +123,6 @@ Shad's Engine:<https://github.com/adri326/5dchess-tools/>
 
 L0laapk3 5dChess website: <https://multiversechess.com/> (Not Open Source, Very hard to find a game)
 
-
-
 ## Copyright
 
 This Project was made without reference to source or decompiled code from the software "5d Chess With Multiverse Time Travel" developed by LLC. Thunkspace. All code, assets, libraries and other files in this project were either made by me, or are open source.
@@ -144,5 +134,3 @@ For the chess pieces currently i am using CrazyPenguin's open source chess piece
 I also plan to implement other methods of modification of the looks, currently you can only really do a palette swap but in the future I plan to implement fully customizable pieces, chess boards, etc.
 
 In the future, I am planning on adding UI sounds for better game feel, most likely something by Kenny see: <https://kenney.nl/assets/category:Audio?sort=update>
-
-

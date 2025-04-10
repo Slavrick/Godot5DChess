@@ -124,3 +124,4 @@ func update_active_area( new_present :int, minTL : int, maxTL : int):
 	present = new_present
 	min_active_tl = minTL
 	max_active_tl = maxTL
+	queue_redraw()

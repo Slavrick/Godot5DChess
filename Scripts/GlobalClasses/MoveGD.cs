@@ -9,4 +9,7 @@ public partial class MoveGD : Resource
 	
 	[Export]
 	public Vector4 Dest;
+	
+	[Export]
+	public bool Color;
 }

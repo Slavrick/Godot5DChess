@@ -3,6 +3,7 @@ extends Path2D
 @export var origin : Coord5
 @export var dest : Coord5
 @export var arrow_color : Color = Color(.1,.9,.1,.6)
+@export var rotation_curve : Curve
 
 func _ready() -> void:
 	curve = Curve2D.new()
@@ -13,8 +14,7 @@ func _ready() -> void:
 
 func _draw():
 	draw_polyline(curve.get_baked_points(), arrow_color, 30.0,true)
-	draw_rect(Rect2(curve.get_point_position(1)-Vector2(20,20),Vector2(40,40)),arrow_color,true)
-
+	draw_circle(curve.get_point_position(1),15,arrow_color,true)
 
 func set_arrow():
 	pass
@@ -33,9 +33,20 @@ func get_coordinate():
 func calc_inout():
 	var pos1 = curve.get_point_position(0)
 	var pos2 = curve.get_point_position(1)
-	var out = (pos2 - pos1) / 2
-	curve.set_point_out(0,out.rotated(.3))
+	var d = min((pos2 - pos1).length(),10000.0)
+	d = d / 10000.0
+	var rot = rotation_curve.sample(d)
+	#print_debug(rot)
+	var out = ((pos2 - pos1) / 3).rotated(rot)
+	var in_ =  ((pos1 - pos2) / 3).rotated(-rot)
+	#in_ = Vector2(-1 * out.x,-1 * out.y)
+	curve.set_point_out(0,out)
+	curve.set_point_in(1,in_)
 
 
 func on_view_changed(perspective,view):
 	get_coordinate()
+
+
+func equals(arrow : Node) -> bool:
+	return origin.Equals(arrow.origin) and dest.Equals(arrow.dest)
