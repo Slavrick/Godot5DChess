@@ -478,7 +478,7 @@ public partial class GameContainer : Control
 	
 	public Godot.Collections.Array<String> GetLinearLabels()
 	{
-		List<String> labels = gsm.TT.GetLabels();
+		List<String> labels = AnnotationTree.GetLabels(gsm.ATR.Root);
 		return new Godot.Collections.Array<String>(labels);
 	}
 
@@ -511,9 +511,10 @@ public partial class GameContainer : Control
 	public void RefreshMoveArrows()
 	{
 		ClearTurnArrows();
-		for(int i = 0 ; i < gsm.CurrTurn - 1 && i < gsm.Turns.Count; i++)
+		List<AnnotatedTurn> turnList = AnnotationTree.GetPastTurns(gsm.Index);
+		for(int i = 0 ; i < turnList.Count; i++)
 		{
-			foreach(Move m in gsm.Turns[i].Moves)
+			foreach(Move m in turnList[i].T.Moves)
 			{
 				Node arrow = CreateArrow(m);
 				Arrows.Add(arrow);
