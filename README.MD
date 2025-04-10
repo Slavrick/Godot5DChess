@@ -34,10 +34,10 @@ I used GitHub Copilot to initially port the code over, Im a little nervous about
 * Ability to load games through PGN/FEN files
 * Ability to save games to a PGN/FEN files
 * White/Black only views
+* Analysis tools such as sidelines, rewinding and jumping to positions.
 
 ## Proposed Features (in order of when i might implement)
 
-* Analysis tools such as sidelines, rewinding and jumping to positions(this is present in other implementations such as chessin5d but not in the base game) (*Need to port from old project)
 * Study System (Loading, creating, saving)
 * Ability to interface with 5d Engines in a UCI like protocol
 * Human V. Bot and Bot V. Bot Matches.
