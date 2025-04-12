@@ -128,5 +128,47 @@ namespace FileIO5D
             headers += "[size \"" + gsm.Width + "x" + gsm.Height + "\"]";
             return headers;
         }
+
+        public static string ExportAnalysisGame(GameStateManager gsm)
+        {
+            string gameStateString = "";
+            string header = GetGameStateHeader(gsm);
+            string origins = "";
+            foreach (Timeline t in gsm.OriginsTL)
+            {
+                if (t.ColorStart)
+                {
+                    origins += "[" + BoardToString(t.WBoards[0], t.ColorStart, t.TStart, t.Layer) + "]";
+                }
+                else
+                {
+                    origins += "[" + BoardToString(t.BBoards[0], t.ColorStart, t.TStart, t.Layer) + "]";
+                }
+                origins += '\n';
+            }
+            string moves = ExportTree(gsm.ATR.Root);
+            gameStateString += header + '\n' + origins + '\n' + moves;
+            return gameStateString;
+        }
+
+        public static string ExportTree(AnnotationTree.Node node)
+        {
+            string returnstring = "";
+            returnstring += node.AT.T.TurnNum.ToString() + ". ";
+            returnstring += StringUtils.TurnExportString(node.AT.T);
+            returnstring += StringUtils.AnnotatedTurnExportString(node.AT);
+            if(node.Children.Count > 0)
+            {
+                returnstring += " {";
+                for(int i = 0; i < node.Children.Count; i++)
+                {
+                    returnstring += ExportTree(node.Children[i]);
+                }
+                returnstring += " }";
+            }
+            returnstring += "\n";
+            return returnstring;
+        }
+
     }
 }

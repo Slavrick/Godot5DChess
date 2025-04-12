@@ -8,7 +8,14 @@ namespace FiveDChess
         public Turn T;
         public string Annotation;
         public List<Move> Arrows;
+        public List<int> ArrowColors;
         public List<CoordFive> Highlights;
+        public List<int> HighlightColors;
+
+        public enum AnnotationColors
+        {
+            RED,BLUE,GREEN,YELLOW,ORANGE
+        }
 
         public AnnotatedTurn(Turn turn, string annotation, List<Move> arrows, List<CoordFive> highlights)
         {

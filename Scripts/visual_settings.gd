@@ -176,10 +176,36 @@ func position_of_coordinate(coord : Coord5):
 			position_.x += board_padding+board_horizontal_margin/2
 	return position_
 
+func position_to_coordinate(position_ : Vector2) -> Coord5:
+	var position_in_tile = Vector2(int(position_.x)  % int(multiverse_tile_width), int(position_.y)  % int(multiverse_tile_height))
+	var multiverse_position = Vector2(0,0)
+	var tile_position = Vector2(0,0)
+	var color = true
+	if position_in_tile.x > multiverse_tile_width / 2 :
+		color = false
+		position_in_tile.x -=  multiverse_tile_width / 2 
+	position_in_tile.x -= board_horizontal_margin 
+	position_in_tile.y -= timeline_vertical_margin/2
+	position_in_tile -= Vector2(board_padding,board_padding)
+	tile_position.x = (int(position_in_tile.x) / int(square_width))
+	tile_position.y = (int(position_in_tile.y) / int(square_width))
+	multiverse_position.y = floor(position_.x / multiverse_tile_width)  + 1
+	multiverse_position.x = floor(position_.y / multiverse_tile_height)
+	if perspective:
+		tile_position.y = game_board_dimensions.y - tile_position.y - 1
+	else:
+		tile_position.x = game_board_dimensions.x - tile_position.x - 1
+	if multiverse_position.x < 0 :
+		multiverse_position.x += 1
+	if multiverse_position.y <= 0 :
+		multiverse_position.y += 1
+	return Coord5.Create(Vector4(tile_position.x,tile_position.y,multiverse_position.x,multiverse_position.y),color)
+
 
 func reset_view():
 	multiverse_view = FULL_VIEW
 	perspective = true
+
 
 #------------------------------Palette----------------------------------------#
 

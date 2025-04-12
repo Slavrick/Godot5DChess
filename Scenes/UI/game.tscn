@@ -104,7 +104,7 @@ initial_position = 1
 size = Vector2i(500, 500)
 ok_button_text = "Save"
 access = 2
-filters = PackedStringArray("*.txt", "*.PGN", "*.PGN5", "*.PGN5.txt")
+filters = PackedStringArray("*.txt", "*.PGN5", "*.PGN5S")
 show_hidden_files = true
 use_native_dialog = true
 

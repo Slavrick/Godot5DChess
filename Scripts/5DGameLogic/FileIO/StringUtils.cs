@@ -1,9 +1,16 @@
 using System;
+using System.Drawing;
 using FiveDChess;
 
 namespace FileIO5D {
 	public class StringUtils
 	{
+		public static readonly char[] colorchars =
+		{
+			'R','B','G','Y','O'
+		};
+
+
 		/// <summary>
 		/// Returns the corresponding file from the int file sent, 0 indexed so a is 0 b is 1 and so on.
 		/// </summary>
@@ -46,7 +53,7 @@ namespace FileIO5D {
 
 		public static string ToRawShadString(Move m)
 		{
-			if(m.SpecialType == Move.NULLMOVE)
+			if (m.SpecialType == Move.NULLMOVE)
 			{
 				return $"({m.Origin.L}T{m.Origin.T})0000";
 
@@ -105,11 +112,11 @@ namespace FileIO5D {
 		{
 			string move = "";
 			int piece = m.PieceMoved;
-			if(m.SpecialType == Move.NULLMOVE)
+			if (m.SpecialType == Move.NULLMOVE)
 			{
 				return $"({m.Origin.L}T{m.Origin.T})0000";
 			}
-			if(m.SpecialType == Move.CASTLE)
+			if (m.SpecialType == Move.CASTLE)
 			{
 				return $"({m.Origin.L}T{m.Origin.T})O-O";
 			}
@@ -134,7 +141,7 @@ namespace FileIO5D {
 			{
 				move += ">>(" + m.Dest.L + "T" + m.Dest.T + ")" + SANString(m.Dest);
 			}
-			if(m.SpecialType > Move.CASTLE)
+			if (m.SpecialType > Move.CASTLE)
 			{
 				int promotionpiece = m.SpecialType;
 				if (promotionpiece > Board.NUMTYPES)
@@ -149,52 +156,95 @@ namespace FileIO5D {
 		public static string TurnString(Turn t, int type = 0)
 		{
 			if (t.Moves == null)
-            {
-                return "";
-            }
-            string temp = "";
-            temp += ((t.TurnNum + 1) / 2) + "" + (t.TurnNum % 2 == 1 ? 'w' : 'b') + ".";
-            switch (type)
-            {
-                case 0://Shad
-                    foreach (Move m in t.Moves)
-                    {
-                        temp += ToShadString(m);
-                        temp += " ";
-                    }
-                    break;
-                case 1://Shadraw
-                    foreach (Move m in t.Moves)
-                    {
-                        temp += ToRawShadString(m);
-                        temp += " ";
-                    }
-                    break;
-                case 2://Coordinate
-                default:
-                    foreach (Move m in t.Moves)
-                    {
-                        temp += RawMoveNotation(m);
-                        temp += "; ";
-                    }
-                    break;
-            }
-            return temp;
+			{
+				return "";
+			}
+			string temp = "";
+			temp += ((t.TurnNum + 1) / 2) + "" + (t.TurnNum % 2 == 1 ? 'w' : 'b') + ".";
+			switch (type)
+			{
+				case 0://Shad
+					foreach (Move m in t.Moves)
+					{
+						temp += ToShadString(m);
+						temp += " ";
+					}
+					break;
+				case 1://Shadraw
+					foreach (Move m in t.Moves)
+					{
+						temp += ToRawShadString(m);
+						temp += " ";
+					}
+					break;
+				case 2://Coordinate
+				default:
+					foreach (Move m in t.Moves)
+					{
+						temp += RawMoveNotation(m);
+						temp += "; ";
+					}
+					break;
+			}
+			return temp;
 		}
 
-        public static string TurnExportString(Turn t, int type = 0)
-        {
-            if (t.Moves == null)
-            {
-                return "";
-            }
-            string temp = "";
+		public static string TurnExportString(Turn t, int type = 0)
+		{
+			if (t.Moves == null)
+			{
+				return "";
+			}
+			string temp = "";
 			foreach (Move m in t.Moves)
 			{
 				temp += ToRawShadString(m);
 				temp += " ";
 			}
-            return temp;
+			return temp;
+		}
+
+		public static string AnnotatedTurnExportString(AnnotatedTurn at)
+		{
+			string exportString = "";
+			//exportString += TurnExportString(at.T);
+			if (at.Annotation != null)
+			{
+				exportString += $" {{ {at.Annotation} }}";
+			}
+			if (at.Highlights != null)
+			{
+				exportString += $" {{ [%csl ";
+				for (int i = 0; i < at.Highlights.Count; i++)
+				{
+					char colorchar = colorchars[at.HighlightColors[i]];
+					char turnchar = at.Highlights[i].Color ? 'w' : 'b';
+					exportString += $"{colorchar}({turnchar}.{at.Highlights[i].L}T{at.Highlights[i].L}){IntToFile(at.Highlights[i].X)}{at.Highlights[i].Y + 1} ";
+				}
+				exportString += $" ] }} ";
+			}
+			if (at.Arrows != null)
+			{
+				exportString += $" {{ [%cal ";
+				for (int i = 0; i < at.Arrows.Count; i++)
+				{
+					exportString += AnnotationMoveCoordinate(at.Arrows[i], at.ArrowColors[i]) + " ";                   
+				}
+				exportString += $" ] }} ";
+			}
+			return exportString;
+		}
+
+		public static string AnnotationMoveCoordinate(Move m,int color)
+		{
+			string annotationString = "";
+            char colorchar = colorchars[color];
+            char turnchar = m.Origin.Color ? 'w' : 'b';
+            annotationString += $"{colorchar}({turnchar}.{m.Origin.L}T{m.Origin.T}){IntToFile(m.Origin.X)}{m.Origin.Y + 1}";
+            annotationString += $"({m.Dest.L}T{m.Dest.T}){IntToFile(m.Dest.X)}{m.Dest.Y + 1}";
+            return annotationString;
+
         }
+
     }
 }

@@ -275,7 +275,9 @@ func annotate_highlight_square(square : Coord5, color : Color ):
 
 
 func annotate_unhighlight_square(square : Coord5):
-	get_board(square.v.w, square.color).unannotate_square(Vector2(square.v.x,square.v.y))
+	var brd = get_board(square.v.w, square.color)
+	if brd != null:
+		brd.unannotate_square(Vector2(square.v.x,square.v.y))
 
 
 func clear_highlights():

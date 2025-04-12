@@ -9,12 +9,10 @@ namespace FiveDChess
         public Move[] PreMoves;
         public Timeline[] OriginsTL;
         public int StartMinTL;
-        //public List<Turn> Turns;
-        //public TurnTree TT;
-        //public TurnTree.Node Index;
         public AnnotationTree ATR;
         public AnnotationTree.Node Index;
         public int CurrTurn;
+
 
         public GameStateManager(Timeline[] origins, int width, int height, bool evenStart, bool color, int minTL, Move[] moves)
             : base(origins, width, height, evenStart, color, minTL, moves)

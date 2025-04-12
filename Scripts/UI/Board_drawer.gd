@@ -304,6 +304,7 @@ func button_clicked( pos : Vector2 ):
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
+			return #XXX this if statement
 			var mouse_pos = get_local_mouse_position()
 			var right_click_square = local_position_to_square(mouse_pos)
 			var c = Coord5.Create(Vector4(right_click_square.x,right_click_square.y,multiverse_position.x,multiverse_position.y),color)
