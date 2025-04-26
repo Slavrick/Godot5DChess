@@ -39,6 +39,7 @@ text = "Save Game
 "
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
+visible = false
 layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -53,7 +54,6 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7ykjc")
 
 [node name="TurnTree" type="ScrollContainer" parent="HSplitContainer"]
-visible = false
 custom_minimum_size = Vector2(150, 100)
 layout_mode = 2
 

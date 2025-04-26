@@ -33,7 +33,7 @@ func show_promotion():
 
 func set_analysis_mode():
 	$HBoxContainer.show()
-	$HSplitContainer/TurnTree.show()
+	$HSplitContainer.show()
 
 func submit_pressed():
 	submit_turn.emit()

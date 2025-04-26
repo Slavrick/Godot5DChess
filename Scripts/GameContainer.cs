@@ -293,25 +293,30 @@ public partial class GameContainer : Control
 						return;
 					}
 				}
+				int color = 1;
 				Color highlight_color = new Color(0,0,1,(float).5);
 				if(Input.IsActionPressed("ThreatAnnotation"))
 				{
+					color = 0;
 					highlight_color = new Color(1,0,0,(float).5);
 				}
 				else if(Input.IsActionPressed("CautionAnnotation"))
 				{
+					color = 4;
 					highlight_color = new Color(1,(float).5,0,(float).5);
 				}
 				else if(Input.IsActionPressed("BrilliantAnnotation"))
 				{
+					color = 2;
 					highlight_color = new Color(0,(float).4,(float).4,(float).5);
 				}
 				AnnotationSquares.Add(square);
-				AnnotationSquareColors.Add(0);
+				AnnotationSquareColors.Add(color);
 				mvcontainer.Call("annotate_highlight_square",square,highlight_color);
 			}
 			else
 			{
+				int color = 1;
 				Node a = CreateArrowCoord5(RightClickStart, square, new Color(0,0,1,(float).5));
 				for(int i = 0 ; i < AnnotationArrows.Count; i++)
 				{
@@ -319,22 +324,27 @@ public partial class GameContainer : Control
 					{
 						AnnotationArrows[i].Call("queue_free");
 						AnnotationArrows.RemoveAt(i);
+						AnnotationArrowColors.RemoveAt(i);
 						return;
 					}
 				}
 				if(Input.IsActionPressed("ThreatAnnotation"))
 				{
+					color = 0;
 					a.Set("arrow_color",new Color(1,0,0,(float).5));
 				}
 				if(Input.IsActionPressed("CautionAnnotation"))
 				{
+					color = 4;
 					a.Set("arrow_color",new Color(1,(float).5,0,(float).5));
 				}
 				if(Input.IsActionPressed("BrilliantAnnotation"))
 				{
+					color = 2;
 					a.Set("arrow_color",new Color(0,(float).4,(float).4,(float).5));
 				}
 				AnnotationArrows.Add(a);
+				AnnotationArrowColors.Add(color);
 				AddChild(a);
 			}
 		}
@@ -541,31 +551,69 @@ public partial class GameContainer : Control
 	
 	public void LoadTurnAnalysis()
 	{
-		foreach(CoordFive cf in gsm.Index.AT.Highlights)
+		Console.WriteLine(string.Join(", ", gsm.Index.AT.Arrows));
+		Console.WriteLine(string.Join(", ", gsm.Index.AT.ArrowColors));
+		for(int i = 0; i < gsm.Index.AT.Highlights.Count; i++)
 		{
+			CoordFive cf =  gsm.Index.AT.Highlights[i];
 			Coord5 annotation = GameInterface.CoordFivetoGD(cf);
 			AnnotationSquares.Add(annotation);
-			AnnotationSquareColors.Add(0);
-			mvcontainer.Call("annotate_highlight_square",annotation,new Color(1,0,0,(float).5));
+			Color c = new Color(1,0,0,(float).5);
+			switch(gsm.Index.AT.HighlightColors[i])
+			{
+				case 1:
+					c = new Color(0,1,0,(float).5);
+					break;
+				case 2:
+					c = new Color(0,(float).4,(float).4,(float).5);
+					break;
+				case 3:
+					c = new Color(1,1,0,(float).5);
+					break;
+				case 4:
+					c = new Color(1,(float).5,0,(float).5);
+					break;
+			}
+			mvcontainer.Call("annotate_highlight_square",annotation,c);
 		}
-		AnnotationSquareColors = gsm.Index.AT.HighlightColors;
-		foreach(Move m in gsm.Index.AT.Arrows)
+		for(int i = 0; i < gsm.Index.AT.Arrows.Count; i++)
 		{
-			Node n = CreateArrow(m);
+			Move m = gsm.Index.AT.Arrows[i];
+			Color c = new Color(1,0,0,(float).5);
+			switch(gsm.Index.AT.ArrowColors[i])
+			{
+				case 1:
+					c = new Color(0,1,0,(float).5);
+					break;
+				case 2:
+					c = new Color(0,(float).4,(float).4,(float).5);
+					break;
+				case 3:
+					c = new Color(1,1,0,(float).5);
+					break;
+				case 4:
+					c = new Color(1,(float).5,0,(float).5);
+					break;
+			}
+			Node n = CreateArrow(m,c);
 			AddChild(n);
 			AnnotationArrows.Add(n);
 		}
+		AnnotationSquareColors = new List<int>(gsm.Index.AT.HighlightColors);
+		AnnotationArrowColors = new List<int>(gsm.Index.AT.ArrowColors);
 	}
 
 	public void SaveTurnAnalysis()
 	{
-		gsm.Index.AT.HighlightColors = AnnotationSquareColors;
+		Console.WriteLine(string.Join(", ", AnnotationSquares));
+		Console.WriteLine(string.Join(", ", AnnotationSquareColors));
+		gsm.Index.AT.HighlightColors = new List<int>(AnnotationSquareColors);
 		gsm.Index.AT.Highlights.Clear();
 		foreach(Coord5 c in AnnotationSquares)
 		{
 			gsm.Index.AT.Highlights.Add(GameInterface.C5toCoordFive(c)); 
 		}
-		gsm.Index.AT.ArrowColors = AnnotationArrowColors;
+		gsm.Index.AT.ArrowColors = new List<int>(AnnotationArrowColors);
 		gsm.Index.AT.Arrows.Clear();
 		foreach(Node n in AnnotationArrows)
 		{
