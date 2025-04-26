@@ -71,6 +71,7 @@ public partial class GameContainer : Control
 			GetNode("FileDialog").Connect("file_selected", new Callable(this, nameof(LoadGame)));
 			GetNode("SaveDialog").Connect("file_selected", new Callable(this, nameof(SaveGame)));
 			GetNode("SubViewport/Menus").Connect("turntree_item_selected", new Callable(this,nameof(OnTurnTreeSelected)));
+			GetNode("SubViewport/Menus").Connect("annotation_changed", new Callable(this,nameof(SaveAnnotation)));
 		}
 	}
 	
@@ -599,8 +600,11 @@ public partial class GameContainer : Control
 			AddChild(n);
 			AnnotationArrows.Add(n);
 		}
+		Console.WriteLine(string.Join(", ", gsm.Index.AT.Highlights));
+		Console.WriteLine(string.Join(", ", gsm.Index.AT.HighlightColors));
 		AnnotationSquareColors = new List<int>(gsm.Index.AT.HighlightColors);
 		AnnotationArrowColors = new List<int>(gsm.Index.AT.ArrowColors);
+		GetNode("SubViewport/Menus").Call("set_annotation_text", gsm.Index.AT.Annotation);
 	}
 
 	public void SaveTurnAnalysis()
@@ -619,6 +623,11 @@ public partial class GameContainer : Control
 		{
 			gsm.Index.AT.Arrows.Add(GameInterface.ArrowToMove(n));
 		}
+	}
+
+	public void SaveAnnotation(string annotation)
+	{
+		gsm.Index.AT.Annotation = annotation;
 	}
 
 
@@ -652,6 +661,10 @@ public partial class GameContainer : Control
 		Destinations = null;
 		CheckForChecks();
 		GetNode("SubViewport/Menus").Call("set_turn_label",gsm.Color,gsm.Present);//This is awful
+		if(AnalysisMode)
+		{
+			LoadTurnAnalysis();
+		}
 	}
 	
 	public void UndoTurn(){
@@ -674,7 +687,14 @@ public partial class GameContainer : Control
 	//TODO clear check arrows.
 	public void LoadGame(String filepath)
 	{
-		gsm = FENParser.ShadSTDGSM(filepath);
+		if(filepath.Contains("PGN5S"))
+		{
+						Console.WriteLine("Got HERE");
+			gsm = FENParser.Parse5dStudy(filepath);
+		}else
+		{
+			gsm = FENParser.ShadSTDGSM(filepath);
+		}
 		GetNode("/root/VisualSettings").Set("game_board_dimensions", new Vector2(gsm.Width,gsm.Height));
 		GetNode("/root/VisualSettings").Call("change_game");
 		UpdateRender();

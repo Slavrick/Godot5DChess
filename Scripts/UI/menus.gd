@@ -9,6 +9,7 @@ signal flip_perspective
 signal change_view(view_type)
 signal promotion_chosen(piece : int)
 signal turntree_item_selected(index : int)
+signal annotation_changed( annotation : String )
 
 @export var game : Node
 
@@ -46,8 +47,10 @@ func undo_turn_pressed():
 func load_game_pressed():
 	load_game.emit()
 
+
 func save_game_pressed():
 	save_game.emit()
+
 
 func gotopresent_pressed():
 	goto_present.emit()
@@ -95,3 +98,11 @@ func on_game_loaded():
 
 func on_turntree_item_selected( index : int):
 	turntree_item_selected.emit(index)
+
+
+func _on_text_edit_text_changed() -> void:
+	annotation_changed.emit($HSplitContainer/Panel/MarginContainer/TextEdit.text)
+
+
+func set_annotation_text( annotation: String):
+	$HSplitContainer/Panel/MarginContainer/TextEdit.text = annotation

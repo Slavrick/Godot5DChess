@@ -18,10 +18,9 @@ namespace FileIO5D
         public static readonly string STDBOARDFEN = "[r*nbqk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*NBQK*BNR*:0:1:w]";
         public static readonly string STD_PRINCESS_BOARDFEN = "[r*nbsk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*NBSK*BNR*:0:1:w]";
         public static readonly string STD_DEFENDEDPAWN_BOARDFEN = "[r*qbnk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*QBNK*BNR*:0:1:w]";
-
-		public static string[] FileToLines(string filePath)
-		{
-			//If this is a godot res path, needs to get it properly.
+        public static string[] FileToLines(string filePath)
+        {
+            //If this is a godot res path, needs to get it properly.
 			if(filePath.Contains("res://"))
 			{
 				if (!Godot.FileAccess.FileExists(filePath))
@@ -38,15 +37,15 @@ namespace FileIO5D
 				string gdContent = file.GetAsText();
 				return gdContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 			}
-			if (!File.Exists(filePath))
-			{
-				Console.WriteLine($"File not found: {filePath}");
-				return null;
-			}
-			string content = File.ReadAllText(filePath);
-			string[] linesarray = content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-			return linesarray;
-		}
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"File not found: {filePath}");
+                return null;
+            }
+            string content = File.ReadAllText(filePath);
+            string[] linesarray = content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            return linesarray;
+        }
 
         public static GameStateManager ShadSTDGSM(string fileLocation)
         {
@@ -495,9 +494,8 @@ namespace FileIO5D
                     lineIndex++;
                 }
             }
-            tokenTreeString.ToString();
-            Console.WriteLine(tokenTreeString.ToString());
             //Parse the tokens.
+            Console.WriteLine(tokenTreeString.ToString());
             List<Turn> compiledTurns = new List<Turn>();
             List<Move> compiledMoves = new List<Move>();
             tokenStringIndex = tokenTreeString;
@@ -559,10 +557,43 @@ namespace FileIO5D
                         compiledMoves.Add(castleMove);
                         break;
                     case TokenType.ARROWS:
+                        if (compiledMoves.Count > 0)
+                        {
+                            compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                            compiledMoves.Clear();
+                            bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                            if (!turnStatus)
+                            {
+                                throw new Exception("Turn not properly added to gamestate.");
+                            }
+                        }
                         ParseArrows(tokenString, gsm);
                         break;
                     case TokenType.HIGHLIGHTS:
+                        if (compiledMoves.Count > 0)
+                        {
+                            compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                            compiledMoves.Clear();
+                            bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                            if (!turnStatus)
+                            {
+                                throw new Exception("Turn not properly added to gamestate.");
+                            }
+                        }
                         ParseHighlights(tokenString, gsm);
+                        break;
+                    case TokenType.DESCRIPTION:
+                        if (compiledMoves.Count > 0)
+                        {
+                            compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                            compiledMoves.Clear();
+                            bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                            if (!turnStatus)
+                            {
+                                throw new Exception("Turn not properly added to gamestate.");
+                            }
+                        }
+                        gsm.Index.AT.Annotation = tokenString.Substring(3,tokenString.Length-4);
                         break;
                     case TokenType.UNKNOWN:
                         throw new Exception("Unknown token detected");
@@ -1072,13 +1103,14 @@ namespace FileIO5D
 
         public static Move ParseRawSHADMove(string coord, bool evenStarters)
         {
-            CoordFive temporal = ParseColoredTemporalCoord(coord.Substring(0, coord.IndexOf(')')),evenStarters);
+            CoordFive temporal1 = ParseColoredTemporalCoord(coord.Substring(0, coord.IndexOf(')') + 1),evenStarters);
+            CoordFive temporal2 = TemporalToCoord(coord.Substring(coord.LastIndexOf('('), coord.LastIndexOf(')') - coord.LastIndexOf('(') + 1), evenStarters);
             CoordFive c1 = SANToCoord(coord.Substring(coord.IndexOf(')') + 1,2));
             CoordFive c2 = SANToCoord(coord.Substring(coord.Length - 2)); // TODO this wont work for things like c24 ( boards with > 9 squares tall)
-            c1.Add(temporal);
-            c2.Add(temporal);
-            c1.Color = temporal.Color;
-            c2.Color = temporal.Color; 
+            c1.Add(temporal1);
+            c2.Add(temporal2);
+            c1.Color = temporal1.Color;
+            c2.Color = temporal1.Color; 
             return new Move(c1, c2);
         }
 

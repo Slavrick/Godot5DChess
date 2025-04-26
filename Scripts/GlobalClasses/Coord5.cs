@@ -34,4 +34,9 @@ public partial class Coord5 : Resource
 	{
 		return $"({v[2]}T{v[3]}){v[0]}.{v[1]}";
 	}
+	
+	public string _to_string()
+	{
+		return ToString();
+	}
 }

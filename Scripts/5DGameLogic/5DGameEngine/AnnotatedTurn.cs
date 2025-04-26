@@ -17,12 +17,14 @@ namespace FiveDChess
             RED,BLUE,GREEN,YELLOW,ORANGE
         }
 
-        public AnnotatedTurn(Turn turn, string annotation, List<Move> arrows, List<CoordFive> highlights)
+        public AnnotatedTurn(Turn turn, string annotation, List<Move> arrows, List<CoordFive> highlights, List<int> arrowColors, List<int> highlightColors)
         {
             T = turn;
             Annotation = annotation;
             Arrows = arrows;
+            ArrowColors = arrowColors;
             Highlights = highlights;
+            HighlightColors = highlightColors;
         }
 
         public AnnotatedTurn(Turn t) 
@@ -30,7 +32,9 @@ namespace FiveDChess
             T = t;
             Annotation = "";
             Arrows = new List<Move>();
+            ArrowColors = new List<int>();
             Highlights = new List<CoordFive>();
+            HighlightColors = new List<int>();
         }
 
         public override string ToString()
