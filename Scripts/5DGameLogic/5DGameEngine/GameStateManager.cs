@@ -12,7 +12,7 @@ namespace FiveDChess
         public AnnotationTree ATR;
         public AnnotationTree.Node Index;
         public int CurrTurn;
-
+        public bool StartColor = true;
 
         public GameStateManager(Timeline[] origins, int width, int height, bool evenStart, bool color, int minTL, Move[] moves)
             : base(origins, width, height, evenStart, color, minTL, moves)
@@ -92,7 +92,25 @@ namespace FiveDChess
             }
         }
 
-        private bool ProgressTree(int childIndex)
+        public void RewindToParent(AnnotationTree.Node node)
+        {
+            while(Index.NodeID != node.NodeID)
+            {
+                UndoTree();
+                if(Index == null)
+                {
+                    throw new Exception("you tried to rewind to an incorrect node");
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Progresses to the given childIndex.
+        /// </summary>
+        /// <param name="childIndex"></param>
+        /// <returns></returns>
+        public bool ProgressTree(int childIndex)
         {
             if (Index.Children.Count <= childIndex)
             {

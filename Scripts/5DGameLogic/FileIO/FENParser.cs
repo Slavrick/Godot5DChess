@@ -1,8 +1,8 @@
+using FiveDChess;
+using System.Text.RegularExpressions;
 using System;
 using System.Collections.Generic;
-using FiveDChess;
 using System.IO;
-using System.Text.RegularExpressions;
 
 //TODO fix style for this.
 namespace FileIO5D
@@ -18,6 +18,7 @@ namespace FileIO5D
         public static readonly string STDBOARDFEN = "[r*nbqk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*NBQK*BNR*:0:1:w]";
         public static readonly string STD_PRINCESS_BOARDFEN = "[r*nbsk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*NBSK*BNR*:0:1:w]";
         public static readonly string STD_DEFENDEDPAWN_BOARDFEN = "[r*qbnk*bnr*/p*p*p*p*p*p*p*p*/8/8/8/8/P*P*P*P*P*P*P*P*/R*QBNK*BNR*:0:1:w]";
+
         public static string[] FileToLines(string filePath)
         {
             //If this is a godot res path, needs to get it properly.
@@ -213,7 +214,7 @@ namespace FileIO5D
                     stringIndex += m.Length;
                     break;
                 }
-                if(stringIndex >= SANLines[lineIndex].Length)
+                if (stringIndex >= SANLines[lineIndex].Length)
                 {
                     stringIndex = 0;
                     lineIndex++;
@@ -300,7 +301,7 @@ namespace FileIO5D
             //Read in the file, initialize variables.
             string[] lines = FileToLines(fileLocation);
             List<string> fenBoards = new List<string>();
-            List<string> SANLines = new List<string>();
+            string SANLines = "";
             bool evenStarters = false;
 
             //Separate moves by header, FEN, SAN
@@ -332,7 +333,7 @@ namespace FileIO5D
                 }
                 else
                 {
-                    SANLines.Add(line);
+                    SANLines += line + " \n";
                 }
             }
 
@@ -389,215 +390,143 @@ namespace FileIO5D
             //reads color header. TODO not correctly set for T0......
             if (color != null)
             {
-                gsm.Color = color.Contains("white");
+                gsm.Color = color.ToLower().Contains("white");
+                if(!gsm.Color)
+                {
+                    gsm.StartColor = false;
+                }
             }
-
-            //Turns into tokens.
-            string[] regexs =
-            {
-                "^/",
-                "^\\d+[WwBb]?\\.",
-                "^\\([+\\-]?\\d+T-?\\d+\\)[NBRQSKCYUDPW]?[a-z]?\\d{0,2}[a-z]\\d{1,2}(>+)?x?\\([+\\-]?\\d+T-?\\d+\\)\\S+(=[NBRQSKCYUDPW])?",
-                "^\\([+\\-]?\\d+T-?\\d+\\)[NBRQSKCYUDPW]?[a-z]?\\d{0,2}x?[a-z]\\d{1,2}(=[NBRQSKCYUDPW])?",
-                "^[NBRQSKCYUDPW]?[a-z]?\\d{0,2}x?[a-z]\\d{1,2}(=[NBRQSKCYUDPW])?",//TODO rework this. SAN Token
-                "^(\\([+\\-]?\\d+T-?\\d+\\))?0000",
-                "^(\\([+\\-]?\\d+T-?\\d+\\))?O-O-O",
-                "^(\\([+\\-]?\\d+T-?\\d+\\))?O-O",
-                "^\\(~T[+\\-]?(\\d+)\\)",
-                "^\\(>L([+\\-]?\\d+)\\)"
-            };
-            TokenType[] regextokens =
-            {
-                TokenType.TURNTERMINATOR,
-                TokenType.TURNINDICATOR,
-                TokenType.FULLCOORDINATE,
-                TokenType.HALFCOORDINATE,
-                TokenType.SAN,
-                TokenType.NULLMOVE,
-                TokenType.CASTLE,
-                TokenType.LONGCASTLE,
-                TokenType.PRESENTSHIFTED,
-                TokenType.LAYERCREATED,
-            };
             TreeNode<string> tokenTreeString = new TreeNode<string>("");
             TreeNode<TokenType> tokenTree = new TreeNode<TokenType>(TokenType.UNKNOWN);
-            TreeNode<string> tokenStringIndex = tokenTreeString;
-            TreeNode<TokenType> tokenTreeIndex = tokenTree;
-            int lineIndex = 0;
-            int stringIndex = 0;
-            while (lineIndex < SANLines.Count)
-            {
-                if (SANLines[lineIndex][stringIndex] == '{')
-                {
-                    string comment = "";
-                    while (SANLines[lineIndex][stringIndex] != '}')
-                    {
-                        comment += SANLines[lineIndex][stringIndex];
-                        stringIndex++;
-                        if (stringIndex >= SANLines[lineIndex].Length)
-                        {
-                            stringIndex = 0;
-                            lineIndex++;
-                            comment += '\n';
-                            if (lineIndex >= SANLines.Count)
-                            {
-                                throw new Exception("Invalid File. Comment does not contain } to end it");
-                            }
-                        }
-                    }
-                    comment += SANLines[lineIndex][stringIndex];
-                    stringIndex++;
-                    if(comment.Substring(0,6).Equals("{[%cal"))
-                    {
-                        tokenStringIndex = tokenStringIndex.AddChild(comment);
-                        tokenTreeIndex = tokenTreeIndex.AddChild(TokenType.ARROWS);
-                    }
-                    else if(comment.Substring(0, 6).Equals("{[%csl"))
-                    {
-                        tokenStringIndex = tokenStringIndex.AddChild(comment);
-                        tokenTreeIndex = tokenTreeIndex.AddChild(TokenType.HIGHLIGHTS);
-                    }
-                    else if (comment.Substring(0, 3).Equals("{%c"))
-                    {
-                        tokenStringIndex = tokenStringIndex.AddChild(comment);
-                        tokenTreeIndex = tokenTreeIndex.AddChild(TokenType.DESCRIPTION);
-                    }
-                    else
-                    {
-                        TreeNode<string> turnStringParent = tokenStringIndex;
-                        TreeNode<TokenType> turnParent = tokenTreeIndex;
-                        while(turnParent.value != TokenType.TURNTERMINATOR && turnParent.value != TokenType.TURNINDICATOR)
-                        {
-                            turnStringParent = turnStringParent.Parent;
-                            turnParent = turnParent.Parent;
-                        }
-                        TokenizeSideline(turnStringParent, turnParent, comment);
-                    }
-                }
-                for (int i = 0; i <= regexs.Length; i++)
-                {
-                    if (i == regexs.Length)
-                    {
-                        stringIndex++;
-                        break;
-                    }
-                    Match m = Regex.Match(SANLines[lineIndex].Substring(stringIndex), regexs[i]);
-                    if (!m.Success) continue;
-                    tokenStringIndex = tokenStringIndex.AddChild(m.Value);
-                    tokenTreeIndex = tokenTreeIndex.AddChild(regextokens[i]);
-                    stringIndex += m.Length;
-                    break;
-                }
-                if (stringIndex >= SANLines[lineIndex].Length)
-                {
-                    stringIndex = 0;
-                    lineIndex++;
-                }
-            }
-            //Parse the tokens.
+
+            //Turns into tokens.
+            TokenizeSideline(tokenTreeString, tokenTree, SANLines);
             Console.WriteLine(tokenTreeString.ToString());
+            //Parse the tokens.
             List<Turn> compiledTurns = new List<Turn>();
             List<Move> compiledMoves = new List<Move>();
-            tokenStringIndex = tokenTreeString;
-            tokenTreeIndex = tokenTree;
-            while(tokenTreeIndex.Children.Count > 0)
+            TreeNode<string> tokenStringIndex = tokenTreeString;
+            TreeNode<TokenType> tokenTreeIndex = tokenTree;
+            while (tokenTreeIndex.Children.Count > 0)
             {
                 tokenTreeIndex = tokenTreeIndex.Children[0];
                 tokenStringIndex = tokenStringIndex.Children[0];
-                string tokenString = tokenStringIndex.value;
-                switch (tokenTreeIndex.value)
+                for(int i = 0; i < tokenTreeIndex.Children.Count; i++)
                 {
-                    case TokenType.COMMENT:
-                    case TokenType.PRESENTSHIFTED:
-                    case TokenType.LAYERCREATED:
-                        //eventually use this for analysis, right now throw it away.
-                        break;
-                    case TokenType.TURNINDICATOR:
-                    case TokenType.TURNTERMINATOR:
-                        goto case TokenType.HALFTURNINDICATOR;
-                    case TokenType.HALFTURNINDICATOR:
-                        if (compiledMoves.Count > 0)
-                        {
-                            compiledTurns.Add(new Turn(compiledMoves.ToArray()));
-                            compiledMoves.Clear();
-                            bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
-                            if (!turnStatus)
-                            {
-                                throw new Exception("Turn not properly added to gamestate.");
-                            }
-                        }
-                        break;
-                    case TokenType.FULLCOORDINATE:
-                    case TokenType.HALFCOORDINATE:
-                    case TokenType.SAN:
-                        if (tokenString.Contains('='))
-                        {
-                            Move sanPromotionMove = PromotionStringToMove(gsm, tokenString, evenStarters);
-                            compiledMoves.Add(sanPromotionMove);
+                    TreeNode<string> childStringIndex = tokenStringIndex.Children[i];
+                    TreeNode<TokenType> childTokenIndex = tokenTreeIndex.Children[i];
+                    string tokenString = childStringIndex.value;
+                    switch (childTokenIndex.value)
+                    {
+                        case TokenType.COMMENT:
+                        case TokenType.PRESENTSHIFTED:
+                        case TokenType.LAYERCREATED:
+                            //eventually use this for analysis, right now throw it away.
                             break;
-                        }
-                        Move m = GetShadMove(gsm, tokenString, evenStarters);
-                        compiledMoves.Add(m);
-                        break;
-                    case TokenType.NULLMOVE:
-                        Move nullMove = GetNullMove(tokenString, evenStarters);
-                        if (!gsm.Color)
-                        {
-                            nullMove.SwapColor();
-                        }
-                        compiledMoves.Add(nullMove);
-                        break;
-                    case TokenType.PROMOTION:
-                        Move promotionMove = PromotionStringToMove(gsm, tokenString, evenStarters);
-                        compiledMoves.Add(promotionMove);
-                        break;
-                    case TokenType.CASTLE:
-                    case TokenType.LONGCASTLE:
-                        Move castleMove = FindCastleMove(gsm, tokenString, evenStarters);
-                        compiledMoves.Add(castleMove);
-                        break;
-                    case TokenType.ARROWS:
-                        if (compiledMoves.Count > 0)
-                        {
-                            compiledTurns.Add(new Turn(compiledMoves.ToArray()));
-                            compiledMoves.Clear();
-                            bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
-                            if (!turnStatus)
+                        case TokenType.TURNINDICATOR:
+                        case TokenType.TURNTERMINATOR:
+                            goto case TokenType.HALFTURNINDICATOR;
+                        case TokenType.HALFTURNINDICATOR:
+                            if (compiledMoves.Count > 0)
                             {
-                                throw new Exception("Turn not properly added to gamestate.");
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
                             }
-                        }
-                        ParseArrows(tokenString, gsm);
-                        break;
-                    case TokenType.HIGHLIGHTS:
-                        if (compiledMoves.Count > 0)
-                        {
-                            compiledTurns.Add(new Turn(compiledMoves.ToArray()));
-                            compiledMoves.Clear();
-                            bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
-                            if (!turnStatus)
+                            break;
+                        case TokenType.FULLCOORDINATE:
+                        case TokenType.HALFCOORDINATE:
+                        case TokenType.SAN:
+                            if (tokenString.Contains('='))
                             {
-                                throw new Exception("Turn not properly added to gamestate.");
+                                Move sanPromotionMove = PromotionStringToMove(gsm, tokenString, evenStarters);
+                                compiledMoves.Add(sanPromotionMove);
+                                break;
                             }
-                        }
-                        ParseHighlights(tokenString, gsm);
-                        break;
-                    case TokenType.DESCRIPTION:
-                        if (compiledMoves.Count > 0)
-                        {
-                            compiledTurns.Add(new Turn(compiledMoves.ToArray()));
-                            compiledMoves.Clear();
-                            bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
-                            if (!turnStatus)
+                            Move m = GetShadMove(gsm, tokenString, evenStarters);
+                            compiledMoves.Add(m);
+                            break;
+                        case TokenType.NULLMOVE:
+                            Move nullMove = GetNullMove(tokenString, evenStarters);
+                            if (!gsm.Color)
                             {
-                                throw new Exception("Turn not properly added to gamestate.");
+                                nullMove.SwapColor();
                             }
-                        }
-                        gsm.Index.AT.Annotation = tokenString.Substring(3,tokenString.Length-4);
-                        break;
-                    case TokenType.UNKNOWN:
-                        throw new Exception("Unknown token detected");
-                        break;
+                            compiledMoves.Add(nullMove);
+                            break;
+                        case TokenType.PROMOTION:
+                            Move promotionMove = PromotionStringToMove(gsm, tokenString, evenStarters);
+                            compiledMoves.Add(promotionMove);
+                            break;
+                        case TokenType.CASTLE:
+                        case TokenType.LONGCASTLE:
+                            Move castleMove = FindCastleMove(gsm, tokenString, evenStarters);
+                            compiledMoves.Add(castleMove);
+                            break;
+                        case TokenType.ARROWS:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            ParseArrows(tokenString, gsm);
+                            break;
+                        case TokenType.HIGHLIGHTS:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            ParseHighlights(tokenString, gsm);
+                            break;
+                        case TokenType.DESCRIPTION:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            gsm.Index.AT.Annotation = tokenString.Substring(3, tokenString.Length - 4);
+                            break;
+                        case TokenType.SIDELINE:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            //Rewind to the previous move to add a sideline.
+                            gsm.RewindToParent(gsm.Index.Parent);
+                            ParseSideline(childStringIndex, childTokenIndex, gsm);
+                            //go to the mainline after this.
+                            gsm.ProgressTree(0);
+                            break;
+                        case TokenType.UNKNOWN:
+                            throw new Exception("Unknown token detected");
+                            break;
+                    }
                 }
             }
             //Add Final Move if needed.
@@ -1006,7 +935,7 @@ namespace FileIO5D
             {
                 color = true;
             }
-            return new CoordFive(0, 0, T, L,color);
+            return new CoordFive(0, 0, T, L, color);
         }
 
         /// <summary>
@@ -1103,14 +1032,14 @@ namespace FileIO5D
 
         public static Move ParseRawSHADMove(string coord, bool evenStarters)
         {
-            CoordFive temporal1 = ParseColoredTemporalCoord(coord.Substring(0, coord.IndexOf(')') + 1),evenStarters);
+            CoordFive temporal1 = ParseColoredTemporalCoord(coord.Substring(0, coord.IndexOf(')') + 1), evenStarters);
             CoordFive temporal2 = TemporalToCoord(coord.Substring(coord.LastIndexOf('('), coord.LastIndexOf(')') - coord.LastIndexOf('(') + 1), evenStarters);
-            CoordFive c1 = SANToCoord(coord.Substring(coord.IndexOf(')') + 1,2));
+            CoordFive c1 = SANToCoord(coord.Substring(coord.IndexOf(')') + 1, 2));
             CoordFive c2 = SANToCoord(coord.Substring(coord.Length - 2)); // TODO this wont work for things like c24 ( boards with > 9 squares tall)
             c1.Add(temporal1);
             c2.Add(temporal2);
             c1.Color = temporal1.Color;
-            c2.Color = temporal1.Color; 
+            c2.Color = temporal1.Color;
             return new Move(c1, c2);
         }
 
@@ -1146,7 +1075,7 @@ namespace FileIO5D
         {
             AnnotatedTurn at = gsm.Index.AT;
             string[] arrows = arrowString.Split(' ');
-            for(int i = 1; i < arrows.Length - 1; i++)
+            for (int i = 1; i < arrows.Length - 1; i++)
             {
                 string arrow = arrows[i];
                 Move m = ParseRawSHADMove(arrow.Substring(1), gsm.EvenStart);
@@ -1207,45 +1136,52 @@ namespace FileIO5D
             {
                 if (comment[strIndex] == '{')
                 {
-                    string subComment = "";
-                    while (comment[strIndex] != '}')
+                    int nesting = 1;
+                    string subcomment = "";
+                    while (nesting > 0)
                     {
-                        subComment += comment[strIndex];
+                        subcomment += comment[strIndex];
                         strIndex++;
                         if (strIndex >= comment.Length)
                         {
-                            throw new Exception("Invalid File. Comment does not contain } to end it");
+                            throw new Exception("Invalid File. Comment does not contain } to end it" + comment);
+                        }
+                        if (comment[strIndex] == '{')
+                        {
+                            nesting++;
+                        }
+                        if (comment[strIndex] == '}')
+                        {
+                            nesting--;
                         }
                     }
-                    subComment += comment[strIndex];
-                    if (subComment.Substring(0, 6).Equals("{[%cal"))
+                    subcomment += comment[strIndex];
+                    strIndex++;
+                    if (subcomment.Substring(0, 6).Equals("{[%cal"))
                     {
-                        tokenStringIndex = tokenStringIndex.AddChild(subComment);
+                        tokenStringIndex = tokenStringIndex.AddChild(subcomment);
                         tokenTreeIndex = tokenTreeIndex.AddChild(TokenType.ARROWS);
-                        strIndex++;
                     }
-                    else if (subComment.Substring(0, 6).Equals("{[%csl"))
+                    else if (subcomment.Substring(0, 6).Equals("{[%csl"))
                     {
-                        tokenStringIndex = tokenStringIndex.AddChild(subComment);
+                        tokenStringIndex = tokenStringIndex.AddChild(subcomment);
                         tokenTreeIndex = tokenTreeIndex.AddChild(TokenType.HIGHLIGHTS);
-                        strIndex++;
                     }
-                    else if (subComment.Substring(0, 3).Equals("{%c"))
+                    else if (subcomment.Substring(0, 3).Equals("{%c"))
                     {
-                        tokenStringIndex = tokenStringIndex.AddChild(subComment);
+                        tokenStringIndex = tokenStringIndex.AddChild(subcomment);
                         tokenTreeIndex = tokenTreeIndex.AddChild(TokenType.DESCRIPTION);
-                        strIndex++;
                     }
                     else
                     {
                         TreeNode<string> turnStringParent = tokenStringIndex;
                         TreeNode<TokenType> turnParent = tokenTreeIndex;
-                        while (turnParent.value != TokenType.TURNTERMINATOR || turnParent.value != TokenType.TURNTERMINATOR)
+                        while (turnParent.value != TokenType.TURNTERMINATOR && turnParent.value != TokenType.TURNINDICATOR)
                         {
                             turnStringParent = turnStringParent.Parent;
                             turnParent = turnParent.Parent;
                         }
-                        TokenizeSideline(turnStringParent, turnParent, comment);
+                        TokenizeSideline(turnStringParent, turnParent, subcomment);
                     }
                 }
                 for (int i = 0; i <= regexs.Length; i++)
@@ -1265,6 +1201,153 @@ namespace FileIO5D
             }
             tokenParent.Children.Add(tokenTree);
             stringParent.Children.Add(tokenTreeString);
+        }
+
+        public static void ParseSideline(TreeNode<string> stringParent, TreeNode<TokenType> tokenParent, GameStateManager gsm)
+        {
+            AnnotationTree.Node startingIndex = gsm.Index;
+            bool evenStarters = gsm.EvenStart;
+            //Parse the tokens.
+            List<Turn> compiledTurns = new List<Turn>();
+            List<Move> compiledMoves = new List<Move>();
+            TreeNode<string> tokenStringIndex = stringParent;
+            TreeNode<TokenType> tokenTreeIndex = tokenParent;
+            while (tokenTreeIndex.Children.Count > 0)
+            {
+                tokenTreeIndex = tokenTreeIndex.Children[0];
+                tokenStringIndex = tokenStringIndex.Children[0];
+                for (int i = 0; i < tokenTreeIndex.Children.Count; i++)
+                {
+                    TreeNode<string> childStringIndex = tokenStringIndex.Children[i];
+                    TreeNode<TokenType> childTokenIndex = tokenTreeIndex.Children[i];
+                    string tokenString = childStringIndex.value;
+                    switch (childTokenIndex.value)
+                    {
+                        case TokenType.COMMENT:
+                        case TokenType.PRESENTSHIFTED:
+                        case TokenType.LAYERCREATED:
+                            //eventually use this for analysis, right now throw it away.
+                            break;
+                        case TokenType.TURNINDICATOR:
+                        case TokenType.TURNTERMINATOR:
+                            goto case TokenType.HALFTURNINDICATOR;
+                        case TokenType.HALFTURNINDICATOR:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            break;
+                        case TokenType.FULLCOORDINATE:
+                        case TokenType.HALFCOORDINATE:
+                        case TokenType.SAN:
+                            if (tokenString.Contains('='))
+                            {
+                                Move sanPromotionMove = PromotionStringToMove(gsm, tokenString, evenStarters);
+                                compiledMoves.Add(sanPromotionMove);
+                                break;
+                            }
+                            Move m = GetShadMove(gsm, tokenString, evenStarters);
+                            compiledMoves.Add(m);
+                            break;
+                        case TokenType.NULLMOVE:
+                            Move nullMove = GetNullMove(tokenString, evenStarters);
+                            if (!gsm.Color)
+                            {
+                                nullMove.SwapColor();
+                            }
+                            compiledMoves.Add(nullMove);
+                            break;
+                        case TokenType.PROMOTION:
+                            Move promotionMove = PromotionStringToMove(gsm, tokenString, evenStarters);
+                            compiledMoves.Add(promotionMove);
+                            break;
+                        case TokenType.CASTLE:
+                        case TokenType.LONGCASTLE:
+                            Move castleMove = FindCastleMove(gsm, tokenString, evenStarters);
+                            compiledMoves.Add(castleMove);
+                            break;
+                        case TokenType.ARROWS:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            ParseArrows(tokenString, gsm);
+                            break;
+                        case TokenType.HIGHLIGHTS:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            ParseHighlights(tokenString, gsm);
+                            break;
+                        case TokenType.DESCRIPTION:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            gsm.Index.AT.Annotation = tokenString.Substring(3, tokenString.Length - 4);
+                            break;
+                        case TokenType.SIDELINE:
+                            if (compiledMoves.Count > 0)
+                            {
+                                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                                compiledMoves.Clear();
+                                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);//List.Last() doesn't work on godot.
+                                if (!turnStatus)
+                                {
+                                    throw new Exception("Turn not properly added to gamestate.");
+                                }
+                            }
+                            //Rewind to the previous move to add a sideline.
+                            gsm.RewindToParent(gsm.Index.Parent);
+                            ParseSideline(childStringIndex, childTokenIndex, gsm);
+                            //go to the mainline after this.
+                            gsm.ProgressTree(0);
+                            break;
+                        case TokenType.UNKNOWN:
+                            throw new Exception("Unknown token detected");
+                            break;
+                    }
+                }
+            }
+            //Add Final Move if needed.
+            if (compiledMoves.Count > 0)
+            {
+                compiledTurns.Add(new Turn(compiledMoves.ToArray()));
+                compiledMoves.Clear();
+                bool turnStatus = gsm.MakeTurn(compiledTurns[compiledTurns.Count - 1]);
+                if (!turnStatus)
+                {
+                    throw new Exception("Turn not properly added to gamestate.");
+                }
+            }
+            gsm.RewindToParent(startingIndex);
+            //rewind to starting index
+
         }
     }
 }

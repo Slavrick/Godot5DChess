@@ -1,3 +1,4 @@
+using FileIO5D;
 using System;
 using System.Collections.Generic;
 
@@ -53,8 +54,26 @@ namespace FiveDChess
 
 			public override string ToString()
 			{
-				return NodeID + ", " + AT.T.ToString();
+				return ToString_(0,0);
 			}
+			
+			public string ToString_(int depth, int child)
+			{
+				string returnString = $"{depth} , {child} , " + this.AT.T.ToString();
+				for (int i = 0; i < depth; i++)
+				{
+					returnString = "-" + returnString;
+				}
+				returnString += '\n';
+				int id = depth;
+				child = 0;
+				foreach (Node node in Children)
+				{
+					returnString += node.ToString_(depth + 1, child++);
+				}
+				return returnString;
+			}
+
 		}
 		
 		public static bool Contains(Node tree, int target)

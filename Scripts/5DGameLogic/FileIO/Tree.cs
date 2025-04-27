@@ -59,7 +59,7 @@ namespace FileIO5D
             string returnString = $"{global} , {childnum} , " + this.value.ToString();
             for(int i = 0; i < depth; i++)
             {
-                returnString = "==" + returnString;
+                returnString = "=" + returnString;
             }
             returnString += '\n';
             int id = global;

@@ -218,7 +218,7 @@ namespace FileIO5D {
 				{
 					char colorchar = colorchars[at.HighlightColors[i]];
 					char turnchar = at.Highlights[i].Color ? 'w' : 'b';
-					exportString += $"{colorchar}({turnchar}.{at.Highlights[i].L}T{at.Highlights[i].T}){IntToFile(at.Highlights[i].X)}{at.Highlights[i].Y + 1} ";
+					exportString += $"{colorchar}" + CoordAnnotationString(at.Highlights[i]) +  " ";
 				}
 				exportString += $"]}} ";
 			}
@@ -246,6 +246,12 @@ namespace FileIO5D {
             return annotationString;
 
         }
+
+		public static string CoordAnnotationString(CoordFive c)
+		{
+			char turnchar = c.Color ? 'w' : 'b';
+			return $"({turnchar}.{c.L}T{c.T}){IntToFile(c.X)}{c.Y + 1}";
+		}
 
     }
 }

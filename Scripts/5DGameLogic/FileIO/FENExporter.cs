@@ -125,7 +125,9 @@ namespace FileIO5D
         {
             string headers = "";
             headers += "[board \"custom\"]\n";
-            headers += "[size \"" + gsm.Width + "x" + gsm.Height + "\"]";
+            headers += "[size \"" + gsm.Width + "x" + gsm.Height + "\"]\n";
+            string colorstring = gsm.StartColor ? "white" : "black";
+            headers += "[color \"" + colorstring + "\"]";
             return headers;
         }
 
@@ -146,31 +148,46 @@ namespace FileIO5D
                 }
                 origins += '\n';
             }
-            string moves = ExportTree(gsm.ATR.Root);
+            string moves = ExportTree(gsm.ATR.Root, null,gsm.StartColor);
             gameStateString += header + '\n' + origins + '\n' + moves;
             return gameStateString;
         }
 
-        public static string ExportTree(AnnotationTree.Node node)
+        public static string ExportTree(AnnotationTree.Node node, string parentSideline, bool colorStart)
         {
             string returnstring = "";
-            returnstring += node.AT.T.TurnNum.ToString() + ". ";
+            char turnchar = 'w';
+            if(colorStart)
+            {
+                turnchar = node.AT.T.TurnNum % 2 == 1 ? 'w' : 'b';
+            }
+            else
+            {
+                turnchar = node.AT.T.TurnNum % 2 == 0 ? 'w' : 'b';
+            }
+            returnstring += (node.AT.T.TurnNum/2).ToString() + turnchar + ". ";
             returnstring += StringUtils.TurnExportString(node.AT.T);
             returnstring += StringUtils.AnnotatedTurnExportString(node.AT);
-            if(node.Children.Count > 0)
+            if(parentSideline != null)
             {
-                returnstring += " " + ExportTree(node.Children[0]);
+                returnstring += " " + parentSideline;
             }
+            string mainlineString = "";
+            string sideline = "";
             if(node.Children.Count > 1)
             {
-                returnstring += "{";
+                sideline += "{ ";
                 for(int i = 1; i < node.Children.Count; i++)
                 {
-                    returnstring += " " + ExportTree(node.Children[i]);
+                    sideline += " " + ExportTree(node.Children[i], null,colorStart);
                 }
-                returnstring += "} \n";
+                sideline += " } ";
             }
-            return returnstring;
+            if(node.Children.Count > 0)
+            {
+                mainlineString = ExportTree(node.Children[0], sideline,colorStart);
+            }
+            return returnstring + "\n" + mainlineString;
         }
 
     }
