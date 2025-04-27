@@ -267,15 +267,21 @@ func board_square_hovered( c : Coord5 ):
 
 
 func highlight_square(square : Vector4, color : bool ):
-	get_board(square.w, color).highlight_square(Vector2(square.x,square.y),Color.MEDIUM_SLATE_BLUE)
+	var brd = get_board(square.w, color)
+	if brd != null:
+		brd.highlight_square(Vector2(square.x,square.y),Color.MEDIUM_SLATE_BLUE)
 
 
 func annotate_highlight_square(square : Coord5, color : Color ):
-	get_board(square.v.w, square.color).annotate_square(Vector2(square.v.x,square.v.y),color)
+	var brd = get_board(square.v.w, square.color)
+	if brd != null:
+		brd.annotate_square(Vector2(square.v.x,square.v.y),color)
 
 
 func annotate_unhighlight_square(square : Coord5):
-	get_board(square.v.w, square.color).unannotate_square(Vector2(square.v.x,square.v.y))
+	var brd = get_board(square.v.w, square.color)
+	if brd != null:
+		brd.unannotate_square(Vector2(square.v.x,square.v.y))
 
 
 func clear_highlights():

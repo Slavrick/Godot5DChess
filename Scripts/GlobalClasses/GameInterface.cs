@@ -32,4 +32,12 @@ public partial class GameInterface
 		CoordFive new_cf = new CoordFive((int)c.v[0],(int)c.v[1],(int)c.v[3],(int)c.v[2],c.color);
 		return new_cf;
 	}
+
+	public static Move ArrowToMove(Node n)
+	{
+		Coord5 origin = (Coord5)n.Get("origin");
+		Coord5 dest = (Coord5)n.Get("dest");
+		Move m = new Move(C5toCoordFive(origin), C5toCoordFive(dest));
+		return m;
+	} 
 }

@@ -9,20 +9,19 @@ namespace FiveDChess
         public Move[] PreMoves;
         public Timeline[] OriginsTL;
         public int StartMinTL;
-        public List<Turn> Turns;
-        public TurnTree TT;
-        public TurnTree.Node Index;
+        public AnnotationTree ATR;
+        public AnnotationTree.Node Index;
         public int CurrTurn;
+        public bool StartColor = true;
 
         public GameStateManager(Timeline[] origins, int width, int height, bool evenStart, bool color, int minTL, Move[] moves)
             : base(origins, width, height, evenStart, color, minTL, moves)
         {
             this.PreMoves = moves;
             OriginsTL = origins;
-            this.Turns = new List<Turn>();
             CurrTurn = 1;
-            TT = new TurnTree(new Turn());
-            Index = TT.Root;
+            ATR = new AnnotationTree(new Turn());
+            Index = ATR.Root;
         }
 
         public bool SubmitMoves()
@@ -30,23 +29,17 @@ namespace FiveDChess
             bool presColor = CalcPresent();
             if (!OpponentCanCaptureKing() && !(presColor == Color))
             {
-                if (CurrTurn + 1 < Turns.Count)
-                {
-                    ClearFutureTurns();
-                }
                 Turn newTurn = new Turn(TurnMoves, TurnTLS);
                 newTurn.TurnNum = CurrTurn;
-                if (!TurnTree.Contains(Index, newTurn))
+                if (!AnnotationTree.ContainsChild(Index, newTurn))
                 {
                     Index = Index.AddChild(newTurn);
                 }
                 else
                 {
-                    Index = TurnTree.FindNode(Index, newTurn);
+                    Index = AnnotationTree.FindNode(Index, newTurn);
                 }
                 CurrTurn++;
-                Turns.Add(new Turn(TurnMoves, TurnTLS));
-                Turns[Turns.Count - 1].TurnNum = CurrTurn / 2 + 1;
                 TurnTLS.Clear();
                 TurnMoves.Clear();
                 Color = !Color;
@@ -54,39 +47,6 @@ namespace FiveDChess
                 return true;
             }
             return false;
-        }
-
-        public bool SetTurn(int targetTurn)
-        {
-            UndoTempMoves();
-            if (targetTurn < -1 || targetTurn > Turns.Count)
-            {
-                return false;
-            }
-            if (CurrTurn == targetTurn)
-            {
-                return true;
-            }
-            if (targetTurn > CurrTurn)
-            {
-                while (CurrTurn < targetTurn)
-                {
-                    IncrementTurn(Turns[CurrTurn + 1]);
-                }
-            }
-            else
-            {
-                while (CurrTurn > targetTurn)
-                {
-                    if (Index.Parent != null)
-                    {
-                        Index = Index.Parent;
-                    }
-                    UndoTurn(Turns[CurrTurn].TLs);
-                    CurrTurn--;
-                }
-            }
-            return true;
         }
 
         public bool NavigateToTurn(int indexClicked)
@@ -98,19 +58,19 @@ namespace FiveDChess
             }
             if (indexClicked == 0)
             {
-                while (Index != TT.Root)
+                while (Index != ATR.Root)
                 {
                     UndoTree();
                 }
                 return true;
             }
-            List<TurnTree.Node> nodeList = TT.GetNodesLinear();
-            TurnTree.Node target = nodeList[indexClicked];
-            while (!TurnTree.Contains(Index, target.NodeID))
+            List<AnnotationTree.Node> nodeList = AnnotationTree.GetNodesLinear(ATR.Root);
+            AnnotationTree.Node target = nodeList[indexClicked];
+            while (!AnnotationTree.Contains(Index, target.NodeID))
             {
                 UndoTree();
             }
-            List<int> navPath = TurnTree.NavPath(Index, target.NodeID);
+            List<int> navPath = AnnotationTree.NavPath(Index, target.NodeID);
             if (navPath == null)
             {
                 return true;
@@ -126,20 +86,38 @@ namespace FiveDChess
         {
             if (Index.Parent != null)
             {
-                UndoTurn(((Turn)Index.Data).TLs);
+                UndoTurn(Index.AT.T.TLs);
                 CurrTurn--;
                 Index = Index.Parent;
             }
         }
 
-        private bool ProgressTree(int childIndex)
+        public void RewindToParent(AnnotationTree.Node node)
+        {
+            while(Index.NodeID != node.NodeID)
+            {
+                UndoTree();
+                if(Index == null)
+                {
+                    throw new Exception("you tried to rewind to an incorrect node");
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Progresses to the given childIndex.
+        /// </summary>
+        /// <param name="childIndex"></param>
+        /// <returns></returns>
+        public bool ProgressTree(int childIndex)
         {
             if (Index.Children.Count <= childIndex)
             {
                 return false;
             }
             Index = Index.Children[childIndex];
-            IncrementTurn((Turn)Index.Data);
+            IncrementTurn(Index.AT.T);
             return true;
         }
 
@@ -153,7 +131,7 @@ namespace FiveDChess
             {
                 if (!this.MakeMove(m,false))
                 {
-                    //UndoTempMoves(); not sure if this is neede.
+                    //UndoTempMoves(); TODO not sure if this is needed, I think it is though.
                     return false;
                 }
             }
@@ -161,6 +139,11 @@ namespace FiveDChess
             return true;
         }
 
+        /// <summary>
+        /// Increments the turn without validation. Used with turntree
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns>true always(indicates the turn worked)</returns>
         private bool IncrementTurn(Turn t)
         {
             CurrTurn++;
@@ -174,21 +157,13 @@ namespace FiveDChess
             return true;
         }
 
-        private void ClearFutureTurns()
+        public static void PrintTree(AnnotationTree t)
         {
-            for (int i = Turns.Count - 1; i > CurrTurn; i--)
-            {
-                Turns.RemoveAt(i);
-            }
-        }
-
-        public static void PrintTree(TurnTree t)
-        {
-            List<TurnTree.Node> nodes = t.GetNodesLinear();
-            foreach (TurnTree.Node n in nodes)
+            List<AnnotationTree.Node> nodes = AnnotationTree.GetNodesLinear(t.Root);
+            foreach (AnnotationTree.Node n in nodes)
             {
                 Console.Write(n);
-                foreach (TurnTree.Node child in n.Children)
+                foreach (AnnotationTree.Node child in n.Children)
                 {
                     Console.Write(" : " + child);
                 }
